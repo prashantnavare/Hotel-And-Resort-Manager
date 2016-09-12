@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A 'parent' preference, which enables/disables child preferences (below)
+         when checked/unchecked. -->
+    <ListPreference
+        android:title="Database Server"
+        android:summary="Select database server to be used for storing inventory data"
+        android:key="databaseType"
+        android:defaultValue="SQLite"
+        android:entries="@array/databaseArray"
+        android:entryValues="@array/databaseValues" />
+
+</PreferenceScreen>

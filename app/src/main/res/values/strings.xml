@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Inventory Manager</string>
+    <string name="inventory_button">Inventory</string>
+    <string name="tasks_button">Tasks</string>
+    <string name="settings_button">Settings</string>
+    <string name="title_item_list">Inventory</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="action_search">Search</string>
+    <string name="menu_add">Add item</string>
+    <string name="menu_inventory_add">Add to inventory</string>
+    <string name="menu_inventory_subtract">Subtract from inventory</string>
+    <string name="menu_service_call">Create service call</string>
+    <string name="search_items_hint">Search inventory...</string>
+    <string name="menu_save">Save</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_revert">Revert Changes</string>
+    <string name="calibration_date">Calibration Date</string>
+    <string name="set_date">Set</string>
+    <string name="instructions">Instructions</string>
+    <string name="calibration_frequency">Frequency (in days)</string>
+    <string name="maintenance_frequency">Frequency (in days)</string>
+    <string name="maintenance_date">Maintenance Date</string>
+    <string name="contract_valid_till_date">Contract Valid Till</string>
+    <string name="min_required_quantity">Minimum Quantity</string>
+    <string name="current_quantity">Current Quantity</string>
+    <string name="add_quantity">Quantity to add : </string>
+    <string name="subtract_quantity">Quantity to subtract : </string>
+    <string name="add">Add</string>
+    <string name="subtract">Subtract</string>
+    <string name="cancel">Cancel</string>
+    <string name="instrument">Instrument</string>
+    <string name="description">Description</string>
+    <string name="report">Report</string>
+    <string name="title_task_list">Tasks</string>
+    <string name="title_task_detail">Task Detail</string>
+    <string name="menu_update_tasks">Update Tasks Table</string>
+    <string name="assigned_to">Assigned</string>
+    <string name="due_date">Due Date</string>
+    <string name="none">None</string>
+    <string name="menu_mark_as_complete">Mark as complete</string>
+    <string name="item">Item</string>
+    <string name="task">Task</string>
+    <string name="consumable">Consumable</string>
+    <string name="task_done">Task Done</string>
+    <string name="comments">Comments</string>
+    <string name="priority">Priority</string>
+    <string name="menu_assign_task">Assign Task</string>
+    <string name="menu_camera">Photo</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_organization_name">Organization Name</string>
+    <string name="pref_default_hospital_name"></string>
+
+    <string name="pref_title_task_sync_time">Time when the task table is refreshed</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- settings for Database -->
+    <string name="pref_header_database">Database</string>
+
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="menu_call_assigned_person">Call Assigned Person</string>
+
+    <string name="title_activity_backup_restore">Backup &amp; Restore</string>
+    <string name="backup_restore_button"><![CDATA[Backup & Restore]]></string>
+    <string name="interstitial_backuprestore_ad_unit_id">ca-app-pub-1181736027907915/4691435780</string>
+    <string name="interstitial_inventory_ad_unit_id">ca-app-pub-1181736027907915/1737969388</string>
+    <string name="interstitial_reports_ad_unit_id">ca-app-pub-1181736027907915/3214702587</string>
+    <string name="interstitial_tasks_ad_unit_id">ca-app-pub-1181736027907915/9261236185</string>
+    <string name="banner_item_detail_ad_unit_id">ca-app-pub-1181736027907915/9400836983</string>
+    <string name="banner_item_list_ad_unit_id">ca-app-pub-1181736027907915/1877570187</string>
+    <string name="banner_main_ad_unit_id">ca-app-pub-1181736027907915/7924103784</string>
+    <string name="banner_report_detail_ad_unit_id">ca-app-pub-1181736027907915/3354303382</string>
+    <string name="banner_report_list_ad_unit_id">ca-app-pub-1181736027907915/4831036583</string>
+    <string name="banner_task_detail_ad_unit_id">ca-app-pub-1181736027907915/6307769786</string>
+    <string name="banner_task_list_ad_unit_id">ca-app-pub-1181736027907915/7784502986</string>
+    <string name="removeads_button">Remove Ads</string>
+
+    <string name="title_activity_remove_ads">Remove Ads</string>
+
+</resources>

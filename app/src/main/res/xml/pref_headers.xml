@@ -1,0 +1,14 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- These settings headers are only used on tablets. -->
+
+    <header
+        android:fragment="com.navare.prashant.resortmanager.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general" android:icon="@drawable/ic_settings_general" />
+
+    <header
+        android:fragment="com.navare.prashant.resortmanager.SettingsActivity$DatabasePreferenceFragment"
+        android:title="@string/pref_header_database"
+        android:icon="@drawable/ic_settings_database" />
+
+</preference-headers>

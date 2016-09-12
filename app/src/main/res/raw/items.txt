@@ -1,0 +1,7 @@
+Oscilloscope - In building 2 - instrument
+MRI Machine - A costly machine - instrument
+Stethoscope - Many of these - instrument
+Toilet Paper - A much needed item! - consumable
+Blades - To Shave - consumable
+
+

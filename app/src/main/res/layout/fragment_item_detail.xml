@@ -1,0 +1,742 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ScrollView
+        android:id="@+id/itemDetailScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/adView"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <!-- Item Name, location, type -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Item Name -->
+                <LinearLayout
+                    android:id="@+id/itemNameRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textName"
+                        android:hint="Item Name"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="textCapWords|textMultiLine"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Item Type -->
+                <LinearLayout
+                    android:id="@+id/itemTypeRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <TextView
+                        android:layout_weight="3.3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Type"
+                        android:padding="5dp"
+                        />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        >
+                        <RadioButton
+                            android:text="Instrument"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/instrumentRadioButton"
+                            android:textSize="12sp"
+                            android:layout_weight="1"
+                            />
+                        <RadioButton
+                            android:text="Consumable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/consumableRadioButton"
+                            android:textSize="12sp"
+                            android:layout_weight="1"
+                            />
+                    </RadioGroup>
+
+                </LinearLayout>
+
+                <!-- Item Location -->
+                <LinearLayout
+                    android:id="@+id/itemLocationRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Location"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textLocation"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine|textCapWords"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Calibration Layout -->
+            <LinearLayout
+                android:id="@+id/calibrationRemindersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+                <!-- Calibration Reminder checkbox -->
+                <CheckBox
+                    android:id="@+id/chkCalibration"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:text="Calibration Reminders"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:checked="false"
+                    />
+
+                <!-- Calibration Details -->
+                <LinearLayout
+                    android:id="@+id/calibrationDetailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:layout_gravity="bottom"
+                    android:elevation="6dp"
+                    android:orientation="vertical"
+                    android:textAlignment="center"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        >
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/calibration_frequency"
+                            android:padding="5dp"
+                            />
+                        <EditText
+                            android:id="@+id/textCalibrationFrequency"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:inputType="numberDecimal"
+                            android:layout_weight="1"
+                            android:layout_marginRight="120dp"
+                            android:background="@drawable/textview_shape"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+                        <TextView
+                            android:text="@string/calibration_date"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                        />
+                        <Button
+                            android:id="@+id/btnChangeCalibrationDate"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/set_date"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="120dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+                        <TextView
+                            android:text="@string/instructions"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+                        <EditText
+                            android:id="@+id/textCalibrationInstructions"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:cursorVisible="true"
+                            android:background="@drawable/textview_shape"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Maintenance Layout -->
+            <LinearLayout
+                android:id="@+id/maintenanceRemindersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Maintenance Reminder checkbox -->
+                <CheckBox
+                    android:id="@+id/chkMaintenance"
+                    android:text="Maintenance Reminders"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:checked="false"
+                    />
+
+                <!-- Maintenance Details -->
+                <LinearLayout
+                    android:id="@+id/maintenanceDetailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:layout_gravity="bottom"
+                    android:elevation="6dp"
+                    android:orientation="vertical"
+                    android:textAlignment="center"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        >
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="@string/maintenance_frequency"
+                            />
+
+                        <EditText
+                            android:id="@+id/textMaintenanceFrequency"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:inputType="numberDecimal"
+                            android:layout_marginRight="120dp"
+                            android:background="@drawable/textview_shape"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+                        <TextView
+                            android:text="@string/maintenance_date"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+                        <Button
+                            android:id="@+id/btnChangeMaintenanceDate"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/set_date"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="120dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+
+                        <TextView
+                            android:text="@string/instructions"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+
+                        <EditText
+                            android:id="@+id/textMaintenanceInstructions"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:cursorVisible="true"
+                            android:background="@drawable/textview_shape"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Contract Layout -->
+            <LinearLayout
+                android:id="@+id/contractRemindersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Contract Reminder checkbox -->
+                <CheckBox
+                    android:id="@+id/chkContract"
+                    android:text="Contract Reminders"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:checked="false"
+                    />
+
+                <!-- Contract Details -->
+                <LinearLayout
+                    android:id="@+id/contractDetailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:layout_gravity="bottom"
+                    android:elevation="6dp"
+                    android:orientation="vertical"
+                    android:textAlignment="center"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        >
+
+                        <TextView
+                            android:text="@string/contract_valid_till_date"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+                        <Button
+                            android:id="@+id/btnContractValidTillDate"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/set_date"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="120dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+
+                        <TextView
+                            android:text="@string/instructions"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+
+                        <EditText
+                            android:id="@+id/textContractInstructions"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:cursorVisible="true"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:background="@drawable/textview_shape"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Consumable  Layout -->
+            <LinearLayout
+                android:id="@+id/consumableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Current Quantity -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:text="@string/current_quantity"
+                        android:layout_weight="2"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        />
+                    <EditText
+                        android:id="@+id/textCurrentQuantity"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="160dp"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        />
+                </LinearLayout>
+
+                <!-- Inventory Reminders checkbox -->
+                <CheckBox
+                    android:id="@+id/chkInventory"
+                    android:text="Inventory Reminders"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:checked="false"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/inventoryDetailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="5dp"
+                        >
+                        <TextView
+                            android:text="@string/min_required_quantity"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+                        <EditText
+                            android:id="@+id/textMinRequiredQuantity"
+                            android:inputType="numberDecimal"
+                            android:cursorVisible="true"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="160dp"
+                            android:padding="5dp"
+                            android:background="@drawable/textview_shape"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <TextView
+                            android:text="Re-order Instructions"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+                        <EditText
+                            android:id="@+id/textReorderInstructions"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:cursorVisible="true"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:background="@drawable/textview_shape"
+                            android:layout_marginRight="5dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Description  Layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:text="Description"
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textDescription"
+                        android:inputType="textMultiLine|textCapSentences|textAutoComplete|textAutoCorrect"
+                        android:cursorVisible="true"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <TextView
+                        android:text="Image"
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/imageItem"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:visibility="visible"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_item_detail_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>

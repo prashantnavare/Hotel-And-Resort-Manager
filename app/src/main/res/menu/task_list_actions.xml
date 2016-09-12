@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:resortmanager="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_search"
+        android:icon="@drawable/ic_menu_search"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        resortmanager:actionViewClass="android.support.v7.widget.SearchView"
+        android:title="@string/action_search"/>
+    <item android:id="@+id/menu_update_tasks"
+        android:icon="@drawable/ic_menu_update_tasks"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_update_tasks"/>
+</menu>

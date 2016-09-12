@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:resortmanager="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_save"
+        android:icon="@drawable/ic_menu_save"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_save"/>
+    <item android:id="@+id/menu_revert"
+        android:icon="@drawable/ic_menu_revert"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_revert"/>
+    <item android:id="@+id/menu_service_call"
+        android:icon="@drawable/ic_menu_service_call"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_service_call"/>
+    <item android:id="@+id/menu_inventory_add"
+        android:icon="@drawable/ic_menu_inventory_add"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_inventory_add"/>
+    <item android:id="@+id/menu_inventory_subtract"
+        android:icon="@drawable/ic_menu_inventory_subtract"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_inventory_subtract"/>
+    <item android:id="@+id/menu_camera"
+        android:icon="@drawable/ic_menu_camera"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_camera"/>
+    <item android:id="@+id/menu_delete"
+        android:icon="@drawable/ic_menu_delete"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_delete"/>
+</menu>

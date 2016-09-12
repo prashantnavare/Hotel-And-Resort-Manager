@@ -1,0 +1,124 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e0e0e0"
+    tools:context=".MainActivity"
+    >
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        >
+
+        <Button
+            android:id="@+id/tasks_button"
+            android:text="@string/tasks_button"
+            android:onClick="onTasksClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:layout_marginTop="25dp"
+            android:enabled="true"
+            android:longClickable="true"
+            android:textStyle="bold"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/inventory_button"
+            android:text="@string/inventory_button"
+            android:onClick="onInventoryClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:layout_marginTop="100dp"
+            android:enabled="true"
+            android:textStyle="bold"
+            android:longClickable="true"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/reports_button"
+            android:text="Reports"
+            android:onClick="onReportsClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="175dp"
+            android:clickable="true"
+            android:enabled="true"
+            android:textStyle="bold"
+            android:longClickable="true"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/backuprestore_button"
+            android:text="@string/backup_restore_button"
+            android:onClick="onBackupRestoreClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="250dp"
+            android:clickable="true"
+            android:enabled="true"
+            android:textStyle="bold"
+            android:longClickable="true"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/settings_button"
+            android:text="@string/settings_button"
+            android:onClick="onSettingsClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="325dp"
+            android:clickable="true"
+            android:enabled="true"
+            android:textStyle="bold"
+            android:longClickable="true"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/removeads_button"
+            android:text="@string/removeads_button"
+            android:onClick="onRemoveAdsClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="400dp"
+            android:clickable="true"
+            android:enabled="true"
+            android:textStyle="bold"
+            android:longClickable="true"
+            android:background="@drawable/button_shape"
+            />
+    </FrameLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_main_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>
