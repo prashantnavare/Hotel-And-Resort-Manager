@@ -1,0 +1,11 @@
+1. To install
+
+adb install e:\ResortManager\app\build\outputs\apk\app-debug.apk
+
+2. To uninstall
+
+adb uninstall com.navare.prashant.resortmanager
+
+3. To clear data
+
+adb shell pm clear com.navare.prashant.resortmanager
