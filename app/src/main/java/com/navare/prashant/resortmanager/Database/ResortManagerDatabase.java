@@ -52,6 +52,8 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         db.execSQL(Task.CREATE_TABLE);
         db.execSQL(Task.CREATE_FTS_TABLE);
         db.execSQL(Task.CREATE_COMPLETED_FTS_TABLE);
+        db.execSQL(Room.CREATE_TABLE);
+        db.execSQL(Room.CREATE_FTS_TABLE);
     }
 
     /**

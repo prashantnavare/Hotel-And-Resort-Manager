@@ -51,9 +51,9 @@
             />
 
         <Button
-            android:id="@+id/reports_button"
-            android:text="Reports"
-            android:onClick="onReportsClick"
+            android:id="@+id/rooms_button"
+            android:text="Rooms"
+            android:onClick="onRoomsClick"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

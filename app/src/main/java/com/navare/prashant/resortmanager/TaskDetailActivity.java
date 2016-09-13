@@ -234,7 +234,7 @@ public class TaskDetailActivity extends AppCompatActivity
                         //permission is denied (and never ask again is  checked)
                         //shouldShowRequestPermissionRationale will return false
                         else {
-                            Toast.makeText(this, "Go to Settings and enable Contacts and SMS permissions for the Inventory Manager before assigning tasks.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Go to Settings and enable Contacts and SMS permissions for the  Resort Manager before assigning tasks.", Toast.LENGTH_LONG).show();
                             // disable the assign task functionality
                             EnableAssignButton(false);
                             break;
@@ -286,7 +286,7 @@ public class TaskDetailActivity extends AppCompatActivity
                         //permission is denied (and never ask again is  checked)
                         //shouldShowRequestPermissionRationale will return false
                         else {
-                            Toast.makeText(this, "Go to Settings and enable Phone permission for the Inventory Manager before calling assignees from the app.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Go to Settings and enable Phone permission for the  Resort Manager before calling assignees from the app.", Toast.LENGTH_LONG).show();
                             // disable the call assignee functionality
                             EnableCallButton(false);
                             break;

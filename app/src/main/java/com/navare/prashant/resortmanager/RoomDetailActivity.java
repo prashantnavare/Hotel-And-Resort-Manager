@@ -35,7 +35,7 @@ import java.util.Map;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity extends AppCompatActivity
+public class RoomDetailActivity extends AppCompatActivity
         implements ItemDetailFragment.Callbacks, InventoryDialogFragment.InventoryDialogListener, ServiceCallDialogFragment.ServiceCallDialogListener {
 
     private MenuItem deleteMenuItem = null;

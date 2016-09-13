@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForReports();
-                onReportsClick(null);
+                onRoomsClick(null);
             }
         });
 
@@ -232,7 +232,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onReportsClick(View view) {
+    public void onRoomsClick(View view) {
         if (mInterstitialAdForReports != null && mInterstitialAdForReports.isLoaded()) {
             mInterstitialAdForReports.show();
         }
@@ -262,7 +262,7 @@ public class MainActivity extends Activity {
         alertDialog.setTitle("Remove Ads");
 
         // Setting Dialog Message
-        alertDialog.setMessage("Would you like to purchase Inventory Manager and remove the ads?");
+        alertDialog.setMessage("Would you like to purchase  Resort Manager and remove the ads?");
 
         // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_hospital_inventory);
@@ -362,7 +362,7 @@ public class MainActivity extends Activity {
             Log.d("initiatePurchase()", "Purchase successful.");
 
             if (purchase.getSku().equals(SKU_INVENTORY_MANAGER)) {
-                // bought the Inventory Manager app!
+                // bought the  Resort Manager app!
                 Log.d("initiatePurchase()", "Purchase is premium upgrade. Congratulating user.");
                 showPurchaseSuccessAlert("Thank you for for the purchase.");
                 ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
@@ -379,7 +379,7 @@ public class MainActivity extends Activity {
     private void setTitleAndTaskandItemCount() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-        titleString = titleString + " Inventory Manager";
+        titleString = titleString + "  Resort Manager";
         setTitle(titleString);
 
         long taskCount = preferences.getLong(ResortManagerApp.sPrefTaskCount, 0);

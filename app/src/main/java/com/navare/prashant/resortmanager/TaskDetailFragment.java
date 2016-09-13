@@ -469,7 +469,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
             String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-            titleString = titleString + " Inventory Manager: ";
+            titleString = titleString + "  Resort Manager: ";
             // First send SMS to the new assignee
             String smsAssignMessage = titleString + "You have been assigned a " + mTask.getTaskTypeString() + " task for " + mTask.mItemName;
             if (!mTask.mItemLocation.isEmpty()) {
@@ -498,7 +498,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
                         if (!mCurrentAssignee.isEmpty()) {
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
                             String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-                            titleString = titleString + " Inventory Manager: ";
+                            titleString = titleString + "  Resort Manager: ";
                             String smsUnAssignMessage = titleString + "You have been unassigned from a " + mTask.getTaskTypeString() + " task for " + mTask.mItemName;
                             if (!mTask.mItemLocation.isEmpty()) {
                                 smsUnAssignMessage = smsUnAssignMessage + " located at " + mTask.mItemLocation;
