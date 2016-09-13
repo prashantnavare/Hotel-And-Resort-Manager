@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Inventory Manager</string>
+    <string name="app_name">Resort Manager</string>
     <string name="inventory_button">Inventory</string>
     <string name="tasks_button">Tasks</string>
     <string name="settings_button">Settings</string>

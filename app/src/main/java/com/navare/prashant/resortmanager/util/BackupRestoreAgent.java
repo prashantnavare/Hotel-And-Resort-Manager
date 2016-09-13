@@ -7,7 +7,7 @@ import android.app.backup.FileBackupHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 
-import com.navare.prashant.resortmanager.Database.InventoryDatabase;
+import com.navare.prashant.resortmanager.Database.ResortManagerDatabase;
 import com.navare.prashant.resortmanager.ResortManagerApp;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class BackupRestoreAgent extends BackupAgentHelper {
 
     // The name of the SharedPreferences file
     private static final String PREFS_FILE = ResortManagerApp.sContext.getPackageName() + "_preferences";
-    private static final String DB_FILE = "../databases/" + InventoryDatabase.DATABASE_NAME;
+    private static final String DB_FILE = "../databases/" + ResortManagerDatabase.DATABASE_NAME;
 
 
     // A key to uniquely identify the set of preferences backup data

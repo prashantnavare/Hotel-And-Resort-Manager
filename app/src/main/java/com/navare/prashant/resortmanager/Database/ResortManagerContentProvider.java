@@ -117,14 +117,14 @@ public class ResortManagerContentProvider extends ContentProvider {
     private static final String ITEM_DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
             "/vnd.navare.prashant.ResortManager.Item";
 
-    private InventoryDatabase mInventoryDB;
+    private ResortManagerDatabase mResortDB;
 
     public ResortManagerContentProvider() {
     }
 
     @Override
     public boolean onCreate() {
-        mInventoryDB = new InventoryDatabase(getContext());
+        mResortDB = new ResortManagerDatabase(getContext());
         return true;
     }
 
@@ -179,46 +179,46 @@ public class ResortManagerContentProvider extends ContentProvider {
     }
 
     private Cursor getAllFTSItems() {
-        return mInventoryDB.getAllFTSItems(Item.FTS_FIELDS);
+        return mResortDB.getAllFTSItems(Item.FTS_FIELDS);
     }
 
     private Cursor searchFTSItems(String query) {
         query = query.toLowerCase();
-        return mInventoryDB.getFTSItemMatches(query, Item.FTS_FIELDS);
+        return mResortDB.getFTSItemMatches(query, Item.FTS_FIELDS);
     }
 
     private Cursor getItem(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        return mInventoryDB.getItem(rowId, Item.FIELDS);
+        return mResortDB.getItem(rowId, Item.FIELDS);
     }
 
     private Cursor getSuggestionsFTSForItems(String query) {
         query = query.toLowerCase();
-        return mInventoryDB.getFTSItemMatches(query, Item.FTS_FIELDS);
+        return mResortDB.getFTSItemMatches(query, Item.FTS_FIELDS);
     }
 
     private Cursor getAllFTSTasks() {
-        return mInventoryDB.getAllFTSTasks(Task.FTS_FIELDS);
+        return mResortDB.getAllFTSTasks(Task.FTS_FIELDS);
     }
 
     private Cursor searchFTSTasks(String query) {
         query = query.toLowerCase();
-        return mInventoryDB.getFTSTaskMatches(query, Task.FTS_FIELDS);
+        return mResortDB.getFTSTaskMatches(query, Task.FTS_FIELDS);
     }
 
     private Cursor searchCompletedFTSTasks(String itemID, String query) {
         query = query.toLowerCase();
-        return mInventoryDB.getCompletedFTSTaskMatches(itemID, query, Task.COMPLETED_FTS_FIELDS);
+        return mResortDB.getCompletedFTSTaskMatches(itemID, query, Task.COMPLETED_FTS_FIELDS);
     }
 
     private Cursor getTask(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        return mInventoryDB.getTask(rowId, Task.FIELDS);
+        return mResortDB.getTask(rowId, Task.FIELDS);
     }
 
     private Cursor getServiceCall(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        return mInventoryDB.getServiceCall(rowId, ServiceCall.FIELDS);
+        return mResortDB.getServiceCall(rowId, ServiceCall.FIELDS);
     }
 
     @Override
@@ -235,7 +235,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private int deleteItem(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        int rowsDeleted = mInventoryDB.deleteItem(rowId);
+        int rowsDeleted = mResortDB.deleteItem(rowId);
         if (rowsDeleted > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             getContext().getContentResolver().notifyChange(FTS_ITEM_URI, null);
@@ -245,7 +245,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private int deleteTask(Uri uri) {
         String rowId = uri.getLastPathSegment();
-        int rowsDeleted = mInventoryDB.deleteTask(rowId);
+        int rowsDeleted = mResortDB.deleteTask(rowId);
         if (rowsDeleted > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             getContext().getContentResolver().notifyChange(FTS_TASK_URI, null);
@@ -271,7 +271,7 @@ public class ResortManagerContentProvider extends ContentProvider {
     private Uri insertItem(ContentValues values) {
 
          // Add a new item
-        long rowID = mInventoryDB.insertItem(values);
+        long rowID = mResortDB.insertItem(values);
         // If record is added successfully
         if (rowID > 0)
         {
@@ -285,7 +285,7 @@ public class ResortManagerContentProvider extends ContentProvider {
     private Uri insertServiceCall(ContentValues values) {
 
         // Add a new service call
-        long rowID = mInventoryDB.insertServiceCall(values);
+        long rowID = mResortDB.insertServiceCall(values);
         // If record is added successfully
         if (rowID > 0)
         {
@@ -297,7 +297,7 @@ public class ResortManagerContentProvider extends ContentProvider {
     private Uri insertTask(ContentValues values) {
 
         // Add a new task
-        long rowID = mInventoryDB.insertTask(values);
+        long rowID = mResortDB.insertTask(values);
         // If record is added successfully
         if (rowID > 0)
         {
@@ -325,7 +325,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         String itemId = uri.getLastPathSegment();
-        int rowsUpdated = mInventoryDB.updateItem(itemId, values, selection, selectionArgs);
+        int rowsUpdated = mResortDB.updateItem(itemId, values, selection, selectionArgs);
         if (rowsUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             getContext().getContentResolver().notifyChange(FTS_ITEM_URI, null);
@@ -335,7 +335,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private int updateTask(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         String taskId = uri.getLastPathSegment();
-        int rowsUpdated = mInventoryDB.updateTask(taskId, values, selection, selectionArgs);
+        int rowsUpdated = mResortDB.updateTask(taskId, values, selection, selectionArgs);
         if (rowsUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             getContext().getContentResolver().notifyChange(FTS_TASK_URI, null);
@@ -345,7 +345,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private int updateServiceCall(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         String serviceCallId = uri.getLastPathSegment();
-        int rowsUpdated = mInventoryDB.updateServiceCall(serviceCallId, values, selection, selectionArgs);
+        int rowsUpdated = mResortDB.updateServiceCall(serviceCallId, values, selection, selectionArgs);
         if (rowsUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             getContext().getContentResolver().notifyChange(FTS_TASK_URI, null);
@@ -379,7 +379,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private void computeNewTasks() {
         Log.d("HIContentProvider", "starting computeNewTasks queries...");
-        mInventoryDB.computeNewTasks();
+        mResortDB.computeNewTasks();
         getContext().getContentResolver().notifyChange(FTS_TASK_URI, null);
     }
 }

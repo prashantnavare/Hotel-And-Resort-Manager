@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class InventoryDatabase extends SQLiteOpenHelper {
-    private static final String TAG = "InventoryDatabase";
+public class ResortManagerDatabase extends SQLiteOpenHelper {
+    private static final String TAG = "ResortManagerDatabase";
     public static final String DATABASE_NAME = "ResortManager";
     private static final int DATABASE_VERSION = 1;
 
@@ -37,7 +37,7 @@ public class InventoryDatabase extends SQLiteOpenHelper {
      * Constructor
      * @param context The Context within which to work, used to create the DB
      */
-    InventoryDatabase(Context context) {
+    ResortManagerDatabase(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mHelperContext = context;
