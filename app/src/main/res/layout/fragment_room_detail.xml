@@ -1,0 +1,324 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ScrollView
+        android:id="@+id/roomDetailScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/adView"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <!-- Room Name, location, type -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Room Name -->
+                <LinearLayout
+                    android:id="@+id/roomNameRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Room Name/Number"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textName"
+                        android:hint="Room Name or Number"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="textCapWords|textMultiLine"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Room Capacity -->
+                <LinearLayout
+                    android:id="@+id/roomCapacityRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Capacity"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textCapacity"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Room Description -->
+                <LinearLayout
+                    android:id="@+id/roomDescriptionRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textDescription"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine|textCapWords"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Cleaning Layout -->
+            <LinearLayout
+                android:id="@+id/cleaningRemindersLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+                <!-- Cleaning Reminder checkbox -->
+                <CheckBox
+                    android:id="@+id/chkCleaning"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:text="Cleaning Reminders"
+                    android:padding="5dp"
+                    android:textStyle="bold"
+                    android:checked="false"
+                    />
+
+                <!-- Cleaning Details -->
+                <LinearLayout
+                    android:id="@+id/cleaningDetailsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="5dp"
+                    android:layout_gravity="bottom"
+                    android:elevation="6dp"
+                    android:orientation="vertical"
+                    android:textAlignment="center"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        >
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Frequency (in days)"
+                            android:padding="5dp"
+                            />
+                        <EditText
+                            android:id="@+id/textCleaningFrequency"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:inputType="numberDecimal"
+                            android:layout_weight="1"
+                            android:layout_marginRight="120dp"
+                            android:background="@drawable/textview_shape"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+                        <TextView
+                            android:text="Cleaning Date"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                        />
+                        <Button
+                            android:id="@+id/btnChangeCleaningDate"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/set_date"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="120dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="10dp"
+                        >
+                        <TextView
+                            android:text="Instructions"
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            />
+                        <EditText
+                            android:id="@+id/textCleaningInstructions"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:cursorVisible="true"
+                            android:background="@drawable/textview_shape"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Image  Layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <TextView
+                        android:text="Image"
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/imageItem"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:visibility="visible"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_item_detail_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>

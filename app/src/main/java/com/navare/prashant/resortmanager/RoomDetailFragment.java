@@ -37,6 +37,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Item;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
+import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.util.CalibrationDatePickerFragment;
@@ -57,21 +58,21 @@ import java.util.Calendar;
  */
 public class RoomDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TextWatcher {
 
-    private static final int LOADER_ID_ITEM_DETAILS = 2;
+    private static final int LOADER_ID_ROOM_DETAILS = 2;
 
     /**
-     * The fragment argument representing the item ID that this fragment
+     * The fragment argument representing the room ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ROOM_ID = "room_id";
 
     private Context mContext = null;
 
     /**
-     * The item this fragment is presenting.
+     * The room this fragment is presenting.
      */
-    private String mItemID;
-    private Item mItem = null;
+    private String mRoomID;
+    private Room mRoom = null;
     private long mPreviousType = 0;
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -79,39 +80,16 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
      * The UI elements showing the details of the item
      */
     private TextView mTextName;
-    private TextView mTextLocation;
     private TextView mTextDescription;
-    private RadioButton mInstrumentRadioButton;
-    private RadioButton mConsumableRadioButton;
+    private TextView mTextCapacity;
 
-    private LinearLayout mCalibrationRemindersLayout;
-    private LinearLayout mCalibrationDetailsLayout;
-    private LinearLayout mMaintenanceRemindersLayout;
-    private LinearLayout mMaintenanceDetailsLayout;
-    private LinearLayout mContractRemindersLayout;
-    private LinearLayout mContractDetailsLayout;
+    private LinearLayout mCleaningRemindersLayout;
+    private LinearLayout mCleaningDetailsLayout;
 
-    private LinearLayout mConsumableLayout;
-    private LinearLayout mInventoryDetailsLayout;
-
-    private CheckBox mCalibrationCheckBox;
-    private TextView mTextCalibrationFrequency;
-    private Button mBtnChangeCalibrationDate;
-    private TextView mTextCalibrationInstructions;
-
-    private CheckBox mMaintenanceCheckBox;
-    private TextView mTextMaintenanceFrequency;
-    private Button mBtnChangeMaintenanceDate;
-    private TextView mTextMaintenanceInstructions;
-
-    private CheckBox mContractCheckBox;
-    private Button mBtnContractValidTillDate;
-    private TextView mTextContractInstructions;
-
-    private CheckBox mInventoryCheckBox;
-    private TextView mTextMinRequiredQuantity;
-    private TextView mTextCurrentQuantity;
-    private TextView mTextReorderInstructions;
+    private CheckBox mCleaningCheckBox;
+    private TextView mTextCleaningFrequency;
+    private Button mBtnChangeCleaningDate;
+    private TextView mTextCleaningInstructions;
 
     private ImageView mImageView;
 
@@ -130,7 +108,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
      */
     public interface Callbacks {
         /**
-         * Callbacks for when an item has been selected.
+         * Callbacks for when an room has been selected.
          */
         void EnableDeleteButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
@@ -139,7 +117,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         void EnableInventorySubtractButton(boolean bEnable);
         void RedrawOptionsMenu();
         void EnableServiceCallButton(boolean bEnable);
-        void onItemDeleted();
+        void onRoomDeleted();
         void setTitleString(String titleString);
     }
     /**
@@ -169,7 +147,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         public void RedrawOptionsMenu() {
         }
         @Override
-        public void onItemDeleted() {
+        public void onRoomDeleted() {
         }
 
         @Override
@@ -193,8 +171,8 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemID = getArguments().getString(ARG_ITEM_ID);
+        if (getArguments().containsKey(ARG_ROOM_ID)) {
+            mRoomID = getArguments().getString(ARG_ROOM_ID);
         }
     }
 
@@ -205,7 +183,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         Activity activity = getActivity();
         // Activities containing this fragment must implement its callbacks.
         if (!(activity instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement item detail fragment's callbacks.");
+            throw new IllegalStateException("Activity must implement room detail fragment's callbacks.");
         }
 
         mCallbacks = (Callbacks) activity;
@@ -246,197 +224,51 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         super.onDestroy();
     }
 
-
-    private void showInstrumentLayout() {
-        mCalibrationRemindersLayout.setVisibility(View.VISIBLE);
-        if (mCalibrationCheckBox.isChecked())
-            mCalibrationDetailsLayout.setVisibility(View.VISIBLE);
-        else
-            mCalibrationDetailsLayout.setVisibility(View.GONE);
-
-        mMaintenanceRemindersLayout.setVisibility(View.VISIBLE);
-        if (mMaintenanceCheckBox.isChecked())
-            mMaintenanceDetailsLayout.setVisibility(View.VISIBLE);
-        else
-            mMaintenanceDetailsLayout.setVisibility(View.GONE);
-
-        mContractRemindersLayout.setVisibility(View.VISIBLE);
-        if (mContractCheckBox.isChecked())
-            mContractDetailsLayout.setVisibility(View.VISIBLE);
-        else
-            mContractDetailsLayout.setVisibility(View.GONE);
-
-        mConsumableLayout.setVisibility(View.GONE);
-    }
-
-    private void showConsumableLayout() {
-        mCalibrationRemindersLayout.setVisibility(View.GONE);
-        mCalibrationDetailsLayout.setVisibility(View.GONE);
-        mMaintenanceRemindersLayout.setVisibility(View.GONE);
-        mMaintenanceDetailsLayout.setVisibility(View.GONE);
-        mContractRemindersLayout.setVisibility(View.GONE);
-        mContractDetailsLayout.setVisibility(View.GONE);
-
-        mConsumableLayout.setVisibility(View.VISIBLE);
-        if (mInventoryCheckBox.isChecked())
-            mInventoryDetailsLayout.setVisibility(View.VISIBLE);
-        else
-            mInventoryDetailsLayout.setVisibility(View.GONE);
-
-    }
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_item_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_room_detail, container, false);
 
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextName.addTextChangedListener(this);
 
-        mTextLocation = ((TextView) rootView.findViewById(R.id.textLocation));
-        mTextLocation.addTextChangedListener(this);
-
         mTextDescription = ((TextView) rootView.findViewById(R.id.textDescription));
         mTextDescription.addTextChangedListener(this);
 
-        mInstrumentRadioButton = (RadioButton) rootView.findViewById(R.id.instrumentRadioButton);
-        mInstrumentRadioButton.setChecked(true);
-        mInstrumentRadioButton.setOnClickListener(new RadioGroup.OnClickListener() {
-            public void onClick(View v){
-                if (mPreviousType != Item.InstrumentType) {
-                    showInstrumentLayout();
-                    mCallbacks.EnableRevertButton(true);
-                    mCallbacks.EnableSaveButton(true);
-                    mCallbacks.RedrawOptionsMenu();
-                }
-            }
-        });
-        mConsumableRadioButton = (RadioButton) rootView.findViewById(R.id.consumableRadioButton);
-        mConsumableRadioButton.setOnClickListener(new RadioGroup.OnClickListener() {
-            public void onClick(View v){
-                if (mPreviousType != Item.ConsumableType) {
-                    showConsumableLayout();
-                    mCallbacks.EnableRevertButton(true);
-                    mCallbacks.EnableSaveButton(true);
-                    mCallbacks.RedrawOptionsMenu();
-                }
-            }
-        });
+        mTextCapacity = (TextView) rootView.findViewById(R.id.textCapacity);
+        mTextCapacity.addTextChangedListener(this);
 
-        // Instrument related
-        mCalibrationRemindersLayout = (LinearLayout) rootView.findViewById(R.id.calibrationRemindersLayout);
-        mCalibrationDetailsLayout = (LinearLayout) rootView.findViewById(R.id.calibrationDetailsLayout);
-        mMaintenanceRemindersLayout = (LinearLayout) rootView.findViewById(R.id.maintenanceRemindersLayout);
-        mMaintenanceDetailsLayout = (LinearLayout) rootView.findViewById(R.id.maintenanceDetailsLayout);
-        mContractRemindersLayout = (LinearLayout) rootView.findViewById(R.id.contractRemindersLayout);
-        mContractDetailsLayout = (LinearLayout) rootView.findViewById(R.id.contractDetailsLayout);
+        mCleaningRemindersLayout = (LinearLayout) rootView.findViewById(R.id.cleaningRemindersLayout);
+        mCleaningDetailsLayout = (LinearLayout) rootView.findViewById(R.id.cleaningDetailsLayout);
 
-        // Calibration
-        mCalibrationCheckBox = (CheckBox) rootView.findViewById(R.id.chkCalibration);
-        mCalibrationCheckBox.setOnClickListener(new View.OnClickListener() {
+        // Cleaning
+        mCleaningCheckBox = (CheckBox) rootView.findViewById(R.id.chkCleaning);
+        mCleaningCheckBox.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (((CheckBox) v).isChecked()) {
-                    mCalibrationDetailsLayout.setVisibility(View.VISIBLE);
+                    mCleaningDetailsLayout.setVisibility(View.VISIBLE);
                 } else {
-                    mCalibrationDetailsLayout.setVisibility(View.GONE);
+                    mCleaningDetailsLayout.setVisibility(View.GONE);
                 }
                 enableRevertAndSaveButtons();
             }
         });
-        mTextCalibrationFrequency = (TextView) rootView.findViewById(R.id.textCalibrationFrequency);
-        mTextCalibrationFrequency.addTextChangedListener(this);
+        mTextCleaningFrequency = (TextView) rootView.findViewById(R.id.textCleaningFrequency);
+        mTextCleaningFrequency.addTextChangedListener(this);
 
-        mBtnChangeCalibrationDate = (Button) rootView.findViewById(R.id.btnChangeCalibrationDate);
-        mBtnChangeCalibrationDate.setOnClickListener(new View.OnClickListener() {
+        mBtnChangeCleaningDate = (Button) rootView.findViewById(R.id.btnChangeCleaningDate);
+        mBtnChangeCleaningDate.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                showDatePicker(DatePickerType.CALIBRATION);
+                showDatePicker(DatePickerType.CLEANING);
             }
         });
 
-        mTextCalibrationInstructions = (TextView) rootView.findViewById(R.id.textCalibrationInstructions);
-        mTextCalibrationInstructions.addTextChangedListener(this);
-
-        // Maintenance
-        mMaintenanceCheckBox = (CheckBox) rootView.findViewById(R.id.chkMaintenance);
-        mMaintenanceCheckBox.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    mMaintenanceDetailsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    mMaintenanceDetailsLayout.setVisibility(View.GONE);
-                }
-                enableRevertAndSaveButtons();
-            }
-        });
-
-        mTextMaintenanceFrequency = (TextView) rootView.findViewById(R.id.textMaintenanceFrequency);
-        mTextMaintenanceFrequency.addTextChangedListener(this);
-
-        mBtnChangeMaintenanceDate = (Button) rootView.findViewById(R.id.btnChangeMaintenanceDate);
-        mBtnChangeMaintenanceDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showDatePicker(DatePickerType.MAINTENANCE);
-            }
-        });
-
-        mTextMaintenanceInstructions = (TextView) rootView.findViewById(R.id.textMaintenanceInstructions);
-        mTextMaintenanceInstructions.addTextChangedListener(this);
-
-        // Contract
-        mContractCheckBox = (CheckBox) rootView.findViewById(R.id.chkContract);
-        mContractCheckBox.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    mContractDetailsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    mContractDetailsLayout.setVisibility(View.GONE);
-                }
-                enableRevertAndSaveButtons();
-            }
-        });
-
-        mBtnContractValidTillDate = (Button) rootView.findViewById(R.id.btnContractValidTillDate);
-        mBtnContractValidTillDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showDatePicker(DatePickerType.CONTRACT);
-            }
-        });
-
-        mTextContractInstructions = (TextView) rootView.findViewById(R.id.textContractInstructions);
-        mTextContractInstructions.addTextChangedListener(this);
-
-        // Consumable related
-        mConsumableLayout = (LinearLayout) rootView.findViewById(R.id.consumableLayout);
-        mInventoryDetailsLayout = (LinearLayout) rootView.findViewById(R.id.inventoryDetailsLayout);
-
-        // Inventory related
-        mTextCurrentQuantity = (TextView) rootView.findViewById(R.id.textCurrentQuantity);
-        mTextCurrentQuantity.addTextChangedListener(this);
-
-        mInventoryCheckBox = (CheckBox) rootView.findViewById(R.id.chkInventory);
-        mInventoryCheckBox.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    mInventoryDetailsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    mInventoryDetailsLayout.setVisibility(View.GONE);
-                }
-                enableRevertAndSaveButtons();
-            }
-        });
-
-        mTextMinRequiredQuantity = (TextView) rootView.findViewById(R.id.textMinRequiredQuantity);
-        mTextMinRequiredQuantity.addTextChangedListener(this);
-
-        mTextReorderInstructions = (TextView) rootView.findViewById(R.id.textReorderInstructions);
-        mTextReorderInstructions.addTextChangedListener(this);
+        mTextCleaningInstructions = (TextView) rootView.findViewById(R.id.textCleaningInstructions);
+        mTextCleaningInstructions.addTextChangedListener(this);
 
         // image related
         mImageView = ((ImageView) rootView.findViewById(R.id.imageItem));
@@ -460,25 +292,15 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         super.onDestroyView();
     }
 
-    enum DatePickerType {CALIBRATION, MAINTENANCE, CONTRACT}
+    enum DatePickerType {CLEANING}
 
     private void showDatePicker(final DatePickerType pickerType) {
         Calendar dateToShow = Calendar.getInstance();
-        if (mItem != null) {
+        if (mRoom != null) {
             switch (pickerType) {
-                case CALIBRATION:
-                    if (mItem.mCalibrationDate > 0) {
-                        dateToShow.setTimeInMillis(mItem.mCalibrationDate);
-                    }
-                    break;
-                case MAINTENANCE:
-                    if (mItem.mMaintenanceDate > 0) {
-                        dateToShow.setTimeInMillis(mItem.mMaintenanceDate);
-                    }
-                    break;
-                case CONTRACT:
-                    if (mItem.mContractValidTillDate > 0) {
-                        dateToShow.setTimeInMillis(mItem.mContractValidTillDate);
+                case CLEANING:
+                    if (mRoom.mCleaningDate > 0) {
+                        dateToShow.setTimeInMillis(mRoom.mCleaningDate);
                     }
                     break;
             }
@@ -500,14 +322,8 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 switch (pickerType) {
-                    case CALIBRATION:
-                        mBtnChangeCalibrationDate.setText(dateFormatter.format(newDate.getTime()));
-                        break;
-                    case MAINTENANCE:
-                        mBtnChangeMaintenanceDate.setText(dateFormatter.format(newDate.getTime()));
-                        break;
-                    case CONTRACT:
-                        mBtnContractValidTillDate.setText(dateFormatter.format(newDate.getTime()));
+                    case CLEANING:
+                        mBtnChangeCleaningDate.setText(dateFormatter.format(newDate.getTime()));
                         break;
                 }
                 enableRevertAndSaveButtons();
@@ -519,23 +335,23 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        if ((mItemID != null) && (!mItemID.isEmpty())) {
-            getLoaderManager().initLoader(LOADER_ID_ITEM_DETAILS, null, this);
+        if ((mRoomID != null) && (!mRoomID.isEmpty())) {
+            getLoaderManager().initLoader(LOADER_ID_ROOM_DETAILS, null, this);
         }
         else {
-            displayUIForNewItem();
+            displayUIForNewRoom();
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        if (id == LOADER_ID_ITEM_DETAILS) {
-            Uri itemURI = Uri.withAppendedPath(ResortManagerContentProvider.ITEM_URI,
-                    mItemID);
+        if (id == LOADER_ID_ROOM_DETAILS) {
+            Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI,
+                    mRoomID);
 
             return new CursorLoader(getActivity(),
-                    itemURI, Item.FIELDS, null, null,
+                    roomURI, Room.FIELDS, null, null,
                     null);
         }
         else
@@ -547,13 +363,13 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
         if (dataCursor != null) {
             int loaderID = loader.getId();
-            if (loaderID == LOADER_ID_ITEM_DETAILS) {
-                if (mItem == null)
-                    mItem = new Item();
+            if (loaderID == LOADER_ID_ROOM_DETAILS) {
+                if (mRoom == null)
+                    mRoom = new Room();
 
-                mItem.setContentFromCursor(dataCursor);
-                updateUIFromItem();
-                mCallbacks.setTitleString(mItem.mName);
+                mRoom.setContentFromCursor(dataCursor);
+                updateUIFromRoom();
+                mCallbacks.setTitleString(mRoom.mName);
 
                 // Toggle the action bar buttons appropriately
                 mCallbacks.EnableDeleteButton(true);
@@ -590,11 +406,11 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
     public void revertUI() {
-        if (mItem == null) {
-            displayUIForNewItem();
+        if (mRoom == null) {
+            displayUIForNewRoom();
         }
         else {
-            updateUIFromItem();
+            updateUIFromRoom();
         }
 
         mCallbacks.EnableRevertButton(false);
@@ -602,33 +418,33 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.RedrawOptionsMenu();
     }
 
-    public void deleteItem() {
-        Uri itemURI = Uri.withAppendedPath(ResortManagerContentProvider.ITEM_URI,
-                mItemID);
-        int result = getActivity().getContentResolver().delete(itemURI, null, null);
+    public void deleteRoom() {
+        Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI,
+                mRoomID);
+        int result = getActivity().getContentResolver().delete(roomURI, null, null);
         if (result > 0) {
-            mCallbacks.onItemDeleted();
+            mCallbacks.onRoomDeleted();
         }
     }
 
-    public boolean saveItem() {
-        boolean bAllDataOK = updateItemFromUI();
+    public boolean saveRoom() {
+        boolean bAllDataOK = updateRoomFromUI();
         if (!bAllDataOK)
             return false;
 
         boolean bSuccess = false;
-        if ((mItemID == null) || (mItemID.isEmpty())) {
+        if ((mRoomID == null) || (mRoomID.isEmpty())) {
             // a new item is being inserted.
-            Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.ITEM_URI, mItem.getContentValues());
+            Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.ROOM_URI, mRoom.getContentValues());
             if (uri != null) {
-                mItemID = uri.getLastPathSegment();
+                mRoomID = uri.getLastPathSegment();
                 bSuccess = true;
             }
         }
         else {
-            Uri itemURI = Uri.withAppendedPath(ResortManagerContentProvider.ITEM_URI,
-                    mItemID);
-            int result = getActivity().getContentResolver().update(itemURI, mItem.getContentValues(), null, null);
+            Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI,
+                    mRoomID);
+            int result = getActivity().getContentResolver().update(roomURI, mRoom.getContentValues(), null, null);
             if (result > 0)
                 bSuccess = true;
         }
@@ -636,7 +452,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             mCallbacks.EnableSaveButton(false);
             mCallbacks.EnableRevertButton(false);
             mCallbacks.RedrawOptionsMenu();
-            mCallbacks.setTitleString(mItem.mName);
+            mCallbacks.setTitleString(mRoom.mName);
         }
         return true;
     }
@@ -665,279 +481,116 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private boolean updateItemFromUI() {
-        if (mItem == null)
-            mItem = new Item();
+    private boolean updateRoomFromUI() {
+        if (mRoom == null)
+            mRoom = new Room();
 
         if (mTextName.getText().toString().isEmpty()) {
-            showAlertDialog("Item name cannot be empty.");
+            showAlertDialog("Room name cannot be empty.");
             mTextName.requestFocus();
             return false;
         }
         else {
-            mItem.mName = mTextName.getText().toString();
+            mRoom.mName = mTextName.getText().toString();
         }
-        mItem.mLocation = mTextLocation.getText().toString();
-        mItem.mDescription = mTextDescription.getText().toString();
-        if (mInstrumentRadioButton.isChecked()) {
-            // Instrument
-            mItem.mType = Item.InstrumentType;
+        mRoom.mDescription = mTextDescription.getText().toString();
 
-            // Calibration related
-            if (mCalibrationCheckBox.isChecked()) {
-                mItem.mCalibrationReminders = 1;
-                if (mTextCalibrationFrequency.getText().toString().isEmpty()) {
-                    showAlertDialog("Calibration frequency cannot be empty.");
-                    mTextCalibrationFrequency.requestFocus();
-                    return false;
-                }
-                else {
-                    mItem.mCalibrationFrequency = Long.valueOf(mTextCalibrationFrequency.getText().toString());
-                }
-
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                Calendar calibrationDate = Calendar.getInstance();
-                String uiCalibrationDate = mBtnChangeCalibrationDate.getText().toString();
-                if (uiCalibrationDate.compareToIgnoreCase("Set") != 0) {
-                    try {
-                        calibrationDate.setTime(dateFormatter.parse(uiCalibrationDate));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    mItem.mCalibrationDate = calibrationDate.getTimeInMillis();
-                }
-
-                mItem.mCalibrationInstructions = mTextCalibrationInstructions.getText().toString();
-            }
-            else {
-                mItem.mCalibrationReminders = 0;
-            }
-
-            // Maintenance related
-            if (mMaintenanceCheckBox.isChecked()) {
-                mItem.mMaintenanceReminders = 1;
-                if (mTextMaintenanceFrequency.getText().toString().isEmpty()) {
-                    showAlertDialog("Maintenance frequency cannot be empty.");
-                    mTextMaintenanceFrequency.requestFocus();
-                    return false;
-                }
-                else {
-                    mItem.mMaintenanceFrequency = Long.valueOf(mTextMaintenanceFrequency.getText().toString());
-                }
-
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                Calendar maintenanceDate = Calendar.getInstance();
-                String uiMaintenanceDate = mBtnChangeMaintenanceDate.getText().toString();
-                if (uiMaintenanceDate.compareToIgnoreCase("Set") != 0) {
-                    try {
-                        maintenanceDate.setTime(dateFormatter.parse(uiMaintenanceDate));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    mItem.mMaintenanceDate = maintenanceDate.getTimeInMillis();
-                }
-
-                mItem.mMaintenanceInstructions = mTextMaintenanceInstructions.getText().toString();
-            }
-            else {
-                mItem.mMaintenanceReminders = 0;
-            }
-
-            // Contract related
-            if (mContractCheckBox.isChecked()) {
-                mItem.mContractReminders = 1;
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                Calendar contractDate = Calendar.getInstance();
-                String uiContractDate = mBtnContractValidTillDate.getText().toString();
-                if (uiContractDate.compareToIgnoreCase("Set") != 0) {
-                    try {
-                        contractDate.setTime(dateFormatter.parse(uiContractDate));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    mItem.mContractValidTillDate = contractDate.getTimeInMillis();
-                }
-
-                mItem.mContractInstructions = mTextContractInstructions.getText().toString();
-            }
-            else {
-                mItem.mContractReminders = 0;
-            }
+        if (mTextCapacity.getText().toString().isEmpty()) {
+            showAlertDialog("Capacity cannot be empty.");
+            mTextCapacity.requestFocus();
+            return false;
         }
-        else if (mConsumableRadioButton.isChecked()){
-            // Consumable
-            mItem.mType = Item.ConsumableType;
-            // Inventory related
-            if (!mTextCurrentQuantity.getText().toString().isEmpty())
-                mItem.mCurrentQuantity = Long.valueOf(mTextCurrentQuantity.getText().toString());
-            if (mInventoryCheckBox.isChecked()) {
-                mItem.mInventoryReminders = 1;
-                if (mTextMinRequiredQuantity.getText().toString().isEmpty()) {
-                    showAlertDialog("Minimum quantity cannot be empty.");
-                    mTextMinRequiredQuantity.requestFocus();
-                    return false;
-                }
-                else {
-                    mItem.mMinRequiredQuantity = Long.valueOf(mTextMinRequiredQuantity.getText().toString());
-                    mItem.mReorderInstructions = mTextReorderInstructions.getText().toString();
-                }
+        else {
+            mRoom.mCapacity = Long.valueOf(mTextCapacity.getText().toString());
+        }
+
+        // Cleaning related
+        if (mCleaningCheckBox.isChecked()) {
+            mRoom.mCleaningReminders = 1;
+            if (mTextCleaningFrequency.getText().toString().isEmpty()) {
+                showAlertDialog("Cleaning frequency cannot be empty.");
+                mTextCleaningFrequency.requestFocus();
+                return false;
             }
             else {
-                mItem.mInventoryReminders = 0;
+                mRoom.mCleaningFrequency = Long.valueOf(mTextCleaningFrequency.getText().toString());
             }
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            Calendar cleaningDate = Calendar.getInstance();
+            String uiCleaningDate = mBtnChangeCleaningDate.getText().toString();
+            if (uiCleaningDate.compareToIgnoreCase("Set") != 0) {
+                try {
+                    cleaningDate.setTime(dateFormatter.parse(uiCleaningDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                mRoom.mCleaningDate = cleaningDate.getTimeInMillis();
+            }
+
+            mRoom.mCleaningInstructions = mTextCleaningInstructions.getText().toString();
+        }
+        else {
+            mRoom.mCleaningReminders = 0;
         }
         if (mImageBitmap != null) {
             ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
             mImageBitmap.compress(Bitmap.CompressFormat.PNG, 0, imageStream);
-            mItem.mImage = imageStream.toByteArray();
+            mRoom.mImage = imageStream.toByteArray();
         }
         return true;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private void updateUIFromItem() {
-        mTextName.setText(mItem.mName);
-        mTextLocation.setText(mItem.mLocation);
-        mTextDescription.setText(mItem.mDescription);
-        if (mItem.mType == Item.InstrumentType) {
+    private void updateUIFromRoom() {
 
-            // Enable the instrument layout
-            showInstrumentLayout();
+        mTextName.setText(mRoom.mName);
+        mTextDescription.setText(mRoom.mDescription);
 
-            mPreviousType = Item.InstrumentType;
-            mInstrumentRadioButton.setChecked(true);
+        mTextCapacity.setText(String.valueOf(mRoom.mCapacity));
 
-            // Turn on the Instrument action bar menu items
-            mCallbacks.EnableServiceCallButton(true);
-
-            // Turn off the Consumable action bar menu items
-            mCallbacks.EnableInventoryAddButton(false);
-            mCallbacks.EnableInventorySubtractButton(false);
-
-            // Set the calibration UI elements
-            if (mItem.mCalibrationReminders > 0) {
-                mCalibrationCheckBox.setChecked(true);
-                mCalibrationDetailsLayout.setVisibility(View.VISIBLE);
-                if (mItem.mCalibrationFrequency > 0)
-                    mTextCalibrationFrequency.setText(String.valueOf(mItem.mCalibrationFrequency));
-                if (mItem.mCalibrationDate > 0) {
-                    Calendar calibrationDate = Calendar.getInstance();
-                    calibrationDate.setTimeInMillis(mItem.mCalibrationDate);
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                    mBtnChangeCalibrationDate.setText(dateFormatter.format(calibrationDate.getTime()));
-                }
-                else {
-                    mBtnChangeCalibrationDate.setText("Set");
-                }
-                mTextCalibrationInstructions.setText(mItem.mCalibrationInstructions);
+        // Set the cleaning UI elements
+        if (mRoom.mCleaningReminders > 0) {
+            mCleaningCheckBox.setChecked(true);
+            mCleaningDetailsLayout.setVisibility(View.VISIBLE);
+            if (mRoom.mCleaningFrequency > 0)
+                mTextCleaningFrequency.setText(String.valueOf(mRoom.mCleaningFrequency));
+            if (mRoom.mCleaningDate > 0) {
+                Calendar cleaningDate = Calendar.getInstance();
+                cleaningDate.setTimeInMillis(mRoom.mCleaningDate);
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                mBtnChangeCleaningDate.setText(dateFormatter.format(cleaningDate.getTime()));
             }
             else {
-                mCalibrationCheckBox.setChecked(false);
-                mCalibrationDetailsLayout.setVisibility(View.GONE);
+                mBtnChangeCleaningDate.setText("Set");
             }
-
-            // Set the maintenance UI elements
-            if (mItem.mMaintenanceReminders > 0) {
-                mMaintenanceCheckBox.setChecked(true);
-                mMaintenanceDetailsLayout.setVisibility(View.VISIBLE);
-                if (mItem.mMaintenanceFrequency > 0)
-                    mTextMaintenanceFrequency.setText(String.valueOf(mItem.mMaintenanceFrequency));
-                if (mItem.mMaintenanceDate > 0) {
-                    Calendar maintenanceDate = Calendar.getInstance();
-                    maintenanceDate.setTimeInMillis(mItem.mMaintenanceDate);
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                    mBtnChangeMaintenanceDate.setText(dateFormatter.format(maintenanceDate.getTime()));
-                }
-                else {
-                    mBtnChangeMaintenanceDate.setText("Set");
-                }
-                mTextMaintenanceInstructions.setText(mItem.mMaintenanceInstructions);
-            }
-            else {
-                mMaintenanceCheckBox.setChecked(false);
-                mMaintenanceDetailsLayout.setVisibility(View.GONE);
-            }
-
-            // Set the contract UI elements
-            if (mItem.mContractReminders > 0) {
-                mContractCheckBox.setChecked(true);
-                mContractDetailsLayout.setVisibility(View.VISIBLE);
-                if (mItem.mContractValidTillDate > 0) {
-                    Calendar contractDate = Calendar.getInstance();
-                    contractDate.setTimeInMillis(mItem.mContractValidTillDate);
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                    mBtnContractValidTillDate.setText(dateFormatter.format(contractDate.getTime()));
-                }
-                else {
-                    mBtnContractValidTillDate.setText("Set");
-                }
-                mTextContractInstructions.setText(mItem.mContractInstructions);
-            }
-            else {
-                mContractCheckBox.setChecked(false);
-                mContractDetailsLayout.setVisibility(View.GONE);
-            }
+            mTextCleaningInstructions.setText(mRoom.mCleaningInstructions);
         }
-        else if (mItem.mType == Item.ConsumableType) {
-
-            // Turn off the Instrument specific views
-            showConsumableLayout();
-
-            mPreviousType = Item.ConsumableType;
-            mConsumableRadioButton.setChecked(true);
-
-            // Turn off the Instrument action bar menu items
-            mCallbacks.EnableServiceCallButton(false);
-
-            // Turn on the Consumable action bar menu items
-            mCallbacks.EnableInventoryAddButton(true);
-            mCallbacks.EnableInventorySubtractButton(true);
-
-            if (mItem.mCurrentQuantity > 0)
-                mTextCurrentQuantity.setText(String.valueOf(mItem.mCurrentQuantity));
-
-            // Set the Inventory UI elements
-            if (mItem.mInventoryReminders > 0) {
-                mInventoryCheckBox.setChecked(true);
-                mInventoryDetailsLayout.setVisibility(View.VISIBLE);
-                if (mItem.mMinRequiredQuantity > 0)
-                    mTextMinRequiredQuantity.setText(String.valueOf(mItem.mMinRequiredQuantity));
-                mTextReorderInstructions.setText(mItem.mReorderInstructions);
-            }
-            else {
-                mInventoryCheckBox.setChecked(false);
-                mInventoryDetailsLayout.setVisibility(View.GONE);
-            }
+        else {
+            mCleaningCheckBox.setChecked(false);
+            mCleaningDetailsLayout.setVisibility(View.GONE);
         }
 
-        if (mItem.mImage == null) {
+        if (mRoom.mImage == null) {
             mImageView.setImageBitmap(null);
         }
         else {
             BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
             bmpFactoryOptions.inJustDecodeBounds = false;
-            mImageBitmap = BitmapFactory.decodeByteArray(mItem.mImage, 0, mItem.mImage.length, bmpFactoryOptions);
+            mImageBitmap = BitmapFactory.decodeByteArray(mRoom.mImage, 0, mRoom.mImage.length, bmpFactoryOptions);
             // Display it
             mImageView.setImageBitmap(mImageBitmap);
         }
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private void displayUIForNewItem() {
+    private void displayUIForNewRoom() {
         mTextName.setText("");
-        mTextLocation.setText("");
         mTextDescription.setText("");
-        mInstrumentRadioButton.setChecked(true);
-        showInstrumentLayout();
+        mTextCapacity.setText("");
 
-        mCalibrationCheckBox.setChecked(false);
-        mCalibrationDetailsLayout.setVisibility(View.GONE);
-
-        mMaintenanceCheckBox.setChecked(false);
-        mMaintenanceDetailsLayout.setVisibility(View.GONE);
-
-        mContractCheckBox.setChecked(false);
-        mContractDetailsLayout.setVisibility(View.GONE);
+        mCleaningCheckBox.setChecked(false);
+        mCleaningDetailsLayout.setVisibility(View.GONE);
 
         mImageView.setImageBitmap(null);
 
@@ -945,7 +598,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.EnableSaveButton(false);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
     }
 
     public void showInventoryAddDialog() {
@@ -962,12 +614,12 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
     public void showServiceCallDialog() {
         ServiceCallDialogFragment dialog = new ServiceCallDialogFragment();
-        dialog.setItem(mItem);
+        dialog.setRoom(mRoom);
         dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "ServiceCallDialogFragment");
     }
 
     public void addToInventory(long quantity) {
-        long newCurrrentQuantity =  mItem.mCurrentQuantity + quantity;
+        long newCurrrentQuantity =  mRoom.mCurrentQuantity + quantity;
         mTextCurrentQuantity.setText(String.valueOf(newCurrrentQuantity));
         mCallbacks.EnableRevertButton(true);
         mCallbacks.EnableSaveButton(true);
@@ -975,22 +627,22 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
     public void subtractFromInventory(long quantity) {
-        long newCurrrentQuantity =  mItem.mCurrentQuantity - quantity;
+        long newCurrrentQuantity =  mRoom.mCurrentQuantity - quantity;
         mTextCurrentQuantity.setText(String.valueOf(newCurrrentQuantity));
         mCallbacks.EnableRevertButton(true);
         mCallbacks.EnableSaveButton(true);
         mCallbacks.RedrawOptionsMenu();
     }
 
-    public void createServiceCall(long itemID, String description, long priority, String itemName, String itemLocation) {
+    public void createServiceCall(long roomID, String description, long priority, String roomName, String roomDescription) {
         ServiceCall sc = new ServiceCall();
-        sc.mItemID = itemID;
+        sc.mRoomID = roomID;
         sc.mDescription = description;
         sc.mPriority = priority;
         sc.mStatus = ServiceCall.OpenStatus;
         sc.mOpenTimeStamp = Calendar.getInstance().getTimeInMillis();
-        sc.mItemName = itemName;
-        sc.mItemLocation = itemLocation;
+        sc.mRoomName = roomName;
+        sc.mRoomDescription = roomDescription;
 
         // a new service call is being inserted.
         Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.SERVICE_CALL_URI, sc.getContentValues());
@@ -1001,10 +653,10 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             // Also create a corresponding task
             Task task = new Task();
             task.mTaskType = Task.ServiceCall;
-            task.mItemID = itemID;
+            task.mRoomID = roomID;
             task.mServiceCallID = Long.valueOf(uri.getLastPathSegment());
-            task.mItemName = mItem.mName;
-            task.mItemLocation = mItem.mLocation;
+            task.mRoomName = mRoom.mName;
+            task.mRoomDescription = mRoom.mDescription;
             task.mStatus = Task.OpenStatus;
             task.mPriority = priority;
 

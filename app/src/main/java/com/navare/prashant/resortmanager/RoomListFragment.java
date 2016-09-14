@@ -221,10 +221,10 @@ public class RoomListFragment extends ListFragment {
         mActivatedPosition = position;
     }
 
-    public void getNewItemList(final String searchString){
+    public void getNewRoomList(final String searchString){
 
         // Load the content
-        getLoaderManager().restartLoader(LOADER_ID_ITEM_LIST, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+        getLoaderManager().restartLoader(LOADER_ID_ROOM_LIST, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 String [] selectionArgs = null;
@@ -233,7 +233,7 @@ public class RoomListFragment extends ListFragment {
                 }
 
                 return new CursorLoader(getActivity(),
-                        ResortManagerContentProvider.FTS_ITEM_URI, Item.FTS_FIELDS, null, selectionArgs,
+                        ResortManagerContentProvider.FTS_ROOM_URI, Room.FTS_FIELDS, null, selectionArgs,
                         null);
             }
 
@@ -241,9 +241,9 @@ public class RoomListFragment extends ListFragment {
             public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
                 ((SimpleCursorAdapter) getListAdapter()).swapCursor(c);
                 if (c != null)
-                    mCallbacks.setItemCount(c.getCount());
+                    mCallbacks.setRoomCount(c.getCount());
                 else
-                    mCallbacks.setItemCount(0);
+                    mCallbacks.setRoomCount(0);
 
             }
 

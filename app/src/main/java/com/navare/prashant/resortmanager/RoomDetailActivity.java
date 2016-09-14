@@ -36,7 +36,7 @@ import java.util.Map;
  * more than a {@link ItemDetailFragment}.
  */
 public class RoomDetailActivity extends AppCompatActivity
-        implements ItemDetailFragment.Callbacks, InventoryDialogFragment.InventoryDialogListener, ServiceCallDialogFragment.ServiceCallDialogListener {
+        implements RoomDetailFragment.Callbacks, InventoryDialogFragment.InventoryDialogListener, ServiceCallDialogFragment.ServiceCallDialogListener {
 
     private MenuItem deleteMenuItem = null;
     private MenuItem revertMenuItem = null;
@@ -62,7 +62,7 @@ public class RoomDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_detail);
+        setContentView(R.layout.activity_room_detail);
 
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -80,12 +80,12 @@ public class RoomDetailActivity extends AppCompatActivity
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            arguments.putString(RoomDetailFragment.ARG_ROOM_ID,
+                    getIntent().getStringExtra(RoomDetailFragment.ARG_ROOM_ID));
+            RoomDetailFragment fragment = new RoomDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
+                    .add(R.id.room_detail_container, fragment)
                     .commit();
         }
         mThisActivity = this;
@@ -96,7 +96,7 @@ public class RoomDetailActivity extends AppCompatActivity
 
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.item_detail_actions, menu);
+        inflater.inflate(R.menu.room_detail_actions, menu);
 
         saveMenuItem = menu.getItem(0);
         revertMenuItem = menu.getItem(1);
@@ -132,20 +132,20 @@ public class RoomDetailActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (mbSaveMenuEnable) {
-                    promptUserForSavingItem();
+                    promptUserForSavingRoom();
                 }
                 else {
-                    NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
+                    NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));
                 }
                 return true;
             case R.id.menu_revert:
                 revertUI();
                 return true;
             case R.id.menu_delete:
-                deleteItem();
+                deleteRoom();
                 return true;
             case R.id.menu_save:
-                saveItem();
+                saveRoom();
                 return true;
             case R.id.menu_inventory_add:
                 showInventoryAddDialog();
@@ -200,8 +200,8 @@ public class RoomDetailActivity extends AppCompatActivity
                     if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
                         Log.d("handleCamera()", "Storage permission granted");
-                        ((ItemDetailFragment) getSupportFragmentManager()
-                                .findFragmentById(R.id.item_detail_container)).handleCamera();
+                        ((RoomDetailFragment) getSupportFragmentManager()
+                                .findFragmentById(R.id.room_detail_container)).handleCamera();
                     }
                     else {
                         Log.d("handleCamera()", "Storage permission not granted. Ask again: ");
@@ -225,7 +225,7 @@ public class RoomDetailActivity extends AppCompatActivity
                         // permission is denied (and never ask again is  checked)
                         // shouldShowRequestPermissionRationale will return false
                         else {
-                            Toast.makeText(this, "Go to Settings and enable Storage permission for the  Resort Manager before taking photos of items.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Go to Settings and enable Storage permission for the  Resort Manager before taking photos of rooms.", Toast.LENGTH_LONG).show();
                             // disable the call assignee functionality
                             EnableCameraButton(false);
                         }
@@ -237,7 +237,7 @@ public class RoomDetailActivity extends AppCompatActivity
 
     private void showDialogOK(DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(this)
-                .setMessage("Storage Permission is required for taking a photo of the item.")
+                .setMessage("Storage Permission is required for taking a photo of the room.")
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", okListener)
                 .create()
@@ -247,32 +247,32 @@ public class RoomDetailActivity extends AppCompatActivity
     private void handleCamera() {
 
         if(checkAndRequestStoragePermission()) {
-            ((ItemDetailFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.item_detail_container)).handleCamera();
+            ((RoomDetailFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.room_detail_container)).handleCamera();
         }
     }
 
     private void showServiceCallDialog() {
-        ((ItemDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.item_detail_container)).showServiceCallDialog();
+        ((RoomDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.room_detail_container)).showServiceCallDialog();
     }
 
     private void showInventoryAddDialog() {
-        ((ItemDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.item_detail_container)).showInventoryAddDialog();
+        ((RoomDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.room_detail_container)).showInventoryAddDialog();
     }
 
     private void showInventorySubtractDialog() {
-        ((ItemDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.item_detail_container)).showInventorySubtractDialog();
+        ((RoomDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.room_detail_container)).showInventorySubtractDialog();
     }
 
-    private boolean saveItem() {
-        return ((ItemDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.item_detail_container)).saveItem();
+    private boolean saveRoom() {
+        return ((RoomDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.room_detail_container)).saveRoom();
     }
 
-    private void promptUserForSavingItem() {
+    private void promptUserForSavingRoom() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
@@ -280,7 +280,7 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setTitle("Save Changes");
 
         // Setting Dialog Message
-        alertDialog.setMessage("Would you like to save the changes to this item?");
+        alertDialog.setMessage("Would you like to save the changes to this room?");
 
         // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_save);
@@ -289,9 +289,9 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
-                boolean bSuccess = saveItem();
+                boolean bSuccess = saveRoom();
                 if (bSuccess)
-                    NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ItemListActivity.class));
+                    NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, RoomListActivity.class));
             }
         });
 
@@ -299,7 +299,7 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ItemListActivity.class));
+                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, RoomListActivity.class));
             }
         });
 
@@ -307,7 +307,7 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.show();
     }
 
-    private void deleteItem() {
+    private void deleteRoom() {
 
         // First, get a confirmation from the user
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -316,7 +316,7 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setTitle("Delete");
 
         // Setting Dialog Message
-        alertDialog.setMessage("Are you sure you want to delete this item?");
+        alertDialog.setMessage("Are you sure you want to delete this room?");
 
         // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_delete);
@@ -325,8 +325,8 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
-                ((ItemDetailFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.item_detail_container)).deleteItem();
+                ((RoomDetailFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.room_detail_container)).deleteRoom();
             }
         });
 
@@ -342,8 +342,8 @@ public class RoomDetailActivity extends AppCompatActivity
     }
 
     private void revertUI() {
-        ((ItemDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.item_detail_container)).revertUI();
+        ((RoomDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.room_detail_container)).revertUI();
     }
 
     @Override
@@ -414,11 +414,11 @@ public class RoomDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemDeleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Item deleted.", Toast.LENGTH_SHORT);
+    public void onRoomDeleted() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Room deleted.", Toast.LENGTH_SHORT);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
+        NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));
     }
 
     @Override
@@ -449,8 +449,8 @@ public class RoomDetailActivity extends AppCompatActivity
 
     @Override
     public void onServiceCallDialogReportClick(ServiceCallDialogFragment dialog) {
-        ((ItemDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.item_detail_container)).createServiceCall(dialog.getItemID(), dialog.getDescription(), dialog.getPriority(), dialog.getItemName(), dialog.getItemLocation());
+        ((RoomDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.room_detail_container)).createServiceCall(dialog.getRoomID(), dialog.getDescription(), dialog.getPriority(), dialog.getRoomName(), dialog.getRoomDescription());
     }
 
     @Override
