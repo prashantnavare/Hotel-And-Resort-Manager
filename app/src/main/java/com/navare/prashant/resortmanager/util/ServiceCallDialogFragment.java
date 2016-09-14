@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.navare.prashant.resortmanager.Database.Item;
+import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.R;
 
@@ -23,6 +24,7 @@ import com.navare.prashant.resortmanager.R;
 public class ServiceCallDialogFragment extends DialogFragment {
 
     private Item mItem;
+    private Room mRoom;
     private TextView mTextInstrument;
     private CheckBox mUrgentCheckBox;
     private TextView mTextDescription;
@@ -143,12 +145,20 @@ public class ServiceCallDialogFragment extends DialogFragment {
         mItem = item;
     }
 
+    public void setRoom(Room room) {
+        mRoom = room;
+    }
+
     public String getDescription() {
         return mTextDescription.getText().toString();
     }
 
     public long getItemID() {
         return mItem.mID;
+    }
+
+    public long getRoomID() {
+        return mRoom.mID;
     }
 
     public long getPriority() {
@@ -163,7 +173,15 @@ public class ServiceCallDialogFragment extends DialogFragment {
         return mItem.mName;
     }
 
+    public String getRoomName() {
+        return mRoom.mName;
+    }
+
     public String getItemLocation() {
         return mItem.mLocation;
+    }
+
+    public String getRoomDescription() {
+        return mRoom.mDescription;
     }
 }

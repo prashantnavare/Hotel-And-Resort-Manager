@@ -16,15 +16,14 @@ import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.navare.prashant.resortmanager.Database.Item;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
 
 /**
- * A list fragment representing a list of Items. This fragment
+ * A list fragment representing a list of Rooms. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link ItemDetailFragment}.
+ * currently being viewed in a {@link RoomDetailFragment}.
  * <p/>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
@@ -34,7 +33,7 @@ public class RoomListFragment extends ListFragment {
     private static final int LOADER_ID_ROOM_LIST = 1;
     /**
      * The serialization (saved instance state) Bundle key representing the
-     * activated item position. Only used on tablets.
+     * activated room position. Only used on tablets.
      */
     private static final String STATE_ACTIVATED_POSITION = "activated_position";
 
@@ -78,7 +77,7 @@ public class RoomListFragment extends ListFragment {
         }
 
         @Override
-        public void setRoomCount(long itemCount) {
+        public void setRoomCount(long roomCount) {
         }
     };
 
@@ -179,14 +178,14 @@ public class RoomListFragment extends ListFragment {
     }
 
     @Override
-    public void onListRoomClick(ListView listView, View view, int position, long id) {
+    public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
         Cursor cursor = (Cursor) getListAdapter().getItem(position);
         Room room = new Room();
         room.setFTSContent(cursor);
         // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
+        // fragment is attached to one) that an room has been selected.
         mCallbacks.onRoomSelected(room.mFTSRealID);
     }
 

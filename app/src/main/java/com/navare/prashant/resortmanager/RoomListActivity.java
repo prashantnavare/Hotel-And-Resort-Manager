@@ -14,20 +14,20 @@ import android.view.MenuItem;
 
 
 /**
- * An activity representing a list of Items. This activity
+ * An activity representing a list of Rooms. This activity
  * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link ItemDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * handsets, the activity presents a list of rooms, which when touched,
+ * lead to a {@link RoomDetailActivity} representing
+ * room details. On tablets, the activity presents the list of rooms and
+ * room details side-by-side using two vertical panes.
  * <p/>
- * The activity makes heavy use of fragments. The list of items is a
- * {@link ItemListFragment} and the item details
- * (if present) is a {@link ItemDetailFragment}.
+ * The activity makes heavy use of fragments. The list of rooms is a
+ * {@link RoomListFragment} and the room details
+ * (if present) is a {@link RoomDetailFragment}.
  * <p/>
  * This activity also implements the required
- * {@link ItemListFragment.Callbacks} interface
- * to listen for item selections.
+ * {@link RoomListFragment.Callbacks} interface
+ * to listen for room selections.
  */
 public class RoomListActivity extends AppCompatActivity
         implements RoomListFragment.Callbacks, SearchView.OnQueryTextListener {
@@ -53,7 +53,7 @@ public class RoomListActivity extends AppCompatActivity
             // activity should be in two-pane mode.
             mTwoPane = true;
 
-            // In two-pane mode, list items should be given the
+            // In two-pane mode, list rooms should be given the
             // 'activated' state when touched.
             ((RoomListFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.room_list))
@@ -123,8 +123,8 @@ public class RoomListActivity extends AppCompatActivity
     }
 
     /**
-     * Callback method from {@link ItemListFragment.Callbacks}
-     * indicating that the item with the given ID was selected.
+     * Callback method from {@link RoomListFragment.Callbacks}
+     * indicating that the room with the given ID was selected.
      */
     @Override
     public void onRoomSelected(String id) {
@@ -142,7 +142,7 @@ public class RoomListActivity extends AppCompatActivity
 
         } else {
             // In single-pane mode, simply start the detail activity
-            // for the selected item ID.
+            // for the selected room ID.
             Intent detailIntent = new Intent(this, RoomDetailActivity.class);
             detailIntent.putExtra(RoomDetailFragment.ARG_ROOM_ID, id);
             startActivity(detailIntent);

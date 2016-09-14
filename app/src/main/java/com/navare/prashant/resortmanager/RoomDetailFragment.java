@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.navare.prashant.resortmanager.Database.Item;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
@@ -51,9 +50,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * A fragment representing a single Item detail screen.
- * This fragment is either contained in a {@link ItemListActivity}
- * in two-pane mode (on tablets) or a {@link ItemDetailActivity}
+ * A fragment representing a single Room detail screen.
+ * This fragment is either contained in a {@link RoomListActivity}
+ * in two-pane mode (on tablets) or a {@link RoomDetailActivity}
  * on handsets.
  */
 public class RoomDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TextWatcher {
@@ -77,7 +76,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /**
-     * The UI elements showing the details of the item
+     * The UI elements showing the details of the room
      */
     private TextView mTextName;
     private TextView mTextDescription;
@@ -113,8 +112,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         void EnableDeleteButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
-        void EnableInventoryAddButton(boolean bEnable);
-        void EnableInventorySubtractButton(boolean bEnable);
         void RedrawOptionsMenu();
         void EnableServiceCallButton(boolean bEnable);
         void onRoomDeleted();
@@ -135,12 +132,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         public void EnableSaveButton(boolean bEnable) {
         }
         @Override
-        public void EnableInventoryAddButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableInventorySubtractButton(boolean bEnable) {
-        }
-        @Override
         public void EnableServiceCallButton(boolean bEnable) {
         }
         @Override
@@ -156,7 +147,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
     };
 
     /**
-     * The fragment's current callback object, which is notified of changes to the item
+     * The fragment's current callback object, which is notified of changes to the room
      */
     private Callbacks mCallbacks = sDummyCallbacks;
 
@@ -271,7 +262,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mTextCleaningInstructions.addTextChangedListener(this);
 
         // image related
-        mImageView = ((ImageView) rootView.findViewById(R.id.imageItem));
+        mImageView = ((ImageView) rootView.findViewById(R.id.imageRoom));
 
         // Banner Ad
         mAdView = (AdView) rootView.findViewById(R.id.adView);
@@ -434,7 +425,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
         boolean bSuccess = false;
         if ((mRoomID == null) || (mRoomID.isEmpty())) {
-            // a new item is being inserted.
+            // a new room is being inserted.
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.ROOM_URI, mRoom.getContentValues());
             if (uri != null) {
                 mRoomID = uri.getLastPathSegment();
@@ -600,38 +591,10 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    public void showInventoryAddDialog() {
-        InventoryDialogFragment dialog = new InventoryDialogFragment();
-        dialog.setDialogType(InventoryDialogFragment.InventoryDialogType.ADD);
-        dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "InventoryDialogFragment");
-    }
-
-    public void showInventorySubtractDialog() {
-        InventoryDialogFragment dialog = new InventoryDialogFragment();
-        dialog.setDialogType(InventoryDialogFragment.InventoryDialogType.SUBTRACT);
-        dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "InventoryDialogFragment");
-    }
-
     public void showServiceCallDialog() {
         ServiceCallDialogFragment dialog = new ServiceCallDialogFragment();
         dialog.setRoom(mRoom);
         dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "ServiceCallDialogFragment");
-    }
-
-    public void addToInventory(long quantity) {
-        long newCurrrentQuantity =  mRoom.mCurrentQuantity + quantity;
-        mTextCurrentQuantity.setText(String.valueOf(newCurrrentQuantity));
-        mCallbacks.EnableRevertButton(true);
-        mCallbacks.EnableSaveButton(true);
-        mCallbacks.RedrawOptionsMenu();
-    }
-
-    public void subtractFromInventory(long quantity) {
-        long newCurrrentQuantity =  mRoom.mCurrentQuantity - quantity;
-        mTextCurrentQuantity.setText(String.valueOf(newCurrrentQuantity));
-        mCallbacks.EnableRevertButton(true);
-        mCallbacks.EnableSaveButton(true);
-        mCallbacks.RedrawOptionsMenu();
     }
 
     public void createServiceCall(long roomID, String description, long priority, String roomName, String roomDescription) {

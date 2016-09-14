@@ -27,23 +27,21 @@ import java.util.Map;
 
 
 /**
- * An activity representing a single Item detail screen. This
+ * An activity representing a single Room detail screen. This
  * activity is only used on handset devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link ItemListActivity}.
+ * in a {@link RoomListActivity}.
  * <p/>
  * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link ItemDetailFragment}.
+ * more than a {@link RoomDetailFragment}.
  */
 public class RoomDetailActivity extends AppCompatActivity
-        implements RoomDetailFragment.Callbacks, InventoryDialogFragment.InventoryDialogListener, ServiceCallDialogFragment.ServiceCallDialogListener {
+        implements RoomDetailFragment.Callbacks, ServiceCallDialogFragment.ServiceCallDialogListener {
 
     private MenuItem deleteMenuItem = null;
     private MenuItem revertMenuItem = null;
     private MenuItem saveMenuItem = null;
 
-    private MenuItem inventoryAddMenuItem = null;
-    private MenuItem inventorySubtractMenuItem = null;
     private MenuItem serviceCallMenuItem = null;
 
     private MenuItem cameraMenuItem = null;
@@ -52,8 +50,6 @@ public class RoomDetailActivity extends AppCompatActivity
     private boolean mbRevertMenuEnable = false;
     private boolean mbSaveMenuEnable = false;
 
-    private boolean mbInventoryAddMenuEnable = false;
-    private boolean mbInventorySubtractMenuEnable = false;
     private boolean mbServiceCallMenuEnable = false;
     private boolean mbCameraMenuEnable = false;
 
@@ -101,10 +97,8 @@ public class RoomDetailActivity extends AppCompatActivity
         saveMenuItem = menu.getItem(0);
         revertMenuItem = menu.getItem(1);
         serviceCallMenuItem = menu.getItem(2);
-        inventoryAddMenuItem = menu.getItem(3);
-        inventorySubtractMenuItem = menu.getItem(4);
-        cameraMenuItem = menu.getItem(5);
-        deleteMenuItem = menu.getItem(6);
+        cameraMenuItem = menu.getItem(3);
+        deleteMenuItem = menu.getItem(4);
 
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here
@@ -113,8 +107,6 @@ public class RoomDetailActivity extends AppCompatActivity
         EnableRevertButton(mbRevertMenuEnable);
         EnableDeleteButton(mbDeleteMenuEnable);
 
-        EnableInventoryAddButton(mbInventoryAddMenuEnable);
-        EnableInventorySubtractButton(mbInventorySubtractMenuEnable);
         EnableServiceCallButton(mbServiceCallMenuEnable);
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -146,12 +138,6 @@ public class RoomDetailActivity extends AppCompatActivity
                 return true;
             case R.id.menu_save:
                 saveRoom();
-                return true;
-            case R.id.menu_inventory_add:
-                showInventoryAddDialog();
-                return true;
-            case R.id.menu_inventory_subtract:
-                showInventorySubtractDialog();
                 return true;
             case R.id.menu_service_call:
                 showServiceCallDialog();
@@ -255,16 +241,6 @@ public class RoomDetailActivity extends AppCompatActivity
     private void showServiceCallDialog() {
         ((RoomDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.room_detail_container)).showServiceCallDialog();
-    }
-
-    private void showInventoryAddDialog() {
-        ((RoomDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.room_detail_container)).showInventoryAddDialog();
-    }
-
-    private void showInventorySubtractDialog() {
-        ((RoomDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.room_detail_container)).showInventorySubtractDialog();
     }
 
     private boolean saveRoom() {
@@ -374,24 +350,6 @@ public class RoomDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void EnableInventoryAddButton(boolean bEnable) {
-        mbInventoryAddMenuEnable = bEnable;
-        if (inventoryAddMenuItem != null) {
-            inventoryAddMenuItem.setEnabled(bEnable);
-            inventoryAddMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
-    public void EnableInventorySubtractButton(boolean bEnable) {
-        mbInventorySubtractMenuEnable = bEnable;
-        if (inventorySubtractMenuItem != null) {
-            inventorySubtractMenuItem.setEnabled(bEnable);
-            inventorySubtractMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
     public void EnableServiceCallButton(boolean bEnable) {
         mbServiceCallMenuEnable = bEnable;
         if (serviceCallMenuItem != null) {
@@ -424,27 +382,6 @@ public class RoomDetailActivity extends AppCompatActivity
     @Override
     public void setTitleString(String titleString) {
         setTitle(titleString);
-    }
-
-    @Override
-    public void onInventoryDialogPositiveClick(InventoryDialogFragment dialog) {
-        String stringQuantity = dialog.getQuantity();
-        if ((stringQuantity != null) && (!stringQuantity.isEmpty())) {
-            long lQuantity = Long.valueOf(stringQuantity);
-            if (dialog.getDialogType() == InventoryDialogFragment.InventoryDialogType.ADD) {
-                ((ItemDetailFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.item_detail_container)).addToInventory(lQuantity);
-            }
-            else if (dialog.getDialogType() == InventoryDialogFragment.InventoryDialogType.SUBTRACT) {
-                ((ItemDetailFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.item_detail_container)).subtractFromInventory(lQuantity);
-            }
-        }
-    }
-
-    @Override
-    public void onInventoryDialogNegativeClick(InventoryDialogFragment dialog) {
-
     }
 
     @Override
