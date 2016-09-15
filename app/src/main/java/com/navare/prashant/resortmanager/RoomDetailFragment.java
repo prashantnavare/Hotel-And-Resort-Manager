@@ -599,13 +599,13 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
     public void createServiceCall(long roomID, String description, long priority, String roomName, String roomDescription) {
         ServiceCall sc = new ServiceCall();
-        sc.mRoomID = roomID;
+        sc.mItemID = roomID;
         sc.mDescription = description;
         sc.mPriority = priority;
         sc.mStatus = ServiceCall.OpenStatus;
         sc.mOpenTimeStamp = Calendar.getInstance().getTimeInMillis();
-        sc.mRoomName = roomName;
-        sc.mRoomDescription = roomDescription;
+        sc.mItemName = roomName;
+        sc.mItemLocation = roomDescription;
 
         // a new service call is being inserted.
         Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.SERVICE_CALL_URI, sc.getContentValues());
@@ -616,10 +616,10 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             // Also create a corresponding task
             Task task = new Task();
             task.mTaskType = Task.ServiceCall;
-            task.mRoomID = roomID;
+            task.mItemID = roomID;
             task.mServiceCallID = Long.valueOf(uri.getLastPathSegment());
-            task.mRoomName = mRoom.mName;
-            task.mRoomDescription = mRoom.mDescription;
+            task.mItemName = mRoom.mName;
+            task.mItemLocation = mRoom.mDescription;
             task.mStatus = Task.OpenStatus;
             task.mPriority = priority;
 

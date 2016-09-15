@@ -33,10 +33,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
 
     private final Context mHelperContext;
 
-    /**
-     * Constructor
-     * @param context The Context within which to work, used to create the DB
-     */
     ResortManagerDatabase(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -348,6 +344,201 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         notifyProviderOnItemChange();
         return rowsUpdated;
     }
+    private long addRoom(Room room) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        long realID = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            realID = db.insert(Room.TABLE_NAME, null, room.getContentValues());
+        }
+        if (realID > -1) {
+            // Also add an entry to the Room FTS table
+            ContentValues ftsValues = new ContentValues();
+            ftsValues.put(Room.COL_FTS_ROOM_NAME, room.mName);
+            ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, room.mDescription);
+            ftsValues.put(Room.COL_FTS_ROOM_REALID, Long.toString(realID));
+
+            long ftsID = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsID =  db.insert(Room.FTS_TABLE_NAME, null, ftsValues);
+            }
+            if (ftsID == -1) {
+                deleteRoom(String.valueOf(realID));
+                return ftsID;
+            }
+            ResortManagerApp.incrementRoomCount();
+        }
+        return realID;
+    }
+
+    public int deleteRoom(String roomID) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        int result = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            result = db.delete(Room.TABLE_NAME, BaseColumns._ID + " IS ?", new String[]{roomID});
+        }
+
+        if (result > 0) {
+            int ftsResult = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsResult = db.delete(Room.FTS_TABLE_NAME, Room.COL_FTS_ROOM_REALID + " MATCH ? ", new String[]{roomID});
+            }
+            notifyProviderOnRoomChange();
+
+            // Lastly, delete all tasks and service calls associated with this room
+            deleteAllTasksForRoom(roomID);
+            deleteAllServiceCallsForRoom(roomID);
+            ResortManagerApp.decrementRoomCount();
+            return ftsResult;
+        }
+        return result;
+    }
+
+    private void notifyProviderOnRoomChange() {
+        mHelperContext.getContentResolver().notifyChange(ResortManagerContentProvider.FTS_ROOM_URI, null, false);
+    }
+
+    /**
+     * Returns a Cursor positioned at the item specified by id
+     *
+     * @param rowID id of item to retrieve
+     * @param columns The columns to include, if null then all are included
+     * @return Cursor positioned to matching item, or null if not found.
+     */
+    public Cursor getRoom(String rowID, String[] columns) {
+        String selection = BaseColumns._ID + " = ?";
+        String[] selectionArgs = new String[] {rowID};
+
+        /* This builds a query that looks like:
+         *     SELECT <columns> FROM <table> WHERE _id = <rowID>
+         */
+        /* The SQLiteBuilder provides a map for all possible columns requested to
+         * actual columns in the database, creating a simple column alias mechanism
+         * by which the ContentProvider does not need to know the real column names
+         */
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Room.TABLE_NAME);
+        builder.setProjectionMap(Room.mColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
+    /**
+     * Returns a Cursor over all FTS items
+     *
+     * @param columns The columns to include, if null then all are included
+     * @return Cursor over all items that match, or null if none found.
+     */
+    public Cursor getAllFTSRooms(String[] columns) {
+
+        /* This builds a query that looks like:
+         *     SELECT <columns> FROM <table>
+         */
+        /* The SQLiteBuilder provides a map for all possible columns requested to
+         * actual columns in the database, creating a simple column alias mechanism
+         * by which the ContentProvider does not need to know the real column names
+         */
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Room.FTS_TABLE_NAME);
+        builder.setProjectionMap(Room.mFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, null, null, null, null, Room.COL_FTS_ROOM_NAME);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+    /**
+     * Returns a Cursor over all FTS items that match the given searchString
+     *
+     * @param searchString The string to search for
+     * @param columns The columns to include, if null then all are included
+     * @return Cursor over all items that match, or null if none found.
+     */
+    public Cursor getFTSRoomMatches(String searchString, String[] columns) {
+        String selection = Room.FTS_TABLE_NAME + " MATCH ?";
+        String[] selectionArgs = new String[] {searchString + "*"};
+
+        /* This builds a query that looks like:
+         *     SELECT <columns> FROM <table> WHERE <COL_FTS_ITEM_NAME> MATCH 'query*'
+         * which is an FTS3 search for the query text (plus a wildcard) inside the item_name column.
+         *
+         * - "rowid" is the unique id for all rows but we need this value for the "_id" column in
+         *    order for the Adapters to work, so the columns need to make "_id" an alias for "rowid"
+         * - "rowid" also needs to be used by the SUGGEST_COLUMN_INTENT_DATA alias in order
+         *   for suggestions to carry the proper intent data.
+         *   These aliases are defined in the InventoryProvider when queries are made.
+         * - This can be revised to also search the item description text with FTS3 by changing
+         *   the selection clause to use FTS_ITEM_TABLE instead of COL_FTS_ITEM_NAME (to search across
+         *   the entire table, but sorting the relevance could be difficult.
+         */
+        /* The SQLiteBuilder provides a map for all possible columns requested to
+         * actual columns in the database, creating a simple column alias mechanism
+         * by which the ContentProvider does not need to know the real column names
+         */
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Room.FTS_TABLE_NAME);
+        builder.setProjectionMap(Room.mFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, Room.COL_FTS_ROOM_NAME);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
+    public long insertRoom(ContentValues values) {
+        Room room = new Room();
+        room.setContentFromCV(values);
+        return addRoom(room);
+    }
+
+    public int updateRoom(String roomId, ContentValues values, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        int rowsUpdated = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            rowsUpdated = db.update(Room.TABLE_NAME, values, BaseColumns._ID + "=" + roomId, null);
+        }
+        if (rowsUpdated > 0) {
+            ContentValues ftsValues = new ContentValues();
+            ftsValues.put(Room.COL_FTS_ROOM_NAME, values.getAsString(Room.COL_NAME));
+            ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, values.getAsString(Room.COL_DESCRIPTION));
+
+            long ftsRowsUpdated = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsRowsUpdated =  db.update(Room.FTS_TABLE_NAME, ftsValues, Room.COL_FTS_ROOM_REALID + " MATCH " + roomId, null);
+            }
+        }
+        notifyProviderOnRoomChange();
+        return rowsUpdated;
+    }
 
     public long insertTask(ContentValues values) {
         Task task = new Task();
@@ -425,6 +616,30 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         synchronized (ResortManagerApp.sDatabaseLock) {
             Cursor taskCursor = null;
             SQLiteQueryBuilder taskbuilder = new SQLiteQueryBuilder();
+            String taskSelection = Task.COL_ITEM_ID + " = ?";
+            String[] taskSelectionArgs = new String[] {itemID};
+
+            taskbuilder.setTables(Task.TABLE_NAME);
+            taskCursor = taskbuilder.query(this.getReadableDatabase(),
+                    Task.FIELDS, taskSelection, taskSelectionArgs, null, null, null);
+
+            if (taskCursor != null) {
+                Task currentTask = new Task();
+                for (taskCursor.moveToFirst(); !taskCursor.isAfterLast(); taskCursor.moveToNext()) {
+                    currentTask.setContentFromCursor(taskCursor);
+                    deleteTask(String.valueOf(currentTask.mID));
+                }
+            }
+        }
+    }
+
+    private void deleteAllTasksForRoom(String roomID)
+    {
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            Cursor taskCursor = null;
+            SQLiteQueryBuilder taskbuilder = new SQLiteQueryBuilder();
+
+            // TODO: Add room id to task and service call and make corresponding changes everywhere
             String taskSelection = Task.COL_ITEM_ID + " = ?";
             String[] taskSelectionArgs = new String[] {itemID};
 
