@@ -639,9 +639,8 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             Cursor taskCursor = null;
             SQLiteQueryBuilder taskbuilder = new SQLiteQueryBuilder();
 
-            // TODO: Add room id to task and service call and make corresponding changes everywhere
-            String taskSelection = Task.COL_ITEM_ID + " = ?";
-            String[] taskSelectionArgs = new String[] {itemID};
+            String taskSelection = Task.COL_ROOM_ID + " = ?";
+            String[] taskSelectionArgs = new String[] {roomID};
 
             taskbuilder.setTables(Task.TABLE_NAME);
             taskCursor = taskbuilder.query(this.getReadableDatabase(),
@@ -917,6 +916,14 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         int result = 0;
         synchronized (ResortManagerApp.sDatabaseLock) {
             result = db.delete(ServiceCall.TABLE_NAME, ServiceCall.COL_ITEMID + " IS ?", new String[]{itemID});
+        }
+    }
+
+    private void deleteAllServiceCallsForRoom(String roomID) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        int result = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            result = db.delete(ServiceCall.TABLE_NAME, ServiceCall.COL_ROOMID + " IS ?", new String[]{roomID});
         }
     }
 

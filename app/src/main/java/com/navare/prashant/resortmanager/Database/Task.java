@@ -33,6 +33,7 @@ public class Task {
     public static final String COL_DUE_DATE = "dueDate";
     public static final String COL_COMPLETED_TIME_STAMP = "completedTimeStamp";
     public static final String COL_COMPLETION_COMMENTS = "completionComments";
+    public static final String COL_ROOM_ID = "roomID";
 
     public static final int Calibration = 1;
     public static final int Contract = 2;
@@ -60,7 +61,8 @@ public class Task {
             COL_ASSIGNED_TO_CONTACT,
             COL_DUE_DATE,
             COL_COMPLETED_TIME_STAMP,
-            COL_COMPLETION_COMMENTS
+            COL_COMPLETION_COMMENTS,
+            COL_ROOM_ID
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -81,6 +83,7 @@ public class Task {
         map.put(COL_DUE_DATE, COL_DUE_DATE);
         map.put(COL_COMPLETED_TIME_STAMP, COL_COMPLETED_TIME_STAMP);
         map.put(COL_COMPLETION_COMMENTS, COL_COMPLETION_COMMENTS);
+        map.put(COL_ROOM_ID, COL_ROOM_ID);
 
         return map;
     }
@@ -104,7 +107,8 @@ public class Task {
                     + COL_ASSIGNED_TO_CONTACT + " TEXT NOT NULL DEFAULT '',"
                     + COL_DUE_DATE + " INTEGER,"
                     + COL_COMPLETED_TIME_STAMP + " INTEGER,"
-                    + COL_COMPLETION_COMMENTS + " TEXT NOT NULL DEFAULT '' "
+                    + COL_COMPLETION_COMMENTS + " TEXT NOT NULL DEFAULT '', "
+                    + COL_ROOM_ID + " INTEGER "
                     + ")";
 
     // Fields corresponding to ServiceCallTable columns
@@ -121,6 +125,7 @@ public class Task {
     public long mDueDate = 0;
     public long mCompletedTimeStamp = 0;
     public String mCompletionComments = "";
+    public long mRoomID = -1;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -146,6 +151,7 @@ public class Task {
         this.mDueDate = cursor.getLong(10);
         this.mCompletedTimeStamp = cursor.getLong(11);
         this.mCompletionComments = cursor.getString(12);
+        this.mRoomID = cursor.getLong(13);
     }
 
     /**
@@ -168,6 +174,7 @@ public class Task {
         values.put(COL_DUE_DATE, mDueDate);
         values.put(COL_COMPLETED_TIME_STAMP, mCompletedTimeStamp);
         values.put(COL_COMPLETION_COMMENTS, mCompletionComments);
+        values.put(COL_ROOM_ID, mRoomID);
 
         return values;
     }
@@ -189,6 +196,7 @@ public class Task {
         mDueDate= values.getAsLong(COL_DUE_DATE);
         mCompletedTimeStamp= values.getAsLong(COL_COMPLETED_TIME_STAMP);
         mCompletionComments = values.getAsString(COL_COMPLETION_COMMENTS);
+        mRoomID = values.getAsLong(COL_ROOM_ID);
     }
 
     public String getTaskTypeString() {

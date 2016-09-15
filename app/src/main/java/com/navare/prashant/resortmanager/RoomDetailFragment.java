@@ -599,7 +599,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
     public void createServiceCall(long roomID, String description, long priority, String roomName, String roomDescription) {
         ServiceCall sc = new ServiceCall();
-        sc.mItemID = roomID;
+        sc.mRoomID = roomID;
         sc.mDescription = description;
         sc.mPriority = priority;
         sc.mStatus = ServiceCall.OpenStatus;
@@ -616,7 +616,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             // Also create a corresponding task
             Task task = new Task();
             task.mTaskType = Task.ServiceCall;
-            task.mItemID = roomID;
+            task.mRoomID = roomID;
             task.mServiceCallID = Long.valueOf(uri.getLastPathSegment());
             task.mItemName = mRoom.mName;
             task.mItemLocation = mRoom.mDescription;

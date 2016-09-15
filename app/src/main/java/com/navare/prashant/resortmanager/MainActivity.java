@@ -390,5 +390,8 @@ public class MainActivity extends Activity {
         String itemButtonString = "Inventory (" + String.valueOf(itemCount) + ")";
         mButtonInventory.setText(itemButtonString);
     }
+
+    // TODO: don't save completed tasks - just delete the task
+    // TODO: get rid of completed task fts code in task.java
 }
 

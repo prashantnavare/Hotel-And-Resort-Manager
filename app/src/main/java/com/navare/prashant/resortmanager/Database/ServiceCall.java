@@ -22,7 +22,7 @@ public class ServiceCall {
     // When you add a field, make sure you add corresponding entries in the FIELDS array, the CREATE_TABLE string
     // and declare a member and so on. See all ++++++++ comment lines below.
     // These fields can be anything you want.
-    public static final String COL_ITEMID = "itemid";
+    public static final String COL_ITEMID = "itemID";
     public static final String COL_DESCRIPTION = "description";
     public static final String COL_PRIORITY = "priority";
     public static final String COL_STATUS = "status";
@@ -30,6 +30,7 @@ public class ServiceCall {
     public static final String COL_CLOSED_TIME_STAMP = "closedTimeStamp";
     public static final String COL_ITEM_NAME = "itemName";
     public static final String COL_ITEM_LOCATION = "itemLocation";
+    public static final String COL_ROOMID = "roomID";
 
     // Defines related to service call status
     public static final long OpenStatus = 1;
@@ -46,7 +47,8 @@ public class ServiceCall {
             COL_OPEN_TIME_STAMP,
             COL_CLOSED_TIME_STAMP,
             COL_ITEM_NAME,
-            COL_ITEM_LOCATION
+            COL_ITEM_LOCATION,
+            COL_ROOMID
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -69,6 +71,7 @@ public class ServiceCall {
         map.put(COL_ITEM_NAME, COL_ITEM_NAME);
         map.put(COL_ITEM_LOCATION, COL_ITEM_LOCATION);
 
+        map.put(COL_ROOMID, COL_ROOMID);
         return map;
     }
 
@@ -87,7 +90,8 @@ public class ServiceCall {
                     + COL_OPEN_TIME_STAMP + " INTEGER,"
                     + COL_CLOSED_TIME_STAMP + " INTEGER,"
                     + COL_ITEM_NAME + " TEXT NOT NULL DEFAULT '',"
-                    + COL_ITEM_LOCATION + " TEXT NOT NULL DEFAULT '' "
+                    + COL_ITEM_LOCATION + " TEXT NOT NULL DEFAULT '', "
+                    + COL_ROOMID + " INTEGER "
                     + ")";
 
     // Fields corresponding to ItemTable columns
@@ -100,6 +104,7 @@ public class ServiceCall {
     public long mClosedTimeStamp = 0;
     public String mItemName = "";
     public String mItemLocation = "";
+    public long mRoomID = -1;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -122,6 +127,7 @@ public class ServiceCall {
         this.mClosedTimeStamp = cursor.getLong(6);
         this.mItemName = cursor.getString(7);
         this.mItemLocation = cursor.getString(8);
+        this.mRoomID = cursor.getLong(9);
     }
 
     /**
@@ -139,6 +145,7 @@ public class ServiceCall {
         values.put(COL_CLOSED_TIME_STAMP, mClosedTimeStamp);
         values.put(COL_ITEM_NAME, mItemName);
         values.put(COL_ITEM_LOCATION, mItemLocation);
+        values.put(COL_ROOMID, mRoomID);
 
         return values;
     }
@@ -156,5 +163,6 @@ public class ServiceCall {
         mClosedTimeStamp = values.getAsLong(COL_CLOSED_TIME_STAMP);
         mItemName = values.getAsString(COL_ITEM_NAME);
         mItemLocation = values.getAsString(COL_ITEM_LOCATION);
+        mRoomID = values.getAsLong(COL_ROOMID);
     }
 }
