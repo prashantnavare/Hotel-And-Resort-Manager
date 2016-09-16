@@ -35,7 +35,7 @@ public class Task {
     public static final String COL_COMPLETION_COMMENTS = "completionComments";
     public static final String COL_ROOM_ID = "roomID";
 
-    public static final int Calibration = 1;
+    public static final int Cleaning = 1;
     public static final int Contract = 2;
     public static final int Inventory = 3;
     public static final int Maintenance = 4;
@@ -201,8 +201,8 @@ public class Task {
 
     public String getTaskTypeString() {
         switch ((int)mTaskType) {
-            case Calibration:
-                return "Calibration";
+            case Cleaning:
+                return "Cleaning";
             case Contract:
                 return "Contract Renewal";
             case Inventory:

@@ -22,6 +22,7 @@ public class ResortManagerApp extends Application {
     public static String sPrefTaskRefreshTime = "TaskRefreshTime";
     public static String sPrefTaskCount = "TaskCount";
     public static String sPrefItemCount = "ItemCount";
+    public static String sPrefRoomCount = "ItemCount";
     private static String sPrefPurchaseValue = "PurchaseValue";
 
     public static long APP_PURCHASED = 0xdeadbeef;
@@ -78,6 +79,23 @@ public class ResortManagerApp extends Application {
         itemCount = itemCount + numItems;
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong(sPrefItemCount, itemCount);
+        editor.commit();
+    }
+
+    static public void incrementRoomCount() {
+        changeRoomCount(1);
+    }
+
+    static public void decrementRoomCount() {
+        changeRoomCount(-1);
+    }
+
+    static private void changeRoomCount(long numRooms) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
+        long roomCount = prefs.getLong(sPrefRoomCount, 0);
+        roomCount = roomCount + numRooms;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(sPrefRoomCount, roomCount);
         editor.commit();
     }
 

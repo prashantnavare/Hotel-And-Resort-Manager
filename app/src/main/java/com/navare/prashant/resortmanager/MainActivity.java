@@ -391,7 +391,14 @@ public class MainActivity extends Activity {
         mButtonInventory.setText(itemButtonString);
     }
 
+    // TODO: modify Task to have CLEANING instead of CALIBRATION etc.
+    // TODO: Add logic to computeNewTasks for cleaning tasks for rooms
+    // TODO: Change the UI of item to get rid of calibration but keep others
     // TODO: don't save completed tasks - just delete the task
     // TODO: get rid of completed task fts code in task.java
+    // TODO: reservation entity should have:
+    //          1: way to choose rooms
+    //          2: tarif options (per person or per room)
+    //          3. 3 states: waiting, checked-in and checked-out
 }
 
