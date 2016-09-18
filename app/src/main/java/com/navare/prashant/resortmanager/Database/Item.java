@@ -29,11 +29,6 @@ public class Item {
     public static final String COL_TYPE = "type";
     public static final String COL_LOCATION = "location";
 
-    public static final String COL_CALIBRATION_REMINDERS = "calibrationReminders";
-    public static final String COL_CALIBRATION_FREQUENCY = "calibrationFrequency";
-    public static final String COL_LAST_CALIBRATION_DATE = "lastCalibrationDate";
-    public static final String COL_CALIBRATION_INSTRUCTIONS = "calibrationInstructions";
-
     public static final String COL_MAINTENANCE_REMINDERS = "maintenanceReminders";
     public static final String COL_MAINTENANCE_FREQUENCY = "maintenanceFrequency";
     public static final String COL_LAST_MAINTENANCE_DATE = "lastMaintenanceDate";
@@ -65,11 +60,6 @@ public class Item {
             COL_DESCRIPTION,
             COL_TYPE,
             COL_LOCATION,
-
-            COL_CALIBRATION_REMINDERS,
-            COL_CALIBRATION_FREQUENCY,
-            COL_LAST_CALIBRATION_DATE,
-            COL_CALIBRATION_INSTRUCTIONS,
 
             COL_MAINTENANCE_REMINDERS,
             COL_MAINTENANCE_FREQUENCY,
@@ -105,11 +95,6 @@ public class Item {
         map.put(COL_TYPE, COL_TYPE);
         map.put(COL_LOCATION, COL_LOCATION);
 
-        map.put(COL_CALIBRATION_REMINDERS, COL_CALIBRATION_REMINDERS);
-        map.put(COL_CALIBRATION_FREQUENCY, COL_CALIBRATION_FREQUENCY);
-        map.put(COL_LAST_CALIBRATION_DATE, COL_LAST_CALIBRATION_DATE);
-        map.put(COL_CALIBRATION_INSTRUCTIONS, COL_CALIBRATION_INSTRUCTIONS);
-
         map.put(COL_MAINTENANCE_REMINDERS, COL_MAINTENANCE_REMINDERS);
         map.put(COL_MAINTENANCE_FREQUENCY, COL_MAINTENANCE_FREQUENCY);
         map.put(COL_LAST_MAINTENANCE_DATE, COL_LAST_MAINTENANCE_DATE);
@@ -143,11 +128,6 @@ public class Item {
                     + COL_TYPE + " INTEGER, "
                     + COL_LOCATION + " TEXT NOT NULL DEFAULT '',"
 
-                    + COL_CALIBRATION_REMINDERS + " INTEGER,"
-                    + COL_CALIBRATION_FREQUENCY + " INTEGER,"
-                    + COL_LAST_CALIBRATION_DATE + " INTEGER,"
-                    + COL_CALIBRATION_INSTRUCTIONS + " TEXT DEFAULT '',"
-
                     + COL_MAINTENANCE_REMINDERS + " INTEGER,"
                     + COL_MAINTENANCE_FREQUENCY + " INTEGER,"
                     + COL_LAST_MAINTENANCE_DATE + " INTEGER,"
@@ -173,11 +153,6 @@ public class Item {
     public String mDescription = "";
     public long mType = 0;
     public String mLocation = "";
-
-    public long mCalibrationReminders = 0;
-    public long mCalibrationFrequency = 0;
-    public long mCalibrationDate = 0;
-    public String mCalibrationInstructions = "";
 
     public long mMaintenanceReminders = 0;
     public long mMaintenanceFrequency = 0;
@@ -213,26 +188,21 @@ public class Item {
         this.mType = cursor.getLong(3);
         this.mLocation = cursor.getString(4);
 
-        this.mCalibrationReminders = cursor.getLong(5);
-        this.mCalibrationFrequency = cursor.getLong(6);
-        this.mCalibrationDate = cursor.getLong(7);
-        this.mCalibrationInstructions = cursor.getString(8);
+        this.mMaintenanceReminders = cursor.getLong(5);
+        this.mMaintenanceFrequency = cursor.getLong(6);
+        this.mMaintenanceDate = cursor.getLong(7);
+        this.mMaintenanceInstructions = cursor.getString(8);
 
-        this.mMaintenanceReminders = cursor.getLong(9);
-        this.mMaintenanceFrequency = cursor.getLong(10);
-        this.mMaintenanceDate = cursor.getLong(11);
-        this.mMaintenanceInstructions = cursor.getString(12);
+        this.mContractReminders = cursor.getLong(9);
+        this.mContractValidTillDate = cursor.getLong(10);
+        this.mContractInstructions = cursor.getString(11);
 
-        this.mContractReminders = cursor.getLong(13);
-        this.mContractValidTillDate = cursor.getLong(14);
-        this.mContractInstructions = cursor.getString(15);
+        this.mInventoryReminders = cursor.getLong(12);
+        this.mMinRequiredQuantity = cursor.getLong(13);
+        this.mCurrentQuantity = cursor.getLong(14);
+        this.mReorderInstructions = cursor.getString(15);
 
-        this.mInventoryReminders = cursor.getLong(16);
-        this.mMinRequiredQuantity = cursor.getLong(17);
-        this.mCurrentQuantity = cursor.getLong(18);
-        this.mReorderInstructions = cursor.getString(19);
-
-        this.mImage = cursor.getBlob(20);
+        this.mImage = cursor.getBlob(16);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -247,11 +217,6 @@ public class Item {
         values.put(COL_DESCRIPTION, mDescription);
         values.put(COL_TYPE, mType);
         values.put(COL_LOCATION, mLocation);
-
-        values.put(COL_CALIBRATION_REMINDERS, mCalibrationReminders);
-        values.put(COL_CALIBRATION_FREQUENCY, mCalibrationFrequency);
-        values.put(COL_LAST_CALIBRATION_DATE, mCalibrationDate);
-        values.put(COL_CALIBRATION_INSTRUCTIONS, mCalibrationInstructions);
 
         values.put(COL_MAINTENANCE_REMINDERS, mMaintenanceReminders);
         values.put(COL_MAINTENANCE_FREQUENCY, mMaintenanceFrequency);
@@ -282,11 +247,6 @@ public class Item {
         mDescription = values.getAsString(COL_DESCRIPTION);
         mType = values.getAsLong(COL_TYPE);
         mLocation = values.getAsString(COL_LOCATION);
-
-        mCalibrationReminders = values.getAsLong(COL_CALIBRATION_REMINDERS);
-        mCalibrationFrequency = values.getAsLong(COL_CALIBRATION_FREQUENCY);
-        mCalibrationDate = values.getAsLong(COL_LAST_CALIBRATION_DATE);
-        mCalibrationInstructions = values.getAsString(COL_CALIBRATION_INSTRUCTIONS);
 
         mMaintenanceReminders = values.getAsLong(COL_MAINTENANCE_REMINDERS);
         mMaintenanceFrequency = values.getAsLong(COL_MAINTENANCE_FREQUENCY);

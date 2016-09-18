@@ -33,6 +33,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Item;
+import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.util.CalibrationDatePickerFragment;
@@ -56,24 +57,21 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     public static final int LOADER_ID_TASK_DETAILS = 12;
     public static final int LOADER_ID_ITEM_DETAILS = 13;
     public static final int LOADER_ID_SERVICE_CALL_DETAILS = 14;
-    /**
-     * The fragment argument representing the task ID that this fragment
-     * represents.
-     */
+    public static final int LOADER_ID_ROOM_DETAILS = 15;
+
     public static final String ARG_TASK_ID = "task_id";
 
     private Context mContext = null;
 
-    /**
-     * The task this fragment is presenting.
-     */
     private String mTaskID;
     private Task mTask = null;
     private Item mItem = null;
+    private Room mRoom = null;
     private ServiceCall mServiceCall = null;
 
     private TextView mTextItemType;
     private TextView mTextItemName;
+    private TextView mTextLocation;
     private TextView mTextItemLocation;
     private Button mBtnChangeDueDate;
     private TextView mTextAssignedTo;
@@ -221,6 +219,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
         mTextItemType = ((TextView) rootView.findViewById(R.id.textItemType));
         mTextItemName = ((TextView) rootView.findViewById(R.id.textItemName));
+        mTextLocation = ((TextView) rootView.findViewById(R.id.textLocation));
         mTextItemLocation = ((TextView) rootView.findViewById(R.id.textItemLocation));
 
         mBtnChangeDueDate = (Button) rootView.findViewById(R.id.btnChangeDueDate);
@@ -309,6 +308,14 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
                     itemURI, Item.FIELDS, null, null,
                     null);
         }
+        else if (id == LOADER_ID_ROOM_DETAILS) {
+            Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI,
+                    String.valueOf(mTask.mRoomID));
+
+            return new CursorLoader(getActivity(),
+                    roomURI, Room.FIELDS, null, null,
+                    null);
+        }
         else if (id == LOADER_ID_SERVICE_CALL_DETAILS) {
             Uri serviceCallURI = Uri.withAppendedPath(ResortManagerContentProvider.SERVICE_CALL_URI,
                     String.valueOf(mTask.mServiceCallID));
@@ -339,6 +346,10 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
                     // Get the service call details.
                     getLoaderManager().initLoader(LOADER_ID_SERVICE_CALL_DETAILS, null, this);
                 }
+                else if (mTask.mTaskType == Task.Cleaning) {
+                    // Get the room details.
+                    getLoaderManager().initLoader(LOADER_ID_ROOM_DETAILS, null, this);
+                }
                 else {
                     // Get the item details
                     getLoaderManager().initLoader(LOADER_ID_ITEM_DETAILS, null, this);
@@ -348,6 +359,12 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
                 if (mItem == null)
                     mItem = new Item();
                 mItem.setContentFromCursor(dataCursor);
+                updateUIFromTask();
+            }
+            else if (loaderID == LOADER_ID_ROOM_DETAILS) {
+                if (mRoom == null)
+                    mRoom = new Room();
+                mRoom.setContentFromCursor(dataCursor);
                 updateUIFromTask();
             }
             else if (loaderID == LOADER_ID_SERVICE_CALL_DETAILS) {
@@ -381,17 +398,23 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         Uri taskURI = Uri.withAppendedPath(ResortManagerContentProvider.TASK_URI,
                 mTaskID);
         int result = getActivity().getContentResolver().update(taskURI, mTask.getContentValues(), null, null);
-
-        // if this is a calibration task, then set the calibration date in the item.
         boolean bUpdateItem = false;
-        if (mTask.mTaskType == Task.Calibration) {
-            bUpdateItem = true;
-            mItem.mCalibrationDate = Calendar.getInstance().getTimeInMillis();
+        boolean bUpdateRoom = false;
+
+        // if this is a cleaning task, then set the cleaning date in the room.
+        if (mTask.mTaskType == Task.Cleaning) {
+            bUpdateRoom = true;
+            mRoom.mCleaningDate = Calendar.getInstance().getTimeInMillis();
         }
         // if this is a maintenance task, then set the maintenance date in the item.
         if (mTask.mTaskType == Task.Maintenance) {
             bUpdateItem = true;
             mItem.mMaintenanceDate = Calendar.getInstance().getTimeInMillis();
+        }
+        if (bUpdateRoom) {
+            Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI,
+                    String.valueOf(mRoom.mID));
+            result = getActivity().getContentResolver().update(roomURI, mRoom.getContentValues(), null, null);
         }
         if (bUpdateItem) {
             Uri itemURI = Uri.withAppendedPath(ResortManagerContentProvider.ITEM_URI,
@@ -589,10 +612,18 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void updateUIFromTask() {
-        if (mTask.mTaskType == Task.Inventory)
-            mTextItemType.setText(getResources().getText(R.string.consumable));
-        else
-            mTextItemType.setText(getResources().getText(R.string.instrument));
+        if (mTask.mItemID >= 0) {
+            // This task for an item
+            if (mTask.mTaskType == Task.Inventory)
+                mTextItemType.setText(getResources().getText(R.string.consumable));
+            else
+                mTextItemType.setText(getResources().getText(R.string.instrument));
+        }
+        else if (mTask.mRoomID >= 0) {
+            // This is a room
+            mTextItemType.setText("Room");
+            mTextLocation.setText("Description");
+        }
 
         mTextItemName.setText(mTask.mItemName);
         mTextItemLocation.setText(mTask.mItemLocation);
@@ -638,14 +669,15 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         }
 
         if (mItem != null) {
-            if (mTask.mTaskType == Task.Calibration)
-                mTextInstructions.setText(mItem.mCalibrationInstructions);
-            else if (mTask.mTaskType == Task.Contract)
+            if (mTask.mTaskType == Task.Contract)
                 mTextInstructions.setText(mItem.mContractInstructions);
             else if (mTask.mTaskType == Task.Maintenance)
                 mTextInstructions.setText(mItem.mMaintenanceInstructions);
             else if (mTask.mTaskType == Task.Inventory)
                 mTextInstructions.setText(mItem.mReorderInstructions);
+        }
+        if (mRoom != null) {
+            mTextInstructions.setText(mRoom.mCleaningInstructions);
         }
         if (mServiceCall != null) {
             mTextInstructionsLabel.setText(getResources().getText(R.string.description));

@@ -29,8 +29,9 @@ import com.navare.prashant.resortmanager.util.SystemUiHider;
  * @see SystemUiHider
  */
 public class MainActivity extends Activity {
-    private Button mButtonInventory;
     private Button mButtonTasks;
+    private Button mButtonInventory;
+    private Button mButtonRooms;
     private Button mButtonRemoveAds;
     private AdView mAdView;
     private InterstitialAd mInterstitialAdForTasks;
@@ -64,11 +65,12 @@ public class MainActivity extends Activity {
         new SimpleEula(this).show();
 
         // Buttons
-        mButtonInventory = (Button) findViewById(R.id.inventory_button);
         mButtonTasks = (Button) findViewById(R.id.tasks_button);
+        mButtonInventory = (Button) findViewById(R.id.inventory_button);
+        mButtonRooms = (Button) findViewById(R.id.rooms_button);
 
         // Set the title to the name of the hospital
-        setTitleAndTaskandItemCount();
+        setTitleAndVariousCount();
 
         // TODO: Remove this after testing
         ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
@@ -172,7 +174,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        setTitleAndTaskandItemCount();
+        setTitleAndVariousCount();
         if (mAdView != null) {
             mAdView.resume();
         }
@@ -237,7 +239,7 @@ public class MainActivity extends Activity {
             mInterstitialAdForReports.show();
         }
         else {
-            startActivity(new Intent(this, ReportListActivity.class));
+            startActivity(new Intent(this, RoomListActivity.class));
         }
     }
 
@@ -376,7 +378,7 @@ public class MainActivity extends Activity {
         // TODO: Implement purchase Wait screen
     }
 
-    private void setTitleAndTaskandItemCount() {
+    private void setTitleAndVariousCount() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
         titleString = titleString + "  Resort Manager";
@@ -389,13 +391,15 @@ public class MainActivity extends Activity {
         long itemCount = preferences.getLong(ResortManagerApp.sPrefItemCount, 0);
         String itemButtonString = "Inventory (" + String.valueOf(itemCount) + ")";
         mButtonInventory.setText(itemButtonString);
+
+        long roomCount = preferences.getLong(ResortManagerApp.sPrefRoomCount, 0);
+        String roomButtonString = "Rooms (" + String.valueOf(roomCount) + ")";
+        mButtonRooms.setText(roomButtonString);
     }
 
-    // TODO: modify Task to have CLEANING instead of CALIBRATION etc.
-    // TODO: Add logic to computeNewTasks for cleaning tasks for rooms
-    // TODO: Change the UI of item to get rid of calibration but keep others
     // TODO: don't save completed tasks - just delete the task
     // TODO: get rid of completed task fts code in task.java
+    // TODO: Revive Reports but for billing (and not for items). Add billing to reports
     // TODO: reservation entity should have:
     //          1: way to choose rooms
     //          2: tarif options (per person or per room)

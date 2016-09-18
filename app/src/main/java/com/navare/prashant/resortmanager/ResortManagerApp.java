@@ -22,7 +22,7 @@ public class ResortManagerApp extends Application {
     public static String sPrefTaskRefreshTime = "TaskRefreshTime";
     public static String sPrefTaskCount = "TaskCount";
     public static String sPrefItemCount = "ItemCount";
-    public static String sPrefRoomCount = "ItemCount";
+    public static String sPrefRoomCount = "RoomCount";
     private static String sPrefPurchaseValue = "PurchaseValue";
 
     public static long APP_PURCHASED = 0xdeadbeef;

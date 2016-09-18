@@ -950,50 +950,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         for (itemCursor.moveToFirst(); !itemCursor.isAfterLast(); itemCursor.moveToNext()) {
             item.setContentFromCursor(itemCursor);
             if (item.mType == Item.InstrumentType) {
-                if (item.mCalibrationReminders > 0) {
-                    if (item.mCalibrationFrequency > 0) {
-                        boolean bCreateTask = false;
-                        long dueDate = 0;
-                        long priority = Task.NormalPriority;
-                        // Check the last calibration date.
-                        if (item.mCalibrationDate > 0) {
-                            // If it is set, then see when the next calibration is due.
-                            Calendar todayDate = Calendar.getInstance();
-                            Calendar nextCalibrationDate = Calendar.getInstance();
-                            // If the item's calibration date is already set in the future, use it.
-                            if (todayDate.getTimeInMillis() < item.mCalibrationDate) {
-                                nextCalibrationDate.setTimeInMillis(item.mCalibrationDate);
-                            }
-                            else {
-                                // Calculate the next calibration date based on the calibration frequency
-                                nextCalibrationDate.setTimeInMillis(item.mCalibrationDate + TimeUnit.MILLISECONDS.convert(item.mCalibrationFrequency, TimeUnit.DAYS));
-                            }
-                            if (todayDate.compareTo(nextCalibrationDate) >= 0) {
-                                // Calibration is overdue
-                                bCreateTask = true;
-                                dueDate = nextCalibrationDate.getTimeInMillis();
-                                priority = Task.UrgentPriority;
-                            }
-                            else {
-                                // Calibration reminders are generated 1 week before the actual due date.
-                                long numberOfDaysTillNextCalibration = TimeUnit.DAYS.convert((nextCalibrationDate.getTimeInMillis() - todayDate.getTimeInMillis()), TimeUnit.MILLISECONDS);
-                                if (numberOfDaysTillNextCalibration < 7) {
-                                    bCreateTask = true;
-                                    dueDate = nextCalibrationDate.getTimeInMillis();
-                                }
-                            }
-                        }
-                        else {
-                            // If it is not set, this instrument needs calibration with a due date of today.
-                            bCreateTask = true;
-                            dueDate = Calendar.getInstance().getTimeInMillis();
-                        }
-                        if (bCreateTask) {
-                            Task newTask = createItemTempTask(item, Task.Calibration, dueDate, priority);
-                            taskMap.put(Pair.create(item.mID, Long.valueOf(Task.Calibration)), newTask);
-                        }
-                    }
-                }
                 if (item.mContractReminders > 0) {
                     boolean bCreateTask = false;
                     long dueDate = 0;
@@ -1087,6 +1043,65 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             }
         }
 
+        // Next, get all the rooms to see which ones have pending cleaning tasks.
+        SQLiteQueryBuilder roomBuilder = new SQLiteQueryBuilder();
+        roomBuilder.setTables(Room.TABLE_NAME);
+        Cursor roomCursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            roomCursor = roomBuilder.query(this.getReadableDatabase(), Room.FIELDS, null, null, null, null, null);
+        }
+        if (roomCursor == null)
+            return;
+
+        Room room = new Room();
+        for (roomCursor.moveToFirst(); !roomCursor.isAfterLast(); roomCursor.moveToNext()) {
+            room.setContentFromCursor(roomCursor);
+            if (room.mCleaningReminders > 0) {
+                if (room.mCleaningFrequency > 0) {
+                    boolean bCreateTask = false;
+                    long dueDate = 0;
+                    long priority = Task.NormalPriority;
+                    // Check the last cleaning date.
+                    if (room.mCleaningDate > 0) {
+                        // If it is set, then see when the next cleaning is due.
+                        Calendar todayDate = Calendar.getInstance();
+                        Calendar nextCleaningDate = Calendar.getInstance();
+                        // If the room's cleaning date is already set in the future, use it.
+                        if (todayDate.getTimeInMillis() < room.mCleaningDate) {
+                            nextCleaningDate.setTimeInMillis(room.mCleaningDate);
+                        }
+                        else {
+                            // Calculate the next cleaning date based on the calibration frequency
+                            nextCleaningDate.setTimeInMillis(room.mCleaningDate + TimeUnit.MILLISECONDS.convert(room.mCleaningFrequency, TimeUnit.DAYS));
+                        }
+                        if (todayDate.compareTo(nextCleaningDate) >= 0) {
+                            // Cleaning is overdue
+                            bCreateTask = true;
+                            dueDate = nextCleaningDate.getTimeInMillis();
+                            priority = Task.UrgentPriority;
+                        }
+                        else {
+                            // Cleaning reminders are generated 1 week before the actual due date.
+                            long numberOfDaysTillNextCleaning = TimeUnit.DAYS.convert((nextCleaningDate.getTimeInMillis() - todayDate.getTimeInMillis()), TimeUnit.MILLISECONDS);
+                            if (numberOfDaysTillNextCleaning < 7) {
+                                bCreateTask = true;
+                                dueDate = nextCleaningDate.getTimeInMillis();
+                            }
+                        }
+                    }
+                    else {
+                        // If it is not set, this instrument needs calibration with a due date of today.
+                        bCreateTask = true;
+                        dueDate = Calendar.getInstance().getTimeInMillis();
+                    }
+                    if (bCreateTask) {
+                        Task newTask = createRoomTempTask(room, Task.Cleaning, dueDate, priority);
+                        taskMap.put(Pair.create(room.mID, Long.valueOf(Task.Cleaning)), newTask);
+                    }
+                }
+            }
+        }
+
         // Next get all the current open service calls
         Map<Long, ServiceCall> serviceCallMap = new HashMap<Long, ServiceCall>();
 
@@ -1137,6 +1152,9 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                 if (currentOpenTask.mTaskType == Task.ServiceCall) {
                     serviceCallMap.remove(currentOpenTask.mServiceCallID);
                 }
+                else if (currentOpenTask.mTaskType == Task.Cleaning) {
+                    taskMap.remove(Pair.create(currentOpenTask.mRoomID, currentOpenTask.mTaskType));
+                }
                 else {
                     taskMap.remove(Pair.create(currentOpenTask.mItemID, currentOpenTask.mTaskType));
                 }
@@ -1159,6 +1177,18 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         task.mItemID = item.mID;
         task.mItemName = item.mName;
         task.mItemLocation = item.mLocation;
+        task.mDueDate = dueDate;
+        task.mStatus = Task.OpenStatus;
+        task.mPriority = priority;
+        return task;
+    }
+
+    private Task createRoomTempTask(Room room, int taskType, long dueDate, long priority) {
+        Task task = new Task();
+        task.mTaskType = taskType;
+        task.mRoomID = room.mID;
+        task.mItemName = room.mName;
+        task.mItemLocation = room.mDescription;
         task.mDueDate = dueDate;
         task.mStatus = Task.OpenStatus;
         task.mPriority = priority;

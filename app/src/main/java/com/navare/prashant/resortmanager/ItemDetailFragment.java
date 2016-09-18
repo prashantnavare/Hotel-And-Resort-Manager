@@ -84,8 +84,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     private RadioButton mInstrumentRadioButton;
     private RadioButton mConsumableRadioButton;
 
-    private LinearLayout mCalibrationRemindersLayout;
-    private LinearLayout mCalibrationDetailsLayout;
     private LinearLayout mMaintenanceRemindersLayout;
     private LinearLayout mMaintenanceDetailsLayout;
     private LinearLayout mContractRemindersLayout;
@@ -93,11 +91,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
     private LinearLayout mConsumableLayout;
     private LinearLayout mInventoryDetailsLayout;
-
-    private CheckBox mCalibrationCheckBox;
-    private TextView mTextCalibrationFrequency;
-    private Button mBtnChangeCalibrationDate;
-    private TextView mTextCalibrationInstructions;
 
     private CheckBox mMaintenanceCheckBox;
     private TextView mTextMaintenanceFrequency;
@@ -248,11 +241,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
 
     private void showInstrumentLayout() {
-        mCalibrationRemindersLayout.setVisibility(View.VISIBLE);
-        if (mCalibrationCheckBox.isChecked())
-            mCalibrationDetailsLayout.setVisibility(View.VISIBLE);
-        else
-            mCalibrationDetailsLayout.setVisibility(View.GONE);
 
         mMaintenanceRemindersLayout.setVisibility(View.VISIBLE);
         if (mMaintenanceCheckBox.isChecked())
@@ -270,8 +258,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
     private void showConsumableLayout() {
-        mCalibrationRemindersLayout.setVisibility(View.GONE);
-        mCalibrationDetailsLayout.setVisibility(View.GONE);
         mMaintenanceRemindersLayout.setVisibility(View.GONE);
         mMaintenanceDetailsLayout.setVisibility(View.GONE);
         mContractRemindersLayout.setVisibility(View.GONE);
@@ -325,39 +311,10 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         });
 
         // Instrument related
-        mCalibrationRemindersLayout = (LinearLayout) rootView.findViewById(R.id.calibrationRemindersLayout);
-        mCalibrationDetailsLayout = (LinearLayout) rootView.findViewById(R.id.calibrationDetailsLayout);
         mMaintenanceRemindersLayout = (LinearLayout) rootView.findViewById(R.id.maintenanceRemindersLayout);
         mMaintenanceDetailsLayout = (LinearLayout) rootView.findViewById(R.id.maintenanceDetailsLayout);
         mContractRemindersLayout = (LinearLayout) rootView.findViewById(R.id.contractRemindersLayout);
         mContractDetailsLayout = (LinearLayout) rootView.findViewById(R.id.contractDetailsLayout);
-
-        // Calibration
-        mCalibrationCheckBox = (CheckBox) rootView.findViewById(R.id.chkCalibration);
-        mCalibrationCheckBox.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    mCalibrationDetailsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    mCalibrationDetailsLayout.setVisibility(View.GONE);
-                }
-                enableRevertAndSaveButtons();
-            }
-        });
-        mTextCalibrationFrequency = (TextView) rootView.findViewById(R.id.textCalibrationFrequency);
-        mTextCalibrationFrequency.addTextChangedListener(this);
-
-        mBtnChangeCalibrationDate = (Button) rootView.findViewById(R.id.btnChangeCalibrationDate);
-        mBtnChangeCalibrationDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showDatePicker(DatePickerType.CALIBRATION);
-            }
-        });
-
-        mTextCalibrationInstructions = (TextView) rootView.findViewById(R.id.textCalibrationInstructions);
-        mTextCalibrationInstructions.addTextChangedListener(this);
 
         // Maintenance
         mMaintenanceCheckBox = (CheckBox) rootView.findViewById(R.id.chkMaintenance);
@@ -460,17 +417,12 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         super.onDestroyView();
     }
 
-    enum DatePickerType {CALIBRATION, MAINTENANCE, CONTRACT}
+    enum DatePickerType {MAINTENANCE, CONTRACT}
 
     private void showDatePicker(final DatePickerType pickerType) {
         Calendar dateToShow = Calendar.getInstance();
         if (mItem != null) {
             switch (pickerType) {
-                case CALIBRATION:
-                    if (mItem.mCalibrationDate > 0) {
-                        dateToShow.setTimeInMillis(mItem.mCalibrationDate);
-                    }
-                    break;
                 case MAINTENANCE:
                     if (mItem.mMaintenanceDate > 0) {
                         dateToShow.setTimeInMillis(mItem.mMaintenanceDate);
@@ -500,9 +452,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 switch (pickerType) {
-                    case CALIBRATION:
-                        mBtnChangeCalibrationDate.setText(dateFormatter.format(newDate.getTime()));
-                        break;
                     case MAINTENANCE:
                         mBtnChangeMaintenanceDate.setText(dateFormatter.format(newDate.getTime()));
                         break;
@@ -683,36 +632,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             // Instrument
             mItem.mType = Item.InstrumentType;
 
-            // Calibration related
-            if (mCalibrationCheckBox.isChecked()) {
-                mItem.mCalibrationReminders = 1;
-                if (mTextCalibrationFrequency.getText().toString().isEmpty()) {
-                    showAlertDialog("Calibration frequency cannot be empty.");
-                    mTextCalibrationFrequency.requestFocus();
-                    return false;
-                }
-                else {
-                    mItem.mCalibrationFrequency = Long.valueOf(mTextCalibrationFrequency.getText().toString());
-                }
-
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                Calendar calibrationDate = Calendar.getInstance();
-                String uiCalibrationDate = mBtnChangeCalibrationDate.getText().toString();
-                if (uiCalibrationDate.compareToIgnoreCase("Set") != 0) {
-                    try {
-                        calibrationDate.setTime(dateFormatter.parse(uiCalibrationDate));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    mItem.mCalibrationDate = calibrationDate.getTimeInMillis();
-                }
-
-                mItem.mCalibrationInstructions = mTextCalibrationInstructions.getText().toString();
-            }
-            else {
-                mItem.mCalibrationReminders = 0;
-            }
-
             // Maintenance related
             if (mMaintenanceCheckBox.isChecked()) {
                 mItem.mMaintenanceReminders = 1;
@@ -814,28 +733,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             mCallbacks.EnableInventoryAddButton(false);
             mCallbacks.EnableInventorySubtractButton(false);
 
-            // Set the calibration UI elements
-            if (mItem.mCalibrationReminders > 0) {
-                mCalibrationCheckBox.setChecked(true);
-                mCalibrationDetailsLayout.setVisibility(View.VISIBLE);
-                if (mItem.mCalibrationFrequency > 0)
-                    mTextCalibrationFrequency.setText(String.valueOf(mItem.mCalibrationFrequency));
-                if (mItem.mCalibrationDate > 0) {
-                    Calendar calibrationDate = Calendar.getInstance();
-                    calibrationDate.setTimeInMillis(mItem.mCalibrationDate);
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                    mBtnChangeCalibrationDate.setText(dateFormatter.format(calibrationDate.getTime()));
-                }
-                else {
-                    mBtnChangeCalibrationDate.setText("Set");
-                }
-                mTextCalibrationInstructions.setText(mItem.mCalibrationInstructions);
-            }
-            else {
-                mCalibrationCheckBox.setChecked(false);
-                mCalibrationDetailsLayout.setVisibility(View.GONE);
-            }
-
             // Set the maintenance UI elements
             if (mItem.mMaintenanceReminders > 0) {
                 mMaintenanceCheckBox.setChecked(true);
@@ -929,9 +826,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         mTextDescription.setText("");
         mInstrumentRadioButton.setChecked(true);
         showInstrumentLayout();
-
-        mCalibrationCheckBox.setChecked(false);
-        mCalibrationDetailsLayout.setVisibility(View.GONE);
 
         mMaintenanceCheckBox.setChecked(false);
         mMaintenanceDetailsLayout.setVisibility(View.GONE);

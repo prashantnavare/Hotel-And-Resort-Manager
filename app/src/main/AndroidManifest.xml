@@ -75,6 +75,34 @@
                 android:value=".ItemListActivity" />
         </activity>
         <activity
+            android:name=".RoomListActivity"
+            android:label="Rooms"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".RoomDetailActivity"
+            android:label="Room Details"
+            android:parentActivityName=".ItemListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ItemListActivity" />
+        </activity>
+        <activity
             android:name=".TaskListActivity"
             android:label="@string/title_task_list"
             android:parentActivityName=".MainActivity"
@@ -162,14 +190,6 @@
                 android:value=".MainActivity" />
         </activity>
 
-        <activity
-            android:name=".RemoveAdsActivity"
-            android:label="@string/title_activity_remove_ads"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
     </application>
 
 </manifest>

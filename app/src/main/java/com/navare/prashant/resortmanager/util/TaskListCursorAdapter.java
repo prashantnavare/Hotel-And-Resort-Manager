@@ -30,10 +30,24 @@ public class TaskListCursorAdapter extends SimpleCursorAdapter {
         //get reference to the row
         View view = super.getView(position, convertView, parent);
 
-        // If the priority is Urgent, mark it red
-        TextView textPriority = (TextView) view.findViewById(R.id.textPriority);
         Cursor cursor = getCursor();
         cursor.moveToPosition(position);
+
+        // Check to see if an item or a room task and set the textItemType to room/item and textLocation to location/description
+        TextView textItemType = (TextView) view.findViewById(R.id.textItemType);
+        TextView textLocation = (TextView) view.findViewById(R.id.textLocation);
+        String taskType = cursor.getString(cursor.getColumnIndex(Task.COL_FTS_TASK_TYPE));
+        if (taskType.equalsIgnoreCase("Cleaning")) {
+            textItemType.setText("Room");
+            textLocation.setText("Description");
+        }
+        else {
+            textItemType.setText("Item");
+            textLocation.setText("Location");
+        }
+
+        // If the priority is Urgent, mark it red
+        TextView textPriority = (TextView) view.findViewById(R.id.textPriority);
         String priority = cursor.getString(cursor.getColumnIndex(Task.COL_FTS_TASK_PRIORITY));
         if (priority.equalsIgnoreCase("Urgent")) {
             textPriority.setTextColor(Color.RED);

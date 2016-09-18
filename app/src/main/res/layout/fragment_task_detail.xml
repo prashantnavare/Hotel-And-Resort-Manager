@@ -64,6 +64,7 @@
                     android:layout_marginBottom="5dp"
                     >
                     <TextView
+                        android:id="@+id/textLocation"
                         android:text="Location"
                         android:layout_weight="1.7"
                         android:textSize="12sp"
