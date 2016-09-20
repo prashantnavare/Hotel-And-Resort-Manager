@@ -25,31 +25,26 @@ public class Reservation {
     // and declare a member and so on. See all ++++++++ comment lines below.
     // These fields can be anything you want.
     public static final String COL_NAME = "name";
-    public static final String COL_DESCRIPTION = "description";
+    public static final String COL_NUMPEOPLE = "numPeople";
+    public static final String COL_FROM_DATE = "fromDate";
+    public static final String COL_TO_DATE = "toDate";
+    public static final String COL_TARIFF_TYPE = "tariffType";
+    public static final String COL_TARIFF_RATE = "tariffRate";
+    public static final String COL_CURRENT_STATE = "currentState";
 
-    public static final String COL_CAPACITY = "capacity";
-
-    public static final String COL_CLEANING_REMINDERS = "cleaningReminders";
-    public static final String COL_CLEANING_FREQUENCY = "cleaningFrequency";
-    public static final String COL_LAST_CLEANING_DATE = "lastCleaningDate";
-    public static final String COL_CLEANING_INSTRUCTIONS = "cleaningInstructions";
-
-    public static final String COL_IMAGE = "imagePath";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // For database projection so order is consistent
     public static final String[] FIELDS = {
             BaseColumns._ID,
             COL_NAME,
-            COL_DESCRIPTION,
-            COL_CAPACITY,
+            COL_NUMPEOPLE,
+            COL_FROM_DATE,
+            COL_TO_DATE,
+            COL_TARIFF_TYPE,
+            COL_TARIFF_RATE,
+            COL_CURRENT_STATE
 
-            COL_CLEANING_REMINDERS,
-            COL_CLEANING_FREQUENCY,
-            COL_LAST_CLEANING_DATE,
-            COL_CLEANING_INSTRUCTIONS,
-
-            COL_IMAGE
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -65,16 +60,12 @@ public class Reservation {
 
         map.put(BaseColumns._ID, BaseColumns._ID);
         map.put(COL_NAME, COL_NAME);
-        map.put(COL_DESCRIPTION, COL_DESCRIPTION);
-        map.put(COL_CAPACITY, COL_CAPACITY);
-
-        map.put(COL_CLEANING_REMINDERS, COL_CLEANING_REMINDERS);
-        map.put(COL_CLEANING_FREQUENCY, COL_CLEANING_FREQUENCY);
-        map.put(COL_LAST_CLEANING_DATE, COL_LAST_CLEANING_DATE);
-        map.put(COL_CLEANING_INSTRUCTIONS, COL_CLEANING_INSTRUCTIONS);
-
-        map.put(COL_IMAGE, COL_IMAGE);
-
+        map.put(COL_NUMPEOPLE, COL_NUMPEOPLE);
+        map.put(COL_FROM_DATE, COL_FROM_DATE);
+        map.put(COL_TO_DATE, COL_TO_DATE);
+        map.put(COL_TARIFF_TYPE, COL_TARIFF_TYPE);
+        map.put(COL_TARIFF_RATE, COL_TARIFF_RATE);
+        map.put(COL_CURRENT_STATE, COL_CURRENT_STATE);
         return map;
     }
 
@@ -88,32 +79,25 @@ public class Reservation {
             "CREATE TABLE " + TABLE_NAME + "("
                     + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                     + COL_NAME + " TEXT NOT NULL DEFAULT '',"
-                    + COL_DESCRIPTION + " TEXT NOT NULL DEFAULT '',"
-                    + COL_CAPACITY + " INTEGER,"
-
-                    + COL_CLEANING_REMINDERS + " INTEGER,"
-                    + COL_CLEANING_FREQUENCY + " INTEGER,"
-                    + COL_LAST_CLEANING_DATE + " INTEGER,"
-                    + COL_CLEANING_INSTRUCTIONS + " TEXT DEFAULT '',"
-
-                    + COL_IMAGE + " BLOB"
-
+                    + COL_NUMPEOPLE + " INTEGER,"
+                    + COL_FROM_DATE + " INTEGER,"
+                    + COL_TO_DATE + " INTEGER,"
+                    + COL_TARIFF_TYPE + " INTEGER,"
+                    + COL_TARIFF_RATE + " INTEGER,"
+                    + COL_CURRENT_STATE + " INTEGER"
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // Fields corresponding to ReservationTable columns
     public long mID = -1;
     public String mName = "";
-    public String mDescription = "";
+    public long mNumPeople = 0;
+    public long mFromDate = 0;
 
-    public long mCapacity = 0;
-
-    public long mCleaningReminders = 0;
-    public long mCleaningFrequency = 0;
-    public long mCleaningDate = 0;
-    public String mCleaningInstructions = "";
-
-    public byte[] mImage;
+    public long mToDate = 0;
+    public long mTariffType = 0;
+    public long mTariffRate = 0;
+    public long mCurrentState = 0;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -129,15 +113,12 @@ public class Reservation {
         // Indices expected to match order in FIELDS!
         this.mID = cursor.getLong(0);
         this.mName = cursor.getString(1);
-        this.mDescription = cursor.getString(2);
-        this.mCapacity = cursor.getLong(3);
-
-        this.mCleaningReminders = cursor.getLong(4);
-        this.mCleaningFrequency = cursor.getLong(5);
-        this.mCleaningDate = cursor.getLong(6);
-        this.mCleaningInstructions = cursor.getString(7);
-
-        this.mImage = cursor.getBlob(8);
+        this.mNumPeople = cursor.getLong(2);
+        this.mFromDate = cursor.getLong(3);
+        this.mToDate = cursor.getLong(4);
+        this.mTariffType = cursor.getLong(5);
+        this.mTariffRate = cursor.getLong(6);
+        this.mCurrentState = cursor.getLong(7);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -149,16 +130,13 @@ public class Reservation {
         final ContentValues values = new ContentValues();
         // Note that ID is NOT included here
         values.put(COL_NAME, mName);
-        values.put(COL_DESCRIPTION, mDescription);
-        values.put(COL_CAPACITY, mCapacity);
+        values.put(COL_NUMPEOPLE, mNumPeople);
+        values.put(COL_FROM_DATE, mFromDate);
 
-        values.put(COL_CLEANING_REMINDERS, mCleaningReminders);
-        values.put(COL_CLEANING_FREQUENCY, mCleaningFrequency);
-        values.put(COL_LAST_CLEANING_DATE, mCleaningDate);
-        values.put(COL_CLEANING_INSTRUCTIONS, mCleaningInstructions);
-
-        values.put(COL_IMAGE, mImage);
-
+        values.put(COL_TO_DATE, mToDate);
+        values.put(COL_TARIFF_TYPE, mTariffType);
+        values.put(COL_TARIFF_RATE, mTariffRate);
+        values.put(COL_CURRENT_STATE, mCurrentState);
         return values;
     }
 
@@ -169,15 +147,13 @@ public class Reservation {
     public void setContentFromCV(final ContentValues values) {
         // Note that ID is NOT included here
         mName = values.getAsString(COL_NAME);
-        mDescription = values.getAsString(COL_DESCRIPTION);
-        mCapacity = values.getAsLong(COL_CAPACITY);
+        mNumPeople = values.getAsLong(COL_NUMPEOPLE);
+        mFromDate = values.getAsLong(COL_FROM_DATE);
 
-        mCleaningReminders = values.getAsLong(COL_CLEANING_REMINDERS);
-        mCleaningFrequency = values.getAsLong(COL_CLEANING_FREQUENCY);
-        mCleaningDate = values.getAsLong(COL_LAST_CLEANING_DATE);
-        mCleaningInstructions = values.getAsString(COL_CLEANING_INSTRUCTIONS);
-
-        mImage = values.getAsByteArray(COL_IMAGE);
+        mToDate = values.getAsLong(COL_TO_DATE);
+        mTariffType = values.getAsLong(COL_TARIFF_TYPE);
+        mTariffRate = values.getAsLong(COL_TARIFF_RATE);
+        mCurrentState = values.getAsLong(COL_CURRENT_STATE);
     }
 
     // Reservation FTS Table
