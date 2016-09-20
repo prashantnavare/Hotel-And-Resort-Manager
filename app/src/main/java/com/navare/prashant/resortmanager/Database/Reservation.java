@@ -12,13 +12,13 @@ import android.provider.BaseColumns;
 import java.util.HashMap;
 
 /**
- * A class representation of a row in table "Room".
+ * A class representation of a row in table "Reservation".
  */
 
-public class Room {
+public class Reservation {
 
-    // Room table
-    public static final String TABLE_NAME = "RoomTable";
+    // Reservation table
+    public static final String TABLE_NAME = "ReservationTable";
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // Add other fields here.
     // When you add a field, make sure you add corresponding entries in the FIELDS array, the CREATE_TABLE string
@@ -55,7 +55,7 @@ public class Room {
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /**
-     * Builds a map for all Room FTS table columns that may be requested, which will be given to the
+     * Builds a map for all Reservation FTS table columns that may be requested, which will be given to the
      * SQLiteQueryBuilder. This is a good way to define aliases for column names, but must include
      * all columns, even if the value is the key. This allows the ContentProvider to request
      * columns w/o the need to know real column names and create the alias itself.
@@ -80,7 +80,7 @@ public class Room {
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /*
-     * The SQL code that creates a Table for storing rooms.
+     * The SQL code that creates a Table for storing reservations.
      * Note that the last row does NOT end in a comma like the others.
      * This is a common source of error.
      */
@@ -101,7 +101,7 @@ public class Room {
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // Fields corresponding to RoomTable columns
+    // Fields corresponding to ReservationTable columns
     public long mID = -1;
     public String mName = "";
     public String mDescription = "";
@@ -118,12 +118,12 @@ public class Room {
     /**
      * No need to do anything, fields are already set to default values above
      */
-    public Room() {
+    public Reservation() {
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /**
-     * Convert information from the RoomTable into an Room object.
+     * Convert information from the ReservationTable into an Reservation object.
      */
     public void setContentFromCursor(final Cursor cursor) {
         // Indices expected to match order in FIELDS!
@@ -180,8 +180,8 @@ public class Room {
         mImage = values.getAsByteArray(COL_IMAGE);
     }
 
-    // Room FTS Table
-    public static final String FTS_TABLE_NAME = "FTSRoomTable";
+    // Reservation FTS Table
+    public static final String FTS_TABLE_NAME = "FTSReservationTable";
     public static final String COL_FTS_ROOM_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
     public static final String COL_FTS_ROOM_DESCRIPTION = SearchManager.SUGGEST_COLUMN_TEXT_2;
     public static final String COL_FTS_ROOM_REALID = "realID";
@@ -206,14 +206,14 @@ public class Room {
                     COL_FTS_ROOM_REALID +
                     ");";
 
-    // Fields corresponding to FTSRoomTable columns
+    // Fields corresponding to FTSReservationTable columns
     public String mRowID = "";
     public String mFTSName = "";
     public String mFTSDescription = "";
     public String mFTSRealID = "";
 
     /**
-     * Set information from the FTSRoomTable into an Room object.
+     * Set information from the FTSReservationTable into an Reservation object.
      */
     public void setFTSContent(final Cursor cursor) {
         // Indices expected to match order in FIELDS!
@@ -225,7 +225,7 @@ public class Room {
 
     public static final HashMap<String, String> mFTSColumnMap = buildFTSColumnMap();
     /**
-     * Builds a map for all Room FTS table columns that may be requested, which will be given to the
+     * Builds a map for all Reservation FTS table columns that may be requested, which will be given to the
      * SQLiteQueryBuilder. This is a good way to define aliases for column names, but must include
      * all columns, even if the value is the key. This allows the ContentProvider to request
      * columns w/o the need to know real column names and create the alias itself.
