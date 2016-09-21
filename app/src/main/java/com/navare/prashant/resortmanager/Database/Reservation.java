@@ -191,13 +191,15 @@ public class Reservation {
     public static final String COL_FTS_RESERVATION_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
     public static final String COL_FTS_RESERVATION_DATES = SearchManager.SUGGEST_COLUMN_TEXT_2;
     public static final String COL_FTS_RESERVATION_STATUS = "status";
+    public static final String COL_FTS_RESERVATION_REALID = "realID";
 
     // For database projection so order is consistent
     public static final String[] FTS_FIELDS = {
             BaseColumns._ID,
             COL_FTS_RESERVATION_NAME,
             COL_FTS_RESERVATION_DATES,
-            COL_FTS_RESERVATION_STATUS
+            COL_FTS_RESERVATION_STATUS,
+            COL_FTS_RESERVATION_REALID
     };
 
     /* Note that FTS3 does not support column constraints and thus, you cannot
@@ -209,7 +211,8 @@ public class Reservation {
                     " USING fts3 (" +
                     COL_FTS_RESERVATION_NAME + ", " +
                     COL_FTS_RESERVATION_DATES + "," +
-                    COL_FTS_RESERVATION_STATUS +
+                    COL_FTS_RESERVATION_STATUS + "," +
+                    COL_FTS_RESERVATION_REALID +
                     ");";
 
     // Fields corresponding to FTSReservationTable columns
@@ -217,6 +220,7 @@ public class Reservation {
     public String mFTSName = "";
     public String mFTSDates = "";
     public String mFTSStatus = "";
+    public String mFTSRealID = "";
 
     /**
      * Set information from the FTSReservationTable into an Reservation object.
@@ -227,6 +231,7 @@ public class Reservation {
         this.mFTSName = cursor.getString(1);
         this.mFTSDates = cursor.getString(2);
         this.mFTSStatus = cursor.getString(3);
+        this.mFTSRealID = cursor.getString(4);
     }
 
     public static final HashMap<String, String> mFTSColumnMap = buildFTSColumnMap();
@@ -241,6 +246,7 @@ public class Reservation {
         map.put(COL_FTS_RESERVATION_NAME, COL_FTS_RESERVATION_NAME);
         map.put(COL_FTS_RESERVATION_DATES, COL_FTS_RESERVATION_DATES);
         map.put(COL_FTS_RESERVATION_STATUS, COL_FTS_RESERVATION_STATUS);
+        map.put(COL_FTS_RESERVATION_REALID, COL_FTS_RESERVATION_REALID);
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +
