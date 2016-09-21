@@ -9,6 +9,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
 /**
@@ -30,8 +32,11 @@ public class Reservation {
     public static final String COL_TO_DATE = "toDate";
     public static final String COL_TARIFF_TYPE = "tariffType";
     public static final String COL_TARIFF_RATE = "tariffRate";
-    public static final String COL_CURRENT_STATE = "currentState";
+    public static final String COL_CURRENT_STATUS = "currentStatus";
 
+    public static final int WaitingStatus = 1;
+    public static final int CheckedInStatus = 2;
+    public static final int CheckedOutStatus = 3;
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // For database projection so order is consistent
@@ -43,7 +48,7 @@ public class Reservation {
             COL_TO_DATE,
             COL_TARIFF_TYPE,
             COL_TARIFF_RATE,
-            COL_CURRENT_STATE
+            COL_CURRENT_STATUS
 
     };
 
@@ -65,7 +70,7 @@ public class Reservation {
         map.put(COL_TO_DATE, COL_TO_DATE);
         map.put(COL_TARIFF_TYPE, COL_TARIFF_TYPE);
         map.put(COL_TARIFF_RATE, COL_TARIFF_RATE);
-        map.put(COL_CURRENT_STATE, COL_CURRENT_STATE);
+        map.put(COL_CURRENT_STATUS, COL_CURRENT_STATUS);
         return map;
     }
 
@@ -84,7 +89,7 @@ public class Reservation {
                     + COL_TO_DATE + " INTEGER,"
                     + COL_TARIFF_TYPE + " INTEGER,"
                     + COL_TARIFF_RATE + " INTEGER,"
-                    + COL_CURRENT_STATE + " INTEGER"
+                    + COL_CURRENT_STATUS + " INTEGER"
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -97,7 +102,7 @@ public class Reservation {
     public long mToDate = 0;
     public long mTariffType = 0;
     public long mTariffRate = 0;
-    public long mCurrentState = 0;
+    public long mCurrentStatus = 0;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -118,7 +123,7 @@ public class Reservation {
         this.mToDate = cursor.getLong(4);
         this.mTariffType = cursor.getLong(5);
         this.mTariffRate = cursor.getLong(6);
-        this.mCurrentState = cursor.getLong(7);
+        this.mCurrentStatus = cursor.getLong(7);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -136,7 +141,7 @@ public class Reservation {
         values.put(COL_TO_DATE, mToDate);
         values.put(COL_TARIFF_TYPE, mTariffType);
         values.put(COL_TARIFF_RATE, mTariffRate);
-        values.put(COL_CURRENT_STATE, mCurrentState);
+        values.put(COL_CURRENT_STATUS, mCurrentStatus);
         return values;
     }
 
@@ -153,21 +158,46 @@ public class Reservation {
         mToDate = values.getAsLong(COL_TO_DATE);
         mTariffType = values.getAsLong(COL_TARIFF_TYPE);
         mTariffRate = values.getAsLong(COL_TARIFF_RATE);
-        mCurrentState = values.getAsLong(COL_CURRENT_STATE);
+        mCurrentStatus = values.getAsLong(COL_CURRENT_STATUS);
+    }
+
+    public String getStatusString() {
+        switch ((int)mCurrentStatus) {
+            case WaitingStatus:
+                return "Waiting";
+            case CheckedInStatus:
+                return "Checked In";
+            case CheckedOutStatus:
+                return "Checked Out";
+        }
+        return "Unknown";
+    }
+
+    public String getDatesString() {
+        String datesString = "";
+        if (mFromDate > 0 && mToDate > 0) {
+            Calendar fromDate = Calendar.getInstance();
+            Calendar toDate = Calendar.getInstance();
+            fromDate.setTimeInMillis(mFromDate);
+            toDate.setTimeInMillis(mToDate);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            datesString = dateFormatter.format(fromDate.getTime()) + " - " + dateFormatter.format(toDate.getTime());
+        }
+        return datesString;
     }
 
     // Reservation FTS Table
     public static final String FTS_TABLE_NAME = "FTSReservationTable";
-    public static final String COL_FTS_ROOM_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
-    public static final String COL_FTS_ROOM_DESCRIPTION = SearchManager.SUGGEST_COLUMN_TEXT_2;
-    public static final String COL_FTS_ROOM_REALID = "realID";
+    public static final String COL_FTS_RESERVATION_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
+    public static final String COL_FTS_RESERVATION_DATES = SearchManager.SUGGEST_COLUMN_TEXT_2;
+    public static final String COL_FTS_RESERVATION_STATUS = "status";
 
     // For database projection so order is consistent
     public static final String[] FTS_FIELDS = {
             BaseColumns._ID,
-            COL_FTS_ROOM_NAME,
-            COL_FTS_ROOM_DESCRIPTION,
-            COL_FTS_ROOM_REALID
+            COL_FTS_RESERVATION_NAME,
+            COL_FTS_RESERVATION_DATES,
+            COL_FTS_RESERVATION_STATUS
     };
 
     /* Note that FTS3 does not support column constraints and thus, you cannot
@@ -177,16 +207,16 @@ public class Reservation {
     public static final String CREATE_FTS_TABLE =
             "CREATE VIRTUAL TABLE " + FTS_TABLE_NAME +
                     " USING fts3 (" +
-                    COL_FTS_ROOM_NAME + ", " +
-                    COL_FTS_ROOM_DESCRIPTION + "," +
-                    COL_FTS_ROOM_REALID +
+                    COL_FTS_RESERVATION_NAME + ", " +
+                    COL_FTS_RESERVATION_DATES + "," +
+                    COL_FTS_RESERVATION_STATUS +
                     ");";
 
     // Fields corresponding to FTSReservationTable columns
     public String mRowID = "";
     public String mFTSName = "";
-    public String mFTSDescription = "";
-    public String mFTSRealID = "";
+    public String mFTSDates = "";
+    public String mFTSStatus = "";
 
     /**
      * Set information from the FTSReservationTable into an Reservation object.
@@ -195,8 +225,8 @@ public class Reservation {
         // Indices expected to match order in FIELDS!
         this.mRowID = cursor.getString(0);
         this.mFTSName = cursor.getString(1);
-        this.mFTSDescription = cursor.getString(2);
-        this.mFTSRealID = cursor.getString(3);
+        this.mFTSDates = cursor.getString(2);
+        this.mFTSStatus = cursor.getString(3);
     }
 
     public static final HashMap<String, String> mFTSColumnMap = buildFTSColumnMap();
@@ -208,9 +238,9 @@ public class Reservation {
      */
     private static HashMap<String,String> buildFTSColumnMap() {
         HashMap<String,String> map = new HashMap<String,String>();
-        map.put(COL_FTS_ROOM_NAME, COL_FTS_ROOM_NAME);
-        map.put(COL_FTS_ROOM_DESCRIPTION, COL_FTS_ROOM_DESCRIPTION);
-        map.put(COL_FTS_ROOM_REALID, COL_FTS_ROOM_REALID);
+        map.put(COL_FTS_RESERVATION_NAME, COL_FTS_RESERVATION_NAME);
+        map.put(COL_FTS_RESERVATION_DATES, COL_FTS_RESERVATION_DATES);
+        map.put(COL_FTS_RESERVATION_STATUS, COL_FTS_RESERVATION_STATUS);
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +

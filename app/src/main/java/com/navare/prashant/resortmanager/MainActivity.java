@@ -404,5 +404,7 @@ public class MainActivity extends Activity {
     //          1: way to choose rooms
     //          2: tarif options (per person or per room)
     //          3. 3 states: waiting, checked-in and checked-out
+    //          4. FTS name should have the number of people in brackets (e.g. Prashant (4))
+    // TODO: all activities for Reservation similar to Room
 }
 
