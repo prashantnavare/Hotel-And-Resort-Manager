@@ -542,6 +542,203 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         return rowsUpdated;
     }
 
+    private long addReservation(Reservation reservation) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        long realID = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            realID = db.insert(Reservation.TABLE_NAME, null, reservation.getContentValues());
+        }
+        if (realID > -1) {
+            // Also add an entry to the Reservation FTS table
+            ContentValues ftsValues = new ContentValues();
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.mName);
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_REALID, Long.toString(realID));
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
+
+            long ftsID = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsID =  db.insert(Reservation.FTS_TABLE_NAME, null, ftsValues);
+            }
+            if (ftsID == -1) {
+                deleteReservation(String.valueOf(realID));
+                return ftsID;
+            }
+            ResortManagerApp.incrementReservationCount();
+        }
+        return realID;
+    }
+
+    public int deleteReservation(String reservationID) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        int result = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            result = db.delete(Reservation.TABLE_NAME, BaseColumns._ID + " IS ?", new String[]{reservationID});
+        }
+
+        if (result > 0) {
+            int ftsResult = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsResult = db.delete(Reservation.FTS_TABLE_NAME, Reservation.COL_FTS_RESERVATION_REALID + " MATCH ? ", new String[]{reservationID});
+            }
+            notifyProviderOnReservationChange();
+
+            ResortManagerApp.decrementReservationCount();
+            return ftsResult;
+        }
+        return result;
+    }
+
+    private void notifyProviderOnReservationChange() {
+        mHelperContext.getContentResolver().notifyChange(ResortManagerContentProvider.FTS_RESERVATION_URI, null, false);
+    }
+
+    /**
+     * Returns a Cursor positioned at the item specified by id
+     *
+     * @param rowID id of item to retrieve
+     * @param columns The columns to include, if null then all are included
+     * @return Cursor positioned to matching item, or null if not found.
+     */
+    public Cursor getReservation(String rowID, String[] columns) {
+        String selection = BaseColumns._ID + " = ?";
+        String[] selectionArgs = new String[] {rowID};
+
+        /* This builds a query that looks like:
+         *     SELECT <columns> FROM <table> WHERE _id = <rowID>
+         */
+        /* The SQLiteBuilder provides a map for all possible columns requested to
+         * actual columns in the database, creating a simple column alias mechanism
+         * by which the ContentProvider does not need to know the real column names
+         */
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.TABLE_NAME);
+        builder.setProjectionMap(Reservation.mColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
+    /**
+     * Returns a Cursor over all FTS Reservation
+     *
+     * @param columns The columns to include, if null then all are included
+     * @return Cursor over all items that match, or null if none found.
+     */
+    public Cursor getAllFTSReservations(String[] columns) {
+
+        /* This builds a query that looks like:
+         *     SELECT <columns> FROM <table>
+         */
+        /* The SQLiteBuilder provides a map for all possible columns requested to
+         * actual columns in the database, creating a simple column alias mechanism
+         * by which the ContentProvider does not need to know the real column names
+         */
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.FTS_TABLE_NAME);
+        builder.setProjectionMap(Reservation.mFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, null, null, null, null, Reservation.COL_FTS_RESERVATION_NAME);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+    /**
+     * Returns a Cursor over all FTS items that match the given searchString
+     *
+     * @param searchString The string to search for
+     * @param columns The columns to include, if null then all are included
+     * @return Cursor over all items that match, or null if none found.
+     */
+    public Cursor getFTSReservationMatches(String searchString, String[] columns) {
+        String selection = Reservation.FTS_TABLE_NAME + " MATCH ?";
+        String[] selectionArgs = new String[] {searchString + "*"};
+
+        /* This builds a query that looks like:
+         *     SELECT <columns> FROM <table> WHERE <COL_FTS_ITEM_NAME> MATCH 'query*'
+         * which is an FTS3 search for the query text (plus a wildcard) inside the item_name column.
+         *
+         * - "rowid" is the unique id for all rows but we need this value for the "_id" column in
+         *    order for the Adapters to work, so the columns need to make "_id" an alias for "rowid"
+         * - "rowid" also needs to be used by the SUGGEST_COLUMN_INTENT_DATA alias in order
+         *   for suggestions to carry the proper intent data.
+         *   These aliases are defined in the InventoryProvider when queries are made.
+         * - This can be revised to also search the item description text with FTS3 by changing
+         *   the selection clause to use FTS_ITEM_TABLE instead of COL_FTS_ITEM_NAME (to search across
+         *   the entire table, but sorting the relevance could be difficult.
+         */
+        /* The SQLiteBuilder provides a map for all possible columns requested to
+         * actual columns in the database, creating a simple column alias mechanism
+         * by which the ContentProvider does not need to know the real column names
+         */
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.FTS_TABLE_NAME);
+        builder.setProjectionMap(Reservation.mFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, Reservation.COL_FTS_RESERVATION_NAME);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
+    public long insertReservation(ContentValues values) {
+        Reservation reservation = new Reservation();
+        reservation.setContentFromCV(values);
+        return addReservation(reservation);
+    }
+
+    public int updateReservation(String reservationId, ContentValues values, String selection, String[] selectionArgs) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        int rowsUpdated = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
+        }
+        if (rowsUpdated > 0) {
+            Reservation reservation = new Reservation();
+            reservation.setContentFromCV(values);
+            ContentValues ftsValues = new ContentValues();
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.mName);
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
+
+            long ftsRowsUpdated = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsRowsUpdated =  db.update(Reservation.FTS_TABLE_NAME, ftsValues, Reservation.COL_FTS_RESERVATION_REALID + " MATCH " + reservationId, null);
+            }
+        }
+        notifyProviderOnRoomChange();
+        return rowsUpdated;
+    }
+
     public long insertTask(ContentValues values) {
         Task task = new Task();
         task.setContentFromCV(values);

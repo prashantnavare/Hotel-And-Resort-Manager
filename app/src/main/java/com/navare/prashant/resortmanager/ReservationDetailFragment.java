@@ -45,6 +45,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A fragment representing a single Reservation detail screen.
@@ -377,7 +378,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         boolean bSuccess = false;
         if ((mReservationID == null) || (mReservationID.isEmpty())) {
-            // a new reservation is being inserted.
+            // a new reservation is being inserted. A new reservation always starts life in Waiting status
+            mReservation.mCurrentStatus = Reservation.WaitingStatus;
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.RESERVATION_URI, mReservation.getContentValues());
             if (uri != null) {
                 mReservationID = uri.getLastPathSegment();
@@ -436,50 +438,43 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             mReservation.mName = mTextName.getText().toString();
         }
-        mReservation.mDescription = mTextDescription.getText().toString();
 
-        if (mTextCapacity.getText().toString().isEmpty()) {
-            showAlertDialog("Capacity cannot be empty.");
-            mTextCapacity.requestFocus();
+        if (mTextNumPeople.getText().toString().isEmpty()) {
+            showAlertDialog("People cannot be empty.");
+            mTextNumPeople.requestFocus();
             return false;
         }
         else {
-            mReservation.mCapacity = Long.valueOf(mTextCapacity.getText().toString());
+            mReservation.mNumPeople = Long.valueOf(mTextNumPeople.getText().toString());
         }
 
-        // Cleaning related
-        if (mCleaningCheckBox.isChecked()) {
-            mReservation.mCleaningReminders = 1;
-            if (mTextCleaningFrequency.getText().toString().isEmpty()) {
-                showAlertDialog("Cleaning frequency cannot be empty.");
-                mTextCleaningFrequency.requestFocus();
-                return false;
-            }
-            else {
-                mReservation.mCleaningFrequency = Long.valueOf(mTextCleaningFrequency.getText().toString());
-            }
-
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-            Calendar cleaningDate = Calendar.getInstance();
-            String uiCleaningDate = mBtnFromDate.getText().toString();
-            if (uiCleaningDate.compareToIgnoreCase("Set") != 0) {
-                try {
-                    cleaningDate.setTime(dateFormatter.parse(uiCleaningDate));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                mReservation.mCleaningDate = cleaningDate.getTimeInMillis();
-            }
-
-            mReservation.mCleaningInstructions = mTextCleaningInstructions.getText().toString();
+        String uiFromDate = mBtnFromDate.getText().toString();
+        if (uiFromDate.compareToIgnoreCase("Set") == 0) {
+            showAlertDialog("From Date needs to be set.");
+            mBtnFromDate.requestFocus();
+            return false;
         }
         else {
-            mReservation.mCleaningReminders = 0;
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            Calendar fromDate = Calendar.getInstance();
+            try {
+                fromDate.setTime(dateFormatter.parse(uiFromDate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            mReservation.mFromDate = fromDate.getTimeInMillis();
         }
-        if (mImageBitmap != null) {
-            ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-            mImageBitmap.compress(Bitmap.CompressFormat.PNG, 0, imageStream);
-            mReservation.mImage = imageStream.toByteArray();
+
+        if (mTextNumDays.getText().toString().isEmpty()) {
+            showAlertDialog("Days cannot be empty.");
+            mTextNumDays.requestFocus();
+            return false;
+        }
+        else {
+            mReservation.mNumDays = Long.valueOf(mTextNumDays.getText().toString());
+            Calendar toDate = Calendar.getInstance();
+            toDate.setTimeInMillis(mReservation.mFromDate + TimeUnit.MILLISECONDS.convert(mReservation.mNumDays, TimeUnit.DAYS));
+            mReservation.mToDate = toDate.getTimeInMillis();
         }
         return true;
     }
@@ -488,127 +483,38 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mName);
-        mTextDescription.setText(mReservation.mDescription);
-
-        mTextCapacity.setText(String.valueOf(mReservation.mCapacity));
-
-        // Set the cleaning UI elements
-        if (mReservation.mCleaningReminders > 0) {
-            mCleaningCheckBox.setChecked(true);
-            mCleaningDetailsLayout.setVisibility(View.VISIBLE);
-            if (mReservation.mCleaningFrequency > 0)
-                mTextCleaningFrequency.setText(String.valueOf(mReservation.mCleaningFrequency));
-            if (mReservation.mCleaningDate > 0) {
-                Calendar cleaningDate = Calendar.getInstance();
-                cleaningDate.setTimeInMillis(mReservation.mCleaningDate);
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                mBtnFromDate.setText(dateFormatter.format(cleaningDate.getTime()));
-            }
-            else {
-                mBtnFromDate.setText("Set");
-            }
-            mTextCleaningInstructions.setText(mReservation.mCleaningInstructions);
+        mTextNumPeople.setText(String.valueOf(mReservation.mNumPeople));
+        mTextNumDays.setText(String.valueOf(mReservation.mNumDays));
+        if (mReservation.mFromDate > 0) {
+            Calendar fromDate = Calendar.getInstance();
+            fromDate.setTimeInMillis(mReservation.mFromDate);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            mBtnFromDate.setText(dateFormatter.format(fromDate.getTime()));
         }
-        else {
-            mCleaningCheckBox.setChecked(false);
-            mCleaningDetailsLayout.setVisibility(View.GONE);
+        if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
+            mCallbacks.EnableCheckinButton(true);
+            mCallbacks.EnableCheckoutButton(false);
         }
-
-        if (mReservation.mImage == null) {
-            mImageView.setImageBitmap(null);
-        }
-        else {
-            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-            bmpFactoryOptions.inJustDecodeBounds = false;
-            mImageBitmap = BitmapFactory.decodeByteArray(mReservation.mImage, 0, mReservation.mImage.length, bmpFactoryOptions);
-            // Display it
-            mImageView.setImageBitmap(mImageBitmap);
+        else if (mReservation.mCurrentStatus == Reservation.CheckedInStatus) {
+            mCallbacks.EnableCheckinButton(false);
+            mCallbacks.EnableCheckoutButton(true);
         }
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void displayUIForNewReservation() {
         mTextName.setText("");
-        mTextDescription.setText("");
-        mTextCapacity.setText("");
-
-        mCleaningCheckBox.setChecked(false);
-        mCleaningDetailsLayout.setVisibility(View.GONE);
-
-        mImageView.setImageBitmap(null);
+        mTextNumPeople.setText("");
+        mTextNumDays.setText("");
+        mBtnFromDate.setText("Set");
 
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
 
+        // New reservation so disable checkin and checkout buttons
+        mCallbacks.EnableCheckinButton(false);
+        mCallbacks.EnableCheckoutButton(false);
+
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-    }
-
-    public void showServiceCallDialog() {
-        ServiceCallDialogFragment dialog = new ServiceCallDialogFragment();
-        dialog.setReservation(mReservation);
-        dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "ServiceCallDialogFragment");
-    }
-
-    public void createServiceCall(long reservationID, String description, long priority, String reservationName, String reservationDescription) {
-        ServiceCall sc = new ServiceCall();
-        sc.mReservationID = reservationID;
-        sc.mDescription = description;
-        sc.mPriority = priority;
-        sc.mStatus = ServiceCall.OpenStatus;
-        sc.mOpenTimeStamp = Calendar.getInstance().getTimeInMillis();
-        sc.mItemName = reservationName;
-        sc.mItemLocation = reservationDescription;
-
-        // a new service call is being inserted.
-        Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.SERVICE_CALL_URI, sc.getContentValues());
-        if (uri != null) {
-            Toast toast = Toast.makeText(mContext, "Problem report created.", Toast.LENGTH_SHORT);
-            toast.show();
-
-            // Also create a corresponding task
-            Task task = new Task();
-            task.mTaskType = Task.ServiceCall;
-            task.mReservationID = reservationID;
-            task.mServiceCallID = Long.valueOf(uri.getLastPathSegment());
-            task.mItemName = mReservation.mName;
-            task.mItemLocation = mReservation.mDescription;
-            task.mStatus = Task.OpenStatus;
-            task.mPriority = priority;
-
-            Uri taskUri = getActivity().getContentResolver().insert(ResortManagerContentProvider.TASK_URI, task.getContentValues());
-        }
-        else {
-            Toast toast = Toast.makeText(mContext, "Failed to create problem report.", Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    public void handleCamera() {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {
-            // Create the File where the photo should go
-            mImageFileName = mContext.getExternalFilesDir(null).getAbsolutePath() + "/" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".png";
-            mImageFile = new File(mImageFileName);
-            mImageFileUri = Uri.fromFile(mImageFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mImageFile));
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-            bmpFactoryOptions.inSampleSize = 4;
-            mImageBitmap = BitmapFactory.decodeFile(mImageFileName, bmpFactoryOptions);
-            // Display it
-            mImageView.setImageBitmap(mImageBitmap);
-            mImageFile.delete();
-            enableRevertAndSaveButtons();
-        }
     }
 }

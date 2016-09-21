@@ -89,6 +89,23 @@ public class ResortManagerContentProvider extends ContentProvider {
     private static final int ROOMS = 15;
     private static final int ROOM_ID = 16;
 
+    // FTS Reservations related
+    private static final String FTS_RESERVATIONS_SUB_SCHEME = "/fts_reservations";
+    private static final String FTS_RESERVATION_URL = SCHEME + PROVIDER_NAME + FTS_RESERVATIONS_SUB_SCHEME;
+    public static final Uri FTS_RESERVATION_URI = Uri.parse(FTS_RESERVATION_URL);
+    // UriMatcher stuff
+    private static final int SEARCH_FTS_RESERVATIONS = 17;
+    private static final int SEARCH_SUGGEST_RESERVATIONS = 18;
+
+    // Actual ReservationTable related
+    // get_reservation related
+    private static final String RESERVATION_SUB_SCHEME = "/reservation";
+    private static final String RESERVATION_URL = SCHEME + PROVIDER_NAME + RESERVATION_SUB_SCHEME;
+    public static final Uri RESERVATION_URI = Uri.parse(RESERVATION_URL);
+    // UriMatcher stuff
+    private static final int RESERVATIONS = 19;
+    private static final int RESERVATION_ID = 20;
+
     private static final UriMatcher mURIMatcher = buildUriMatcher();
 
     /**
@@ -128,6 +145,13 @@ public class ResortManagerContentProvider extends ContentProvider {
         matcher.addURI(PROVIDER_NAME, ROOM_SUB_SCHEME , ROOMS);
         matcher.addURI(PROVIDER_NAME, ROOM_SUB_SCHEME + "/#", ROOM_ID);
 
+        // to get FTS reservations...
+        matcher.addURI(PROVIDER_NAME, FTS_RESERVATIONS_SUB_SCHEME, SEARCH_FTS_RESERVATIONS);
+
+        // for reservation
+        matcher.addURI(PROVIDER_NAME, RESERVATION_SUB_SCHEME , RESERVATIONS);
+        matcher.addURI(PROVIDER_NAME, RESERVATION_SUB_SCHEME + "/#", RESERVATION_ID);
+
         // to get suggestions...
         matcher.addURI(PROVIDER_NAME, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST_ITEMS);
         matcher.addURI(PROVIDER_NAME, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST_ITEMS);
@@ -146,6 +170,12 @@ public class ResortManagerContentProvider extends ContentProvider {
             "/vnd.navare.prashant.ResortManager.Room";
     private static final String ROOM_DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
             "/vnd.navare.prashant.ResortManager.Room";
+
+    // MIME types used for searching rooms or looking up a single reservation
+    private static final String RESERVATIONS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
+            "/vnd.navare.prashant.ResortManager.Reservation";
+    private static final String RESERVATION_DEFINITION_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+            "/vnd.navare.prashant.ResortManager.Reservation";
 
     private ResortManagerDatabase mResortDB;
 
@@ -216,6 +246,18 @@ public class ResortManagerContentProvider extends ContentProvider {
                 resultCursor =  getRoom(uri);
                 break;
 
+            case SEARCH_FTS_RESERVATIONS:
+                if (selectionArgs == null) {
+                    resultCursor = getAllFTSReservations();
+                }
+                else {
+                    resultCursor =  searchFTSReservations(selectionArgs[0]);
+                }
+                break;
+            case RESERVATION_ID:
+                resultCursor =  getReservation(uri);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
@@ -238,6 +280,11 @@ public class ResortManagerContentProvider extends ContentProvider {
         return mResortDB.getItem(rowId, Item.FIELDS);
     }
 
+    private Cursor getSuggestionsFTSForItems(String query) {
+        query = query.toLowerCase();
+        return mResortDB.getFTSItemMatches(query, Item.FTS_FIELDS);
+    }
+
     private Cursor getAllFTSRooms() {
         return mResortDB.getAllFTSRooms(Room.FTS_FIELDS);
     }
@@ -252,9 +299,18 @@ public class ResortManagerContentProvider extends ContentProvider {
         return mResortDB.getRoom(rowId, Room.FIELDS);
     }
 
-    private Cursor getSuggestionsFTSForItems(String query) {
+    private Cursor getAllFTSReservations() {
+        return mResortDB.getAllFTSReservations(Reservation.FTS_FIELDS);
+    }
+
+    private Cursor searchFTSReservations(String query) {
         query = query.toLowerCase();
-        return mResortDB.getFTSItemMatches(query, Item.FTS_FIELDS);
+        return mResortDB.getFTSReservationMatches(query, Reservation.FTS_FIELDS);
+    }
+
+    private Cursor getReservation(Uri uri) {
+        String rowId = uri.getLastPathSegment();
+        return mResortDB.getReservation(rowId, Reservation.FIELDS);
     }
 
     private Cursor getAllFTSTasks() {
@@ -288,6 +344,8 @@ public class ResortManagerContentProvider extends ContentProvider {
                 return deleteItem(uri);
             case ROOM_ID:
                 return deleteRoom(uri);
+            case RESERVATION_ID:
+                return deleteReservation(uri);
             case TASK_ID:
                 return deleteTask(uri);
             default:
@@ -315,6 +373,16 @@ public class ResortManagerContentProvider extends ContentProvider {
         return rowsDeleted;
     }
 
+    private int deleteReservation(Uri uri) {
+        String rowId = uri.getLastPathSegment();
+        int rowsDeleted = mResortDB.deleteReservation(rowId);
+        if (rowsDeleted > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(FTS_RESERVATION_URI, null);
+        }
+        return rowsDeleted;
+    }
+
     private int deleteTask(Uri uri) {
         String rowId = uri.getLastPathSegment();
         int rowsDeleted = mResortDB.deleteTask(rowId);
@@ -333,6 +401,8 @@ public class ResortManagerContentProvider extends ContentProvider {
                 return insertItem(values);
             case ROOMS:
                 return insertRoom(values);
+            case RESERVATIONS:
+                return insertReservation(values);
             case SERVICE_CALLS:
                 return insertServiceCall(values);
             case TASKS:
@@ -366,6 +436,20 @@ public class ResortManagerContentProvider extends ContentProvider {
             Uri newRoomUri = ContentUris.withAppendedId(ROOM_URI, rowID);
             getContext().getContentResolver().notifyChange(FTS_ROOM_URI, null);
             return newRoomUri;
+        }
+        return null;
+    }
+
+    private Uri insertReservation(ContentValues values) {
+
+        // Add a new room
+        long rowID = mResortDB.insertReservation(values);
+        // If record is added successfully
+        if (rowID > 0)
+        {
+            Uri newReservationUri = ContentUris.withAppendedId(RESERVATION_URI, rowID);
+            getContext().getContentResolver().notifyChange(FTS_RESERVATION_URI, null);
+            return newReservationUri;
         }
         return null;
     }
@@ -404,6 +488,8 @@ public class ResortManagerContentProvider extends ContentProvider {
                 return updateItem(uri, values, selection, selectionArgs);
             case ROOM_ID:
                 return updateRoom(uri, values, selection, selectionArgs);
+            case RESERVATION_ID:
+                return updateReservation(uri, values, selection, selectionArgs);
             case TASK_ID:
                 return updateTask(uri, values, selection, selectionArgs);
             case SERVICE_CALL_ID:
@@ -429,6 +515,16 @@ public class ResortManagerContentProvider extends ContentProvider {
         if (rowsUpdated > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
             getContext().getContentResolver().notifyChange(FTS_ROOM_URI, null);
+        }
+        return rowsUpdated;
+    }
+
+    private int updateReservation(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        String reservationId = uri.getLastPathSegment();
+        int rowsUpdated = mResortDB.updateReservation(reservationId, values, selection, selectionArgs);
+        if (rowsUpdated > 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(FTS_RESERVATION_URI, null);
         }
         return rowsUpdated;
     }
@@ -465,6 +561,11 @@ public class ResortManagerContentProvider extends ContentProvider {
                 return ROOMS_MIME_TYPE;
             case ROOMS:
                 return ROOM_DEFINITION_MIME_TYPE;
+
+            case SEARCH_FTS_RESERVATIONS:
+                return RESERVATIONS_MIME_TYPE;
+            case RESERVATIONS:
+                return RESERVATION_DEFINITION_MIME_TYPE;
 
             // PNTODO: Should this be different?
             case SEARCH_SUGGEST_ITEMS:

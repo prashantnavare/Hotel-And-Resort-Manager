@@ -28,10 +28,9 @@ public class Reservation {
     // These fields can be anything you want.
     public static final String COL_NAME = "name";
     public static final String COL_NUMPEOPLE = "numPeople";
+    public static final String COL_NUMDAYS = "numDays";
     public static final String COL_FROM_DATE = "fromDate";
     public static final String COL_TO_DATE = "toDate";
-    public static final String COL_TARIFF_TYPE = "tariffType";
-    public static final String COL_TARIFF_RATE = "tariffRate";
     public static final String COL_CURRENT_STATUS = "currentStatus";
 
     public static final int WaitingStatus = 1;
@@ -44,10 +43,9 @@ public class Reservation {
             BaseColumns._ID,
             COL_NAME,
             COL_NUMPEOPLE,
+            COL_NUMDAYS,
             COL_FROM_DATE,
             COL_TO_DATE,
-            COL_TARIFF_TYPE,
-            COL_TARIFF_RATE,
             COL_CURRENT_STATUS
 
     };
@@ -66,10 +64,9 @@ public class Reservation {
         map.put(BaseColumns._ID, BaseColumns._ID);
         map.put(COL_NAME, COL_NAME);
         map.put(COL_NUMPEOPLE, COL_NUMPEOPLE);
+        map.put(COL_NUMDAYS, COL_NUMDAYS);
         map.put(COL_FROM_DATE, COL_FROM_DATE);
         map.put(COL_TO_DATE, COL_TO_DATE);
-        map.put(COL_TARIFF_TYPE, COL_TARIFF_TYPE);
-        map.put(COL_TARIFF_RATE, COL_TARIFF_RATE);
         map.put(COL_CURRENT_STATUS, COL_CURRENT_STATUS);
         return map;
     }
@@ -85,10 +82,9 @@ public class Reservation {
                     + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                     + COL_NAME + " TEXT NOT NULL DEFAULT '',"
                     + COL_NUMPEOPLE + " INTEGER,"
+                    + COL_NUMDAYS + " INTEGER,"
                     + COL_FROM_DATE + " INTEGER,"
                     + COL_TO_DATE + " INTEGER,"
-                    + COL_TARIFF_TYPE + " INTEGER,"
-                    + COL_TARIFF_RATE + " INTEGER,"
                     + COL_CURRENT_STATUS + " INTEGER"
                     + ")";
 
@@ -97,11 +93,9 @@ public class Reservation {
     public long mID = -1;
     public String mName = "";
     public long mNumPeople = 0;
+    public long mNumDays = 0;
     public long mFromDate = 0;
-
     public long mToDate = 0;
-    public long mTariffType = 0;
-    public long mTariffRate = 0;
     public long mCurrentStatus = 0;
 
     /**
@@ -119,11 +113,10 @@ public class Reservation {
         this.mID = cursor.getLong(0);
         this.mName = cursor.getString(1);
         this.mNumPeople = cursor.getLong(2);
-        this.mFromDate = cursor.getLong(3);
-        this.mToDate = cursor.getLong(4);
-        this.mTariffType = cursor.getLong(5);
-        this.mTariffRate = cursor.getLong(6);
-        this.mCurrentStatus = cursor.getLong(7);
+        this.mNumDays = cursor.getLong(3);
+        this.mFromDate = cursor.getLong(4);
+        this.mToDate = cursor.getLong(5);
+        this.mCurrentStatus = cursor.getLong(6);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -136,11 +129,9 @@ public class Reservation {
         // Note that ID is NOT included here
         values.put(COL_NAME, mName);
         values.put(COL_NUMPEOPLE, mNumPeople);
+        values.put(COL_NUMDAYS, mNumDays);
         values.put(COL_FROM_DATE, mFromDate);
-
         values.put(COL_TO_DATE, mToDate);
-        values.put(COL_TARIFF_TYPE, mTariffType);
-        values.put(COL_TARIFF_RATE, mTariffRate);
         values.put(COL_CURRENT_STATUS, mCurrentStatus);
         return values;
     }
@@ -153,11 +144,9 @@ public class Reservation {
         // Note that ID is NOT included here
         mName = values.getAsString(COL_NAME);
         mNumPeople = values.getAsLong(COL_NUMPEOPLE);
+        mNumDays = values.getAsLong(COL_NUMDAYS);
         mFromDate = values.getAsLong(COL_FROM_DATE);
-
         mToDate = values.getAsLong(COL_TO_DATE);
-        mTariffType = values.getAsLong(COL_TARIFF_TYPE);
-        mTariffRate = values.getAsLong(COL_TARIFF_RATE);
         mCurrentStatus = values.getAsLong(COL_CURRENT_STATUS);
     }
 
