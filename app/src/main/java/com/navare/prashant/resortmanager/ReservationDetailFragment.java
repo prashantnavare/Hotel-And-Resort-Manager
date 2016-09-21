@@ -110,7 +110,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void EnableRevertButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
         void RedrawOptionsMenu();
-        void EnableServiceCallButton(boolean bEnable);
+        void EnableCheckinButton(boolean bEnable);
+        void EnableCheckoutButton(boolean bEnable);
         void onReservationDeleted();
         void setTitleString(String titleString);
     }
@@ -129,7 +130,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         public void EnableSaveButton(boolean bEnable) {
         }
         @Override
-        public void EnableServiceCallButton(boolean bEnable) {
+        public void EnableCheckinButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableCheckoutButton(boolean bEnable) {
         }
         @Override
         public void RedrawOptionsMenu() {

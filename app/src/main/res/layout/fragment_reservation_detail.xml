@@ -1,0 +1,183 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ScrollView
+        android:id="@+id/roomDetailScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/adView"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <!-- Reservation Name, location, type -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Reservation Name -->
+                <LinearLayout
+                    android:id="@+id/roomNameRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textName"
+                        android:hint="Name"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="textCapWords|textMultiLine"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Num of people -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="People"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textNumPeople"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Num of days -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Days"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textNumDays"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- From Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="From Date"
+                        android:padding="5dp"
+                        />
+                    <Button
+                        android:id="@+id/btnFromDate"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:text="@string/set_date"
+                        android:textColor="#ffffff"
+                        android:layout_marginRight="100dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_shape"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_item_detail_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:resortmanager="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_save"
+        android:icon="@drawable/ic_menu_save"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_save"/>
+    <item android:id="@+id/menu_revert"
+        android:icon="@drawable/ic_menu_revert"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_revert"/>
+    <item android:id="@+id/menu_checkin"
+        android:icon="@drawable/ic_menu_checkin"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="Check In"/>
+    <item android:id="@+id/menu_checkout"
+        android:icon="@drawable/ic_menu_checkout"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="Check Out"/>
+    <item android:id="@+id/menu_delete"
+        android:icon="@drawable/ic_menu_delete"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/menu_delete"/>
+</menu>
