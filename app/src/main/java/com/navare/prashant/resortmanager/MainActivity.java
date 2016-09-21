@@ -406,5 +406,8 @@ public class MainActivity extends Activity {
     //          3. 3 states: waiting, checked-in and checked-out
     //          4. FTS name should have the number of people in brackets (e.g. Prashant (4))
     // TODO: all activities for Reservation similar to Room
+    // TODO: Apply Tariff at the time of checkout
+    //          1. Can be per person or per room
+    //          2. UI for specifying either
 }
 

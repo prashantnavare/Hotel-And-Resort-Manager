@@ -69,30 +69,15 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
      */
     private String mReservationID;
     private Reservation mReservation = null;
-    private long mPreviousType = 0;
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /**
      * The UI elements showing the details of the reservation
      */
     private TextView mTextName;
-    private TextView mTextDescription;
-    private TextView mTextCapacity;
-
-    private LinearLayout mCleaningRemindersLayout;
-    private LinearLayout mCleaningDetailsLayout;
-
-    private CheckBox mCleaningCheckBox;
-    private TextView mTextCleaningFrequency;
-    private Button mBtnChangeCleaningDate;
-    private TextView mTextCleaningInstructions;
-
-    private ImageView mImageView;
-
-    private String mImageFileName;
-    private File mImageFile;
-    private Uri mImageFileUri;
-    private Bitmap mImageBitmap = null;
+    private TextView mTextNumPeople;
+    private TextView mTextNumDays;
+    private Button mBtnFromDate;
 
     private AdView mAdView;
 
@@ -226,44 +211,20 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextName.addTextChangedListener(this);
 
-        mTextDescription = ((TextView) rootView.findViewById(R.id.textDescription));
-        mTextDescription.addTextChangedListener(this);
+        mTextNumPeople = ((TextView) rootView.findViewById(R.id.textNumPeople));
+        mTextNumPeople.addTextChangedListener(this);
 
-        mTextCapacity = (TextView) rootView.findViewById(R.id.textCapacity);
-        mTextCapacity.addTextChangedListener(this);
+        mTextNumDays = (TextView) rootView.findViewById(R.id.textNumDays);
+        mTextNumDays.addTextChangedListener(this);
 
-        mCleaningRemindersLayout = (LinearLayout) rootView.findViewById(R.id.cleaningRemindersLayout);
-        mCleaningDetailsLayout = (LinearLayout) rootView.findViewById(R.id.cleaningDetailsLayout);
-
-        // Cleaning
-        mCleaningCheckBox = (CheckBox) rootView.findViewById(R.id.chkCleaning);
-        mCleaningCheckBox.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    mCleaningDetailsLayout.setVisibility(View.VISIBLE);
-                } else {
-                    mCleaningDetailsLayout.setVisibility(View.GONE);
-                }
-                enableRevertAndSaveButtons();
-            }
-        });
-        mTextCleaningFrequency = (TextView) rootView.findViewById(R.id.textCleaningFrequency);
-        mTextCleaningFrequency.addTextChangedListener(this);
-
-        mBtnChangeCleaningDate = (Button) rootView.findViewById(R.id.btnChangeCleaningDate);
-        mBtnChangeCleaningDate.setOnClickListener(new View.OnClickListener() {
+        mBtnFromDate = (Button) rootView.findViewById(R.id.btnFromDate);
+        mBtnFromDate.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                showDatePicker(DatePickerType.CLEANING);
+                showDatePicker();
             }
         });
-
-        mTextCleaningInstructions = (TextView) rootView.findViewById(R.id.textCleaningInstructions);
-        mTextCleaningInstructions.addTextChangedListener(this);
-
-        // image related
-        mImageView = ((ImageView) rootView.findViewById(R.id.imageReservation));
 
         // Banner Ad
         mAdView = (AdView) rootView.findViewById(R.id.adView);
@@ -284,17 +245,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         super.onDestroyView();
     }
 
-    enum DatePickerType {CLEANING}
-
-    private void showDatePicker(final DatePickerType pickerType) {
+    private void showDatePicker() {
         Calendar dateToShow = Calendar.getInstance();
         if (mReservation != null) {
-            switch (pickerType) {
-                case CLEANING:
-                    if (mReservation.mCleaningDate > 0) {
-                        dateToShow.setTimeInMillis(mReservation.mCleaningDate);
-                    }
-                    break;
+            if (mReservation.mFromDate > 0) {
+                dateToShow.setTimeInMillis(mReservation.mFromDate);
             }
         }
         CalibrationDatePickerFragment datePicker = new CalibrationDatePickerFragment();
@@ -313,16 +268,12 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
-                switch (pickerType) {
-                    case CLEANING:
-                        mBtnChangeCleaningDate.setText(dateFormatter.format(newDate.getTime()));
-                        break;
-                }
+                mBtnFromDate.setText(dateFormatter.format(newDate.getTime()));
                 enableRevertAndSaveButtons();
             }
         };
         datePicker.setCallBack(onDateChangeCallback);
-        datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "Instrument Date Picker");
+        datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "Reservation Date Picker");
     }
 
     @Override
@@ -510,7 +461,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
             Calendar cleaningDate = Calendar.getInstance();
-            String uiCleaningDate = mBtnChangeCleaningDate.getText().toString();
+            String uiCleaningDate = mBtnFromDate.getText().toString();
             if (uiCleaningDate.compareToIgnoreCase("Set") != 0) {
                 try {
                     cleaningDate.setTime(dateFormatter.parse(uiCleaningDate));
@@ -551,10 +502,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 Calendar cleaningDate = Calendar.getInstance();
                 cleaningDate.setTimeInMillis(mReservation.mCleaningDate);
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-                mBtnChangeCleaningDate.setText(dateFormatter.format(cleaningDate.getTime()));
+                mBtnFromDate.setText(dateFormatter.format(cleaningDate.getTime()));
             }
             else {
-                mBtnChangeCleaningDate.setText("Set");
+                mBtnFromDate.setText("Set");
             }
             mTextCleaningInstructions.setText(mReservation.mCleaningInstructions);
         }
