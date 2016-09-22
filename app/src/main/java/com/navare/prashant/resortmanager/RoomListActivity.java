@@ -96,6 +96,7 @@ public class RoomListActivity extends AppCompatActivity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Not Do not iconify the widget; expand it by default
         searchView.setOnQueryTextListener(this);
+        searchView.setQueryHint("Search rooms...");
         return super.onCreateOptionsMenu(menu);
     }
 
