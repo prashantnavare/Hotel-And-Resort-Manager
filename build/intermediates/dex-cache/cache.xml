@@ -2,87 +2,50 @@
 <items version="2" >
 
     <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.3.0_0f383cad78e9ef9119c2b2fbd92e47d0d9d659a5/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.3.0_ac583894efe6f69e4282e627d4ed4b5b6b28c5f2/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-8.4.0_cfa41f962c694074f5527216a9b23d6bb4d59e88/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.3.0_b9fb1ab8883b9df7ea3fc34442377dcde281e7ad/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="1d08beb9bfb92d0b341632c18381f00c05862737">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_e854a72e8de862127f3a58c74a6ae6bde517750f/classes.dex" />
-    </item>
-    <item
         jar="/home/pnavare/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.3.0/support-annotations-23.3.0.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
         sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.3.0_52be1d38c5bf09ad2b533cf0f361103fa2e8d40a/classes.dex" />
     </item>
     <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.3.0/jars/classes.jar"
+        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.4.0/jars/classes.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
-        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.3.0_9a518a6b686d1edd90b8e9fa9a0c8f6eef9dce76/classes.dex" />
+        sha1="b5e7892fb0708e792e0e933c4c0a0ca0ac7831fb">
+        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-ads-8.4.0_27925861f0693d18e5caf44968773fde256d9f36/classes.dex" />
     </item>
     <item
         jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
         sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.3.0_9e2a151f5d2cd257fd34a1a68dce33178fd91325/classes.dex" />
     </item>
     <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
+        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/jars/classes.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
-        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.3.0_ac583894efe6f69e4282e627d4ed4b5b6b28c5f2/classes.dex" />
+        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
+        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-8.4.0_cfa41f962c694074f5527216a9b23d6bb4d59e88/classes.dex" />
     </item>
     <item
-        is-multidex="true"
+        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/design/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.3.0_8230dd596db5e75c03a508f26265dbd54fce6050/classes.dex" />
+    </item>
+    <item
+        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.3.0_b9fb1ab8883b9df7ea3fc34442377dcde281e7ad/classes.dex" />
+    </item>
+    <item
         jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.3.0/jars/classes.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
         sha1="debf30ce0a7560396b6235edef77e447006454c2">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.3.0_dac4b004d9aa16a45b0eab4066093011a3da7c5e/classes.dex" />
@@ -90,120 +53,37 @@
     <item
         jar="/home/pnavare/resortmanager/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
-        sha1="55103c43061b02f67378ad7446d79d9df8a0e294">
+        sha1="90e716b6b7929b318ab3fe6aed1644772e00d8e0">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_6b88630158743faee98a1f46d2d9d83033caf47b/classes.dex" />
     </item>
     <item
-        is-multidex="true"
         jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.3.0/jars/classes.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
         sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.3.0_9a518a6b686d1edd90b8e9fa9a0c8f6eef9dce76/classes.dex" />
     </item>
     <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar"
+        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
-        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.3.0_9e2a151f5d2cd257fd34a1a68dce33178fd91325/classes.dex" />
-    </item>
-    <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="b5e7892fb0708e792e0e933c4c0a0ca0ac7831fb">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-ads-8.4.0_27925861f0693d18e5caf44968773fde256d9f36/classes.dex" />
-    </item>
-    <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="debf30ce0a7560396b6235edef77e447006454c2">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-23.3.0_dac4b004d9aa16a45b0eab4066093011a3da7c5e/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="0ad37d6bf32c71ff5e41ad33c5fe38474522be43">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_6b88630158743faee98a1f46d2d9d83033caf47b/classes.dex" />
-    </item>
-    <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/design/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.3.0_8230dd596db5e75c03a508f26265dbd54fce6050/classes.dex" />
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.3.0_ac583894efe6f69e4282e627d4ed4b5b6b28c5f2/classes.dex" />
     </item>
     <item
         jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/jars/classes.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
         sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.3.0_0f383cad78e9ef9119c2b2fbd92e47d0d9d659a5/classes.dex" />
     </item>
     <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.3.0_b9fb1ab8883b9df7ea3fc34442377dcde281e7ad/classes.dex" />
-    </item>
-    <item
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="8e673cdfadd8f2d98fdb2fda2285c30f6e449782">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-8.4.0_cfa41f962c694074f5527216a9b23d6bb4d59e88/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.4.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="b5e7892fb0708e792e0e933c4c0a0ca0ac7831fb">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-ads-8.4.0_27925861f0693d18e5caf44968773fde256d9f36/classes.dex" />
-    </item>
-    <item
         jar="/home/pnavare/resortmanager/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
-        optimize="true"
         revision="23.0.3"
-        sha1="e1faa207fbaee7d7af270abb0a51f9f4f5ecb49f">
+        sha1="9d4e5389d9455a106e14e6dbba8b047a2195517a">
         <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_e854a72e8de862127f3a58c74a6ae6bde517750f/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.3.0/support-annotations-23.3.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.3.0_52be1d38c5bf09ad2b533cf0f361103fa2e8d40a/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/home/pnavare/resortmanager/app/build/intermediates/exploded-aar/com.android.support/design/23.3.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.3"
-        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
-        <dex dex="/home/pnavare/resortmanager/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-23.3.0_8230dd596db5e75c03a508f26265dbd54fce6050/classes.dex" />
     </item>
 
 </items>
