@@ -321,7 +321,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             }
         };
         datePicker.setCallBack(onDateChangeCallback);
-        datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "Instrument Date Picker");
+        datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "Room Date Picker");
     }
 
     @Override

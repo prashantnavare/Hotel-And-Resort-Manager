@@ -2,18 +2,14 @@ package com.navare.prashant.resortmanager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -24,24 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Reservation;
-import com.navare.prashant.resortmanager.Database.ServiceCall;
-import com.navare.prashant.resortmanager.Database.Task;
-import com.navare.prashant.resortmanager.util.CalibrationDatePickerFragment;
-import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -253,15 +239,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 dateToShow.setTimeInMillis(mReservation.mFromDate);
             }
         }
-        CalibrationDatePickerFragment datePicker = new CalibrationDatePickerFragment();
-        Bundle args = new Bundle();
-        args.putInt("year", dateToShow.get(Calendar.YEAR));
-        args.putInt("month", dateToShow.get(Calendar.MONTH));
-        args.putInt("day", dateToShow.get(Calendar.DAY_OF_MONTH));
-        datePicker.setArguments(args);
-        /**
-         * Set Call back to capture selected date
-         */
         OnDateSetListener onDateChangeCallback = new OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -273,8 +250,13 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 enableRevertAndSaveButtons();
             }
         };
-        datePicker.setCallBack(onDateChangeCallback);
-        datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "Reservation Date Picker");
+
+        int year = dateToShow.get(Calendar.YEAR);
+        int month = dateToShow.get(Calendar.MONTH);
+        int day = dateToShow.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePicker = new DatePickerDialog(mContext, onDateChangeCallback, year, month, day);
+        datePicker.getDatePicker().setMinDate(Calendar.getInstance().getTime().getTime());
+        datePicker.show();
     }
 
     @Override
@@ -490,6 +472,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             fromDate.setTimeInMillis(mReservation.mFromDate);
             SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
             mBtnFromDate.setText(dateFormatter.format(fromDate.getTime()));
+        }
+        else {
+            mBtnFromDate.setText("Set");
         }
         if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
             mCallbacks.EnableCheckinButton(true);

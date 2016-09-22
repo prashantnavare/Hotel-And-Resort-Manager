@@ -30,6 +30,7 @@ import com.navare.prashant.resortmanager.util.SystemUiHider;
  */
 public class MainActivity extends Activity {
     private Button mButtonTasks;
+    private Button mButtonReservations;
     private Button mButtonInventory;
     private Button mButtonRooms;
     private Button mButtonRemoveAds;
@@ -66,14 +67,12 @@ public class MainActivity extends Activity {
 
         // Buttons
         mButtonTasks = (Button) findViewById(R.id.tasks_button);
+        mButtonReservations = (Button) findViewById(R.id.reservations_button);
         mButtonInventory = (Button) findViewById(R.id.inventory_button);
         mButtonRooms = (Button) findViewById(R.id.rooms_button);
 
         // Set the title to the name of the hospital
         setTitleAndVariousCount();
-
-        // TODO: Remove this after testing
-        ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
 
         // Ads related
         mButtonRemoveAds = (Button) findViewById(R.id.removeads_button);
@@ -222,6 +221,15 @@ public class MainActivity extends Activity {
         }
         else {
             startActivity(new Intent(this, TaskListActivity.class));
+        }
+    }
+
+    public void onReservationsClick(View view) {
+        if (mInterstitialAdForInventory != null && mInterstitialAdForInventory.isLoaded()) {
+            mInterstitialAdForInventory.show();
+        }
+        else {
+            startActivity(new Intent(this, ReservationListActivity.class));
         }
     }
 
@@ -387,6 +395,10 @@ public class MainActivity extends Activity {
         long taskCount = preferences.getLong(ResortManagerApp.sPrefTaskCount, 0);
         String taskButtonString = "Tasks (" + String.valueOf(taskCount) + ")";
         mButtonTasks.setText(taskButtonString);
+
+        long reservationsCount = preferences.getLong(ResortManagerApp.sPrefReservationCount, 0);
+        String reservationsButtonString = "Reservations (" + String.valueOf(reservationsCount) + ")";
+        mButtonReservations.setText(reservationsButtonString);
 
         long itemCount = preferences.getLong(ResortManagerApp.sPrefItemCount, 0);
         String itemButtonString = "Inventory (" + String.valueOf(itemCount) + ")";
