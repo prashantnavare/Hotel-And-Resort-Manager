@@ -339,8 +339,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
                 mTask.setContentFromCursor(dataCursor);
                 updateUIFromTask();
-                String titleString = mTask.getTaskTypeString() + " (" + mTask.mItemName + ")";
-                mCallbacks.setTitleString(titleString);
 
                 if (mTask.mTaskType == Task.ServiceCall) {
                     // Get the service call details.
@@ -478,9 +476,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             // If the task was unassigned to a person, send that person an SMS.
             // If the task was assigned to a new person, send that person an SMS.
             sendTaskSMSs();
-            mCallbacks.EnableSaveButton(false);
-            mCallbacks.EnableRevertButton(false);
-            mCallbacks.RedrawOptionsMenu();
+            updateUIFromTask();
         }
     }
 
@@ -705,6 +701,9 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.EnableSaveButton(false);
         mCallbacks.EnableRevertButton(false);
         mCallbacks.RedrawOptionsMenu();
+
+        String titleString = mTask.getTaskTypeString() + " (" + mTask.mItemName + ")";
+        mCallbacks.setTitleString(titleString);
     }
 
     public void showTaskDoneDialog() {

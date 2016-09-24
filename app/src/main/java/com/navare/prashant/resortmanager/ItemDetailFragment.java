@@ -502,13 +502,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
                 mItem.setContentFromCursor(dataCursor);
                 updateUIFromItem();
-                mCallbacks.setTitleString(mItem.mName);
-
-                // Toggle the action bar buttons appropriately
-                mCallbacks.EnableDeleteButton(true);
-                mCallbacks.EnableRevertButton(false);
-                mCallbacks.EnableSaveButton(false);
-                mCallbacks.RedrawOptionsMenu();
             }
         }
     }
@@ -545,10 +538,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         else {
             updateUIFromItem();
         }
-
-        mCallbacks.EnableRevertButton(false);
-        mCallbacks.EnableSaveButton(false);
-        mCallbacks.RedrawOptionsMenu();
     }
 
     public void deleteItem() {
@@ -582,10 +571,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 bSuccess = true;
         }
         if (bSuccess) {
-            mCallbacks.EnableSaveButton(false);
-            mCallbacks.EnableRevertButton(false);
-            mCallbacks.RedrawOptionsMenu();
-            mCallbacks.setTitleString(mItem.mName);
+            updateUIFromItem();
         }
         return true;
     }
@@ -817,6 +803,14 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             // Display it
             mImageView.setImageBitmap(mImageBitmap);
         }
+
+        // Toggle remaining action bar buttons appropriately
+        mCallbacks.EnableDeleteButton(true);
+        mCallbacks.EnableRevertButton(false);
+        mCallbacks.EnableSaveButton(false);
+        mCallbacks.RedrawOptionsMenu();
+
+        mCallbacks.setTitleString(mItem.mName);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -837,6 +831,12 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
+        mCallbacks.EnableDeleteButton(false);
+        mCallbacks.EnableServiceCallButton(false);
+        mCallbacks.EnableInventoryAddButton(false);
+        mCallbacks.EnableInventorySubtractButton(false);
+
+        mCallbacks.setTitleString("New Item");
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
