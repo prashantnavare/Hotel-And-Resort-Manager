@@ -135,6 +135,7 @@ public class ReservationDetailActivity extends AppCompatActivity
                 return true;
             case R.id.menu_checkin:
                 // TODO: Implement this
+                doCheckin();
                 return true;
             case R.id.menu_checkout:
                 // TODO: Implement this
@@ -220,6 +221,11 @@ public class ReservationDetailActivity extends AppCompatActivity
         alertDialog.show();
     }
 
+    private void doCheckin() {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).doCheckin();
+    }
+
     private void revertUI() {
         ((ReservationDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.reservation_detail_container)).revertUI();
@@ -278,6 +284,14 @@ public class ReservationDetailActivity extends AppCompatActivity
     @Override
     public void onReservationDeleted() {
         Toast toast = Toast.makeText(getApplicationContext(), "Reservation deleted.", Toast.LENGTH_SHORT);
+        toast.show();
+
+        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+    }
+
+    @Override
+    public void onCheckinCompleted() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Checkin completed.", Toast.LENGTH_SHORT);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));

@@ -421,5 +421,9 @@ public class MainActivity extends Activity {
     // TODO: Apply Tariff at the time of checkout
     //          1. Can be per person or per room
     //          2. UI for specifying either
+    // TODO: Replace ic_hospital_inventory with ic_resort_manager icon
+    // TODO: In Reservations list, show reservations that are Waiting and FromDate is in the past as RED
+    // TODO: In Task List, change item to room and Location to Description when the task is for a room
+    // TODO: Do the simplification logic done for Reservation & Room to Task and Item (in respective DetailFragment)
 }
 

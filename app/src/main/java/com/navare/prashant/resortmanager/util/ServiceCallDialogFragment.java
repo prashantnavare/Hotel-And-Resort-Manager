@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,7 +26,8 @@ public class ServiceCallDialogFragment extends DialogFragment {
 
     private Item mItem;
     private Room mRoom;
-    private TextView mTextInstrument;
+    private TextView mTextItemLabel;
+    private TextView mTextItem;
     private CheckBox mUrgentCheckBox;
     private TextView mTextDescription;
     private Button mBtnReport;
@@ -75,11 +77,20 @@ public class ServiceCallDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
 
         getDialog().setTitle("Create a Service Call");
+        getDialog().requestWindowFeature(Window.FEATURE_LEFT_ICON);
 
         View rootView = inflater.inflate(R.layout.dialog_service_call, container, false);
 
-        mTextInstrument = ((TextView) rootView.findViewById(R.id.textInstrument));
-        mTextInstrument.setText(mItem.mName);
+        mTextItemLabel = ((TextView) rootView.findViewById(R.id.textItemLabel));
+        mTextItem = ((TextView) rootView.findViewById(R.id.textItem));
+        if (mItem != null) {
+            mTextItemLabel.setText("Item");
+            mTextItem.setText(mItem.mName);
+        }
+        else if (mRoom != null) {
+            mTextItemLabel.setText("Room");
+            mTextItem.setText(mRoom.mName);
+        }
 
         mUrgentCheckBox = ((CheckBox) rootView.findViewById(R.id.chkUrgent));
 
@@ -121,6 +132,13 @@ public class ServiceCallDialogFragment extends DialogFragment {
         */
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        getDialog().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.ic_menu_service_call);
     }
 
     View.OnClickListener onCancel=

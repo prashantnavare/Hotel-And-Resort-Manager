@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -86,6 +87,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void EnableCheckoutButton(boolean bEnable);
         void onReservationDeleted();
         void setTitleString(String titleString);
+        void onCheckinCompleted();
     }
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -113,9 +115,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         @Override
         public void onReservationDeleted() {
         }
-
         @Override
         public void setTitleString(String titleString) {
+        }
+        @Override
+        public void onCheckinCompleted() {
         }
     };
 
@@ -295,13 +299,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
                 mReservation.setContentFromCursor(dataCursor);
                 updateUIFromReservation();
-                mCallbacks.setTitleString(mReservation.mName);
-
-                // Toggle the action bar buttons appropriately
-                mCallbacks.EnableDeleteButton(true);
-                mCallbacks.EnableRevertButton(false);
-                mCallbacks.EnableSaveButton(false);
-                mCallbacks.RedrawOptionsMenu();
             }
         }
     }
@@ -338,10 +335,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             updateUIFromReservation();
         }
-
-        mCallbacks.EnableRevertButton(false);
-        mCallbacks.EnableSaveButton(false);
-        mCallbacks.RedrawOptionsMenu();
     }
 
     public void deleteReservation() {
@@ -376,12 +369,62 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 bSuccess = true;
         }
         if (bSuccess) {
-            mCallbacks.EnableSaveButton(false);
-            mCallbacks.EnableRevertButton(false);
-            mCallbacks.RedrawOptionsMenu();
-            mCallbacks.setTitleString(mReservation.mName);
+            updateUIFromReservation();
         }
         return true;
+    }
+
+    public void doCheckin() {
+        // First, get a confirmation from the user
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Checkin");
+
+        // Setting Dialog Message
+        String dialogMessage = "Please confirm the following:\r\n";
+        dialogMessage += "\t 1. Number of people checking in : " + String.valueOf(mReservation.mNumPeople) + "\r\n";
+        dialogMessage += "\t 2. Number of days : " + String.valueOf(mReservation.mNumDays) + "\r\n";
+        alertDialog.setMessage(dialogMessage);
+
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.drawable.ic_menu_checkin);
+
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+
+                doTheRealCheckin();
+            }
+        });
+
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+
+    }
+
+    private void doTheRealCheckin() {
+        // TODO: Implement this
+        // The fromDate becomes today
+        mReservation.mFromDate = Calendar.getInstance().getTimeInMillis();
+        mReservation.mCurrentStatus = Reservation.CheckedInStatus;
+        Calendar toDate = Calendar.getInstance();
+        toDate.setTimeInMillis(mReservation.mFromDate + TimeUnit.MILLISECONDS.convert(mReservation.mNumDays, TimeUnit.DAYS));
+        mReservation.mToDate = toDate.getTimeInMillis();
+        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
+                mReservationID);
+        int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
+        if (result > 0) {
+            mCallbacks.onCheckinCompleted();
+        }
+
     }
 
     private void showAlertDialog(String message) {
@@ -476,6 +519,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             mBtnFromDate.setText("Set");
         }
+        // Toggle the action bar buttons appropriately
+        mCallbacks.EnableDeleteButton(true);
+        mCallbacks.EnableRevertButton(false);
+        mCallbacks.EnableSaveButton(false);
         if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
             mCallbacks.EnableCheckinButton(true);
             mCallbacks.EnableCheckoutButton(false);
@@ -484,6 +531,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mCallbacks.EnableCheckinButton(false);
             mCallbacks.EnableCheckoutButton(true);
         }
+        mCallbacks.RedrawOptionsMenu();
+        mCallbacks.setTitleString(mReservation.mName + " - " + mReservation.getStatusString()) ;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -495,11 +544,13 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
+        mCallbacks.EnableDeleteButton(false);
 
         // New reservation so disable checkin and checkout buttons
         mCallbacks.EnableCheckinButton(false);
         mCallbacks.EnableCheckoutButton(false);
 
+        mCallbacks.setTitleString("New Reservation");
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 }

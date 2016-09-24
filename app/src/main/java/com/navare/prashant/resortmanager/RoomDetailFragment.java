@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -109,11 +110,12 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         /**
          * Callbacks for when an room has been selected.
          */
+        void EnableCameraButton(boolean bEnable);
         void EnableDeleteButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
-        void RedrawOptionsMenu();
         void EnableServiceCallButton(boolean bEnable);
+        void RedrawOptionsMenu();
         void onRoomDeleted();
         void setTitleString(String titleString);
     }
@@ -122,6 +124,9 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
      * nothing. Used only when this fragment is not attached to an activity.
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
+        @Override
+        public void EnableCameraButton(boolean bEnable) {
+        }
         @Override
         public void EnableDeleteButton(boolean bEnable) {
         }
@@ -360,24 +365,16 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
                 mRoom.setContentFromCursor(dataCursor);
                 updateUIFromRoom();
-                mCallbacks.setTitleString(mRoom.mName);
-
-                // Toggle the action bar buttons appropriately
-                mCallbacks.EnableDeleteButton(true);
-                mCallbacks.EnableRevertButton(false);
-                mCallbacks.EnableSaveButton(false);
-                mCallbacks.RedrawOptionsMenu();
             }
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
+
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
@@ -393,7 +390,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void afterTextChanged(Editable s) {
-
     }
 
     public void revertUI() {
@@ -403,10 +399,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         else {
             updateUIFromRoom();
         }
-
-        mCallbacks.EnableRevertButton(false);
-        mCallbacks.EnableSaveButton(false);
-        mCallbacks.RedrawOptionsMenu();
     }
 
     public void deleteRoom() {
@@ -440,10 +432,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
                 bSuccess = true;
         }
         if (bSuccess) {
-            mCallbacks.EnableSaveButton(false);
-            mCallbacks.EnableRevertButton(false);
-            mCallbacks.RedrawOptionsMenu();
-            mCallbacks.setTitleString(mRoom.mName);
+            updateUIFromRoom();
         }
         return true;
     }
@@ -572,6 +561,15 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             // Display it
             mImageView.setImageBitmap(mImageBitmap);
         }
+
+        // Toggle the action bar buttons appropriately
+        mCallbacks.EnableCameraButton(true);
+        mCallbacks.EnableDeleteButton(true);
+        mCallbacks.EnableRevertButton(false);
+        mCallbacks.EnableSaveButton(false);
+        mCallbacks.EnableServiceCallButton(true);
+        mCallbacks.RedrawOptionsMenu();
+        mCallbacks.setTitleString(mRoom.mName);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -585,8 +583,15 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
         mImageView.setImageBitmap(null);
 
+        // Toggle the action bar buttons appropriately
+        mCallbacks.EnableCameraButton(true);
+        mCallbacks.EnableDeleteButton(false);
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
+        mCallbacks.EnableServiceCallButton(false);
+        mCallbacks.RedrawOptionsMenu();
+
+        mCallbacks.setTitleString("New Room");
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }

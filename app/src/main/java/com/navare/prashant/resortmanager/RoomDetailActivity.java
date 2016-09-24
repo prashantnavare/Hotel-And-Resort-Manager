@@ -38,20 +38,17 @@ import java.util.Map;
 public class RoomDetailActivity extends AppCompatActivity
         implements RoomDetailFragment.Callbacks, ServiceCallDialogFragment.ServiceCallDialogListener {
 
+    private MenuItem cameraMenuItem = null;
     private MenuItem deleteMenuItem = null;
     private MenuItem revertMenuItem = null;
     private MenuItem saveMenuItem = null;
-
     private MenuItem serviceCallMenuItem = null;
 
-    private MenuItem cameraMenuItem = null;
-
+    private boolean mbCameraMenuEnable = false;
     private boolean mbDeleteMenuEnable = false;
     private boolean mbRevertMenuEnable = false;
     private boolean mbSaveMenuEnable = false;
-
     private boolean mbServiceCallMenuEnable = false;
-    private boolean mbCameraMenuEnable = false;
 
     private Activity mThisActivity;
 
@@ -103,10 +100,10 @@ public class RoomDetailActivity extends AppCompatActivity
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here
         // as it happens on a separate thread. Hence the boolean state keepers
+        EnableCameraButton(mbCameraMenuEnable);
+        EnableDeleteButton(mbDeleteMenuEnable);
         EnableSaveButton(mbSaveMenuEnable);
         EnableRevertButton(mbRevertMenuEnable);
-        EnableDeleteButton(mbDeleteMenuEnable);
-
         EnableServiceCallButton(mbServiceCallMenuEnable);
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
@@ -323,6 +320,15 @@ public class RoomDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void EnableCameraButton(boolean bEnable) {
+        mbCameraMenuEnable = bEnable;
+        if (cameraMenuItem != null) {
+            cameraMenuItem.setEnabled(bEnable);
+            cameraMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
     public void EnableDeleteButton(boolean bEnable) {
         mbDeleteMenuEnable = bEnable;
         if (deleteMenuItem != null) {
@@ -358,13 +364,6 @@ public class RoomDetailActivity extends AppCompatActivity
         }
     }
 
-    private void EnableCameraButton(boolean bEnable) {
-        mbCameraMenuEnable = bEnable;
-        if (cameraMenuItem != null) {
-            cameraMenuItem.setEnabled(bEnable);
-            cameraMenuItem.setVisible(bEnable);
-        }
-    }
 
     @Override
     public void RedrawOptionsMenu() {
