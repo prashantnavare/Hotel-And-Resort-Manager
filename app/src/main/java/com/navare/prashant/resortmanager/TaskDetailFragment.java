@@ -611,9 +611,9 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         if (mTask.mItemID >= 0) {
             // This task for an item
             if (mTask.mTaskType == Task.Inventory)
-                mTextItemType.setText(getResources().getText(R.string.consumable));
+                mTextItemType.setText("Consumable");
             else
-                mTextItemType.setText(getResources().getText(R.string.instrument));
+                mTextItemType.setText("Equipment");
         }
         else if (mTask.mRoomID >= 0) {
             // This is a room

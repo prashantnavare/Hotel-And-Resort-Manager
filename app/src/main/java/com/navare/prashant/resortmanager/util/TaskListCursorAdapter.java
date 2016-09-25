@@ -36,8 +36,8 @@ public class TaskListCursorAdapter extends SimpleCursorAdapter {
         // Check to see if an item or a room task and set the textItemType to room/item and textLocation to location/description
         TextView textItemType = (TextView) view.findViewById(R.id.textItemType);
         TextView textLocation = (TextView) view.findViewById(R.id.textLocation);
-        String taskType = cursor.getString(cursor.getColumnIndex(Task.COL_FTS_TASK_TYPE));
-        if (taskType.equalsIgnoreCase("Cleaning")) {
+        String itemType = cursor.getString(cursor.getColumnIndex(Task.COL_FTS_ITEM_TYPE));
+        if (itemType.equalsIgnoreCase("Room")) {
             textItemType.setText("Room");
             textLocation.setText("Description");
         }

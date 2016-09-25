@@ -560,6 +560,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.ITEM_URI, mItem.getContentValues());
             if (uri != null) {
                 mItemID = uri.getLastPathSegment();
+                mItem.mID = Long.valueOf(mItemID);
                 bSuccess = true;
             }
         }
@@ -586,7 +587,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         alertDialog.setMessage(message);
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_hospital_inventory);
+        alertDialog.setIcon(R.drawable.ic_resort_manager);
 
         // Setting OK Button
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {

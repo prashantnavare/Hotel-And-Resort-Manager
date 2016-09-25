@@ -245,6 +245,7 @@ public class Task {
     public static final String COL_FTS_DUE_DATE = "ftsDueDate";
     public static final String COL_FTS_TASK_REALID = "realID";
     public static final String COL_FTS_TASK_PRIORITY = "priority";
+    public static final String COL_FTS_ITEM_TYPE = "itemType";
 
     // For database projection so order is consistent
     public static final String[] FTS_FIELDS = {
@@ -255,7 +256,8 @@ public class Task {
             COL_FTS_ASSIGNED_TO,
             COL_FTS_DUE_DATE,
             COL_FTS_TASK_REALID,
-            COL_FTS_TASK_PRIORITY
+            COL_FTS_TASK_PRIORITY,
+            COL_FTS_ITEM_TYPE
     };
 
     /* Note that FTS3 does not support column constraints and thus, you cannot
@@ -271,7 +273,8 @@ public class Task {
                     COL_FTS_ASSIGNED_TO + "," +
                     COL_FTS_DUE_DATE + "," +
                     COL_FTS_TASK_REALID + "," +
-                    COL_FTS_TASK_PRIORITY +
+                    COL_FTS_TASK_PRIORITY + "," +
+                    COL_FTS_ITEM_TYPE +
                     ");";
 
     // Fields corresponding to FTSItemTable columns
@@ -283,6 +286,7 @@ public class Task {
     public String mFTSDueDate = "";
     public String mFTSRealID = "";
     public String mFTSPriority = "";
+    public String mFTSItemType = "";
 
     /**
      * Set information from the FTSItemTable into a Task object.
@@ -297,6 +301,7 @@ public class Task {
         this.mFTSDueDate = cursor.getString(5);
         this.mFTSRealID = cursor.getString(6);
         this.mFTSPriority = cursor.getString(7);
+        this.mFTSItemType = cursor.getString(8);
     }
 
     public static final HashMap<String, String> mFTSColumnMap = buildFTSColumnMap();
@@ -315,6 +320,7 @@ public class Task {
         map.put(COL_FTS_DUE_DATE, COL_FTS_DUE_DATE);
         map.put(COL_FTS_TASK_REALID, COL_FTS_TASK_REALID);
         map.put(COL_FTS_TASK_PRIORITY, COL_FTS_TASK_PRIORITY);
+        map.put(COL_FTS_ITEM_TYPE, COL_FTS_ITEM_TYPE);
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +

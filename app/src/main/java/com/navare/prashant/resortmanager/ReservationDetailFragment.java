@@ -358,6 +358,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.RESERVATION_URI, mReservation.getContentValues());
             if (uri != null) {
                 mReservationID = uri.getLastPathSegment();
+                mReservation.mID = Long.valueOf(mReservationID);
                 bSuccess = true;
             }
         }
@@ -437,7 +438,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         alertDialog.setMessage(message);
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_hospital_inventory);
+        alertDialog.setIcon(R.drawable.ic_resort_manager);
 
         // Setting OK Button
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {

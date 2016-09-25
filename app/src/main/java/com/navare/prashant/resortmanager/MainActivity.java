@@ -275,7 +275,7 @@ public class MainActivity extends Activity {
         alertDialog.setMessage("Would you like to purchase  Resort Manager and remove the ads?");
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_hospital_inventory);
+        alertDialog.setIcon(R.drawable.ic_resort_manager);
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
@@ -417,12 +417,9 @@ public class MainActivity extends Activity {
     //          2: tarif options (per person or per room)
     //          3. 3 states: waiting, checked-in and checked-out
     //          4. FTS name should have the number of people in brackets (e.g. Prashant (4))
-    // TODO: all activities for Reservation similar to Room
     // TODO: Apply Tariff at the time of checkout
     //          1. Can be per person or per room
     //          2. UI for specifying either
-    // TODO: Replace ic_hospital_inventory with ic_resort_manager icon
     // TODO: In Reservations list, show reservations that are Waiting and FromDate is in the past as RED
-    // TODO: In Task List, change item to room and Location to Description when the task is for a room
 }
 

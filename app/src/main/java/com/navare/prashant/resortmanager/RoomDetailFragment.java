@@ -421,6 +421,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.ROOM_URI, mRoom.getContentValues());
             if (uri != null) {
                 mRoomID = uri.getLastPathSegment();
+                mRoom.mID = Long.valueOf(mRoomID);
                 bSuccess = true;
             }
         }
@@ -447,7 +448,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         alertDialog.setMessage(message);
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_hospital_inventory);
+        alertDialog.setIcon(R.drawable.ic_resort_manager);
 
         // Setting OK Button
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {

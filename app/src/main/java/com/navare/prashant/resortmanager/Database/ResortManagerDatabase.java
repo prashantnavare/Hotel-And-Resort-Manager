@@ -773,6 +773,11 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             }
             ftsValues.put(Task.COL_FTS_TASK_REALID, Long.toString(realID));
             ftsValues.put(Task.COL_FTS_TASK_PRIORITY, task.getTaskPriority());
+            if (task.mRoomID >= 0)
+                ftsValues.put(Task.COL_FTS_ITEM_TYPE, "Room");
+            else
+                ftsValues.put(Task.COL_FTS_ITEM_TYPE, "Item");
+
 
             long ftsID = -1;
             synchronized (ResortManagerApp.sDatabaseLock) {
