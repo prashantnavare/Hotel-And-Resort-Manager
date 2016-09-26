@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +30,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Reservation;
+import com.navare.prashant.resortmanager.Database.Room;
+import com.navare.prashant.resortmanager.Database.Task;
+import com.navare.prashant.resortmanager.util.SelectedRoomListCursorAdapter;
+import com.navare.prashant.resortmanager.util.TaskListCursorAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,8 +73,13 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private TextView mTextNumDays;
     private Button mBtnFromDate;
 
+    private LinearLayout mSelectedRoomsLayout;
+    private ListView mSelectedRoomListView;
+
     private AdView mAdView;
 
+    private boolean mbCheckinInProgress = false;
+    private SelectedRoomListCursorAdapter roomCursorAdapter;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -142,6 +153,15 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (getArguments().containsKey(ARG_RESERVATION_ID)) {
             mReservationID = getArguments().getString(ARG_RESERVATION_ID);
         }
+        String[] columns = new String[] {
+                Room.COL_NAME,
+                Room.COL_DESCRIPTION
+        };
+        int[] views = new int[] {
+                R.id.textRoomName,
+                R.id.textRoomDescription
+        };
+        roomCursorAdapter = new SelectedRoomListCursorAdapter(mContext, R.layout.selected_room_list_row, null, columns, views, 0);
     }
 
     @Override
@@ -216,6 +236,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 showDatePicker();
             }
         });
+
+        mSelectedRoomsLayout = (LinearLayout) rootView.findViewById(R.id.selectedRoomsLayout);
+        mSelectedRoomListView = (ListView) rootView.findViewById(R.id.list);
+
+        mSelectedRoomListView.setAdapter(roomCursorAdapter);
 
         // Banner Ad
         mAdView = (AdView) rootView.findViewById(R.id.adView);
@@ -376,38 +401,37 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     }
 
     public void doCheckin() {
-        // First, get a confirmation from the user
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        if (mbCheckinInProgress == false) {
+            // First, tell the user to select rooms for the checkin
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
-        // Setting Dialog Title
-        alertDialog.setTitle("Checkin");
+            // Setting Dialog Title
+            alertDialog.setTitle("Checkin");
+            // Setting Icon to Dialog
+            alertDialog.setIcon(R.drawable.ic_menu_checkin);
 
-        // Setting Dialog Message
-        String dialogMessage = "Please confirm the following:\r\n";
-        dialogMessage += "\t 1. Number of people checking in : " + String.valueOf(mReservation.mNumPeople) + "\r\n";
-        dialogMessage += "\t 2. Number of days : " + String.valueOf(mReservation.mNumDays) + "\r\n";
-        alertDialog.setMessage(dialogMessage);
+            // Setting Dialog Message
+            String dialogMessage = "Please select the rooms for this reservation and click on Checkin arrow again.";
+            alertDialog.setMessage(dialogMessage);
 
-        // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_menu_checkin);
+            // Setting Positive "Yes" Button
+            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
 
-        // Setting Positive "Yes" Button
-        alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+                    mbCheckinInProgress = true;
+                    mSelectedRoomsLayout.setVisibility(View.VISIBLE);
+                    getRooms();
+                }
+            });
 
-                doTheRealCheckin();
-            }
-        });
+            alertDialog.show();
+        }
+        else {
+            // TODO: verify that some rooms have been selected and doTheRealCheckin().
+        }
+    }
 
-        // Setting Negative "NO" Button
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
+    public void getRooms() {
 
     }
 
@@ -527,6 +551,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
             mCallbacks.EnableCheckinButton(true);
             mCallbacks.EnableCheckoutButton(false);
+            mSelectedRoomsLayout.setVisibility(View.GONE);
         }
         else if (mReservation.mCurrentStatus == Reservation.CheckedInStatus) {
             mCallbacks.EnableCheckinButton(false);
@@ -542,6 +567,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextNumPeople.setText("");
         mTextNumDays.setText("");
         mBtnFromDate.setText("Set");
+
+        mSelectedRoomsLayout.setVisibility(View.GONE);
 
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);

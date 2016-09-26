@@ -65,6 +65,9 @@ public class MainActivity extends Activity {
 
         new SimpleEula(this).show();
 
+        // TODO: remove this before final build
+        ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
+
         // Buttons
         mButtonTasks = (Button) findViewById(R.id.tasks_button);
         mButtonReservations = (Button) findViewById(R.id.reservations_button);

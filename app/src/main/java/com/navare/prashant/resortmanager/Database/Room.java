@@ -34,7 +34,13 @@ public class Room {
     public static final String COL_LAST_CLEANING_DATE = "lastCleaningDate";
     public static final String COL_CLEANING_INSTRUCTIONS = "cleaningInstructions";
 
+    public static final String COL_STATUS = "status";
+    public static final String COL_RESERVATION_ID = "reservationID";
+
     public static final String COL_IMAGE = "imagePath";
+
+    public static final int Free = 1;
+    public static final int Occupied = 2;
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // For database projection so order is consistent
@@ -48,6 +54,9 @@ public class Room {
             COL_CLEANING_FREQUENCY,
             COL_LAST_CLEANING_DATE,
             COL_CLEANING_INSTRUCTIONS,
+
+            COL_STATUS,
+            COL_RESERVATION_ID,
 
             COL_IMAGE
     };
@@ -73,6 +82,9 @@ public class Room {
         map.put(COL_LAST_CLEANING_DATE, COL_LAST_CLEANING_DATE);
         map.put(COL_CLEANING_INSTRUCTIONS, COL_CLEANING_INSTRUCTIONS);
 
+        map.put(COL_STATUS, COL_STATUS);
+        map.put(COL_RESERVATION_ID, COL_RESERVATION_ID);
+
         map.put(COL_IMAGE, COL_IMAGE);
 
         return map;
@@ -96,6 +108,9 @@ public class Room {
                     + COL_LAST_CLEANING_DATE + " INTEGER,"
                     + COL_CLEANING_INSTRUCTIONS + " TEXT DEFAULT '',"
 
+                    + COL_STATUS + " INTEGER,"
+                    + COL_RESERVATION_ID + " INTEGER,"
+
                     + COL_IMAGE + " BLOB"
 
                     + ")";
@@ -112,6 +127,9 @@ public class Room {
     public long mCleaningFrequency = 0;
     public long mCleaningDate = 0;
     public String mCleaningInstructions = "";
+
+    public long mStatus = 0;
+    public long mReservationID = -1;
 
     public byte[] mImage;
 
@@ -137,7 +155,10 @@ public class Room {
         this.mCleaningDate = cursor.getLong(6);
         this.mCleaningInstructions = cursor.getString(7);
 
-        this.mImage = cursor.getBlob(8);
+        this.mStatus = cursor.getLong(8);
+        this.mReservationID = cursor.getLong(9);
+
+        this.mImage = cursor.getBlob(10);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -156,6 +177,9 @@ public class Room {
         values.put(COL_CLEANING_FREQUENCY, mCleaningFrequency);
         values.put(COL_LAST_CLEANING_DATE, mCleaningDate);
         values.put(COL_CLEANING_INSTRUCTIONS, mCleaningInstructions);
+
+        values.put(COL_STATUS, mStatus);
+        values.put(COL_RESERVATION_ID, mReservationID);
 
         values.put(COL_IMAGE, mImage);
 
@@ -176,6 +200,9 @@ public class Room {
         mCleaningFrequency = values.getAsLong(COL_CLEANING_FREQUENCY);
         mCleaningDate = values.getAsLong(COL_LAST_CLEANING_DATE);
         mCleaningInstructions = values.getAsString(COL_CLEANING_INSTRUCTIONS);
+
+        mStatus = values.getAsLong(COL_STATUS);
+        mReservationID = values.getAsLong(COL_RESERVATION_ID);
 
         mImage = values.getAsByteArray(COL_IMAGE);
     }
