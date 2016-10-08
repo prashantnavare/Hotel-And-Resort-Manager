@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<com.navare.prashant.resortmanager.util.CheckableRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:minHeight="?android:listPreferredItemHeight"
     >
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,13 +21,17 @@
         android:background="@drawable/raised_background"
         android:orientation="vertical"
         android:textAlignment="center"
+        android:duplicateParentState="true"
+        android:layout_weight="1"
         >
         <TextView
             android:id="@+id/textRoomName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textStyle="bold"
+            android:duplicateParentState="true"
+            android:textColor="@color/hideable_text_color"
             />
 
         <Space
@@ -34,11 +40,23 @@
             />
         <TextView
             android:id="@+id/textRoomDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:duplicateParentState="true"
             android:textSize="12sp"
+            android:textColor="@color/hideable_text_color"
             />
 
     </LinearLayout>
 
-</RelativeLayout>
+    <ImageView android:src="@drawable/ic_hideable_item"
+        android:duplicateParentState="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        />
+
+</com.navare.prashant.resortmanager.util.CheckableRelativeLayout>

@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Checkable;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /**
  * This is a simple wrapper for {@link LinearLayout} that implements the {@link Checkable}
@@ -31,12 +32,12 @@ import android.widget.LinearLayout;
  * {@link android.widget.AbsListView} elements with a
  * {@link android.widget.AbsListView#setChoiceMode(int) choiceMode} set.
  */
-public class CheckableLinearLayout extends LinearLayout implements Checkable {
+public class CheckableRelativeLayout extends RelativeLayout implements Checkable {
     private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};
 
     private boolean mChecked = false;
 
-    public CheckableLinearLayout(Context context, AttributeSet attrs) {
+    public CheckableRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
