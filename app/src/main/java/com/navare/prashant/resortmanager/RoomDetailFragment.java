@@ -417,7 +417,8 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
 
         boolean bSuccess = false;
         if ((mRoomID == null) || (mRoomID.isEmpty())) {
-            // a new room is being inserted.
+            // a new room is being inserted. It always starts out life as a Free room.
+            mRoom.mStatus = Room.Free;
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.ROOM_URI, mRoom.getContentValues());
             if (uri != null) {
                 mRoomID = uri.getLastPathSegment();

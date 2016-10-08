@@ -5,17 +5,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <ScrollView
-        android:id="@+id/roomDetailScrollView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/adView"
-        >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_above="@+id/adView"
             >
             <!-- Reservation Name, etc. -->
             <LinearLayout
@@ -170,7 +164,7 @@
             <LinearLayout
                 android:id="@+id/selectedRoomsLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
@@ -187,19 +181,23 @@
                     android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Selected Rooms for this reservation"
+                    android:text="Selected Rooms for this reservation:"
                     android:padding="5dp"
                     />
                 <ListView
                     android:id="@+id/list"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:choiceMode="multipleChoice"
                 />
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

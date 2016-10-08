@@ -630,6 +630,29 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getReservationRooms(String reservationID, String[] columns) {
+        String selection = Room.COL_RESERVATION_ID + " = ? OR " + Room.COL_STATUS + " != " + String.valueOf(Room.Occupied);
+        String[] selectionArgs = new String[] {reservationID};
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Room.TABLE_NAME);
+        builder.setProjectionMap(Room.mColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
     /**
      * Returns a Cursor over all FTS Reservation
      *

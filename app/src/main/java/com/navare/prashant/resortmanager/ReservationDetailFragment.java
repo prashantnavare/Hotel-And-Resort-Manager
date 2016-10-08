@@ -49,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 public class ReservationDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, TextWatcher {
 
     private static final int LOADER_ID_RESERVATION_DETAILS = 2;
+    private static final int LOADER_ID_ROOM_DETAILS = 3;
 
     /**
      * The fragment argument representing the reservation ID that this fragment
@@ -309,6 +310,14 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                     reservationURI, Reservation.FIELDS, null, null,
                     null);
         }
+        else if (id == LOADER_ID_ROOM_DETAILS) {
+            Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_ROOMS_URI,
+                    mReservationID);
+
+            return new CursorLoader(getActivity(),
+                    roomURI, Room.FIELDS, null, null,
+                    null);
+        }
         else
             return null;
     }
@@ -324,6 +333,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
                 mReservation.setContentFromCursor(dataCursor);
                 updateUIFromReservation();
+            }
+            else if (loaderID == LOADER_ID_ROOM_DETAILS) {
+                roomCursorAdapter.swapCursor(dataCursor);
             }
         }
     }
@@ -420,7 +432,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
                     mbCheckinInProgress = true;
                     mSelectedRoomsLayout.setVisibility(View.VISIBLE);
-                    getRooms();
+                    getSelectedRooms();
                 }
             });
 
@@ -431,8 +443,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
     }
 
-    public void getRooms() {
-
+    public void getSelectedRooms() {
+        getLoaderManager().initLoader(LOADER_ID_ROOM_DETAILS, null, this);
     }
 
     private void doTheRealCheckin() {

@@ -102,9 +102,13 @@ public class ResortManagerContentProvider extends ContentProvider {
     private static final String RESERVATION_SUB_SCHEME = "/reservation";
     private static final String RESERVATION_URL = SCHEME + PROVIDER_NAME + RESERVATION_SUB_SCHEME;
     public static final Uri RESERVATION_URI = Uri.parse(RESERVATION_URL);
+    private static final String RESERVATION_ROOMS_SUB_SCHEME = "/reservationRooms";
+    private static final String RESERVATION_ROOMS_URL = SCHEME + PROVIDER_NAME + RESERVATION_ROOMS_SUB_SCHEME;
+    public static final Uri RESERVATION_ROOMS_URI = Uri.parse(RESERVATION_ROOMS_URL);
     // UriMatcher stuff
     private static final int RESERVATIONS = 19;
     private static final int RESERVATION_ID = 20;
+    private static final int RESERVATION_ROOMS_ID = 21;
 
     private static final UriMatcher mURIMatcher = buildUriMatcher();
 
@@ -151,6 +155,9 @@ public class ResortManagerContentProvider extends ContentProvider {
         // for reservation
         matcher.addURI(PROVIDER_NAME, RESERVATION_SUB_SCHEME , RESERVATIONS);
         matcher.addURI(PROVIDER_NAME, RESERVATION_SUB_SCHEME + "/#", RESERVATION_ID);
+
+        // for reservation rooms
+        matcher.addURI(PROVIDER_NAME, RESERVATION_ROOMS_SUB_SCHEME + "/#", RESERVATION_ROOMS_ID);
 
         // to get suggestions...
         matcher.addURI(PROVIDER_NAME, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST_ITEMS);
@@ -258,6 +265,10 @@ public class ResortManagerContentProvider extends ContentProvider {
                 resultCursor =  getReservation(uri);
                 break;
 
+            case RESERVATION_ROOMS_ID:
+                resultCursor =  getReservationRooms(uri);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
@@ -311,6 +322,11 @@ public class ResortManagerContentProvider extends ContentProvider {
     private Cursor getReservation(Uri uri) {
         String rowId = uri.getLastPathSegment();
         return mResortDB.getReservation(rowId, Reservation.FIELDS);
+    }
+
+    private Cursor getReservationRooms(Uri uri) {
+        String reservationId = uri.getLastPathSegment();
+        return mResortDB.getReservationRooms(reservationId, Room.FIELDS);
     }
 
     private Cursor getAllFTSTasks() {
