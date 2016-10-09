@@ -157,7 +157,7 @@ public class ResortManagerContentProvider extends ContentProvider {
         matcher.addURI(PROVIDER_NAME, RESERVATION_SUB_SCHEME + "/#", RESERVATION_ID);
 
         // for reservation rooms
-        matcher.addURI(PROVIDER_NAME, RESERVATION_ROOMS_SUB_SCHEME + "/#", RESERVATION_ROOMS_ID);
+        matcher.addURI(PROVIDER_NAME, RESERVATION_ROOMS_SUB_SCHEME, RESERVATION_ROOMS_ID);
 
         // to get suggestions...
         matcher.addURI(PROVIDER_NAME, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST_ITEMS);
@@ -266,7 +266,12 @@ public class ResortManagerContentProvider extends ContentProvider {
                 break;
 
             case RESERVATION_ROOMS_ID:
-                resultCursor =  getReservationRooms(uri);
+                if (selectionArgs == null) {
+                    resultCursor = getReservationRooms(null);
+                }
+                else {
+                    resultCursor =  getReservationRooms(selectionArgs[0]);
+                }
                 break;
 
             default:
@@ -324,9 +329,8 @@ public class ResortManagerContentProvider extends ContentProvider {
         return mResortDB.getReservation(rowId, Reservation.FIELDS);
     }
 
-    private Cursor getReservationRooms(Uri uri) {
-        String reservationId = uri.getLastPathSegment();
-        return mResortDB.getReservationRooms(reservationId, Room.FIELDS);
+    private Cursor getReservationRooms(String reservationID) {
+        return mResortDB.getReservationRooms(reservationID, Room.FIELDS);
     }
 
     private Cursor getAllFTSTasks() {

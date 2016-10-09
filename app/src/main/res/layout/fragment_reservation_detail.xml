@@ -177,11 +177,13 @@
                 android:textAlignment="center"
                 >
                 <TextView
+                    android:id="@+id/selectedRoomTextLabel"
                     android:layout_weight="3"
                     android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Selected Rooms for this reservation:"
+                    android:textStyle="bold"
                     android:padding="5dp"
                     />
                 <ListView

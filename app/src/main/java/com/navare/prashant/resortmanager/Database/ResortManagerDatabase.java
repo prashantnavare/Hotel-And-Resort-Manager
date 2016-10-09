@@ -631,8 +631,16 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
     }
 
     public Cursor getReservationRooms(String reservationID, String[] columns) {
-        String selection = Room.COL_RESERVATION_ID + " = ? OR " + Room.COL_STATUS + " != " + String.valueOf(Room.Occupied);
-        String[] selectionArgs = new String[] {reservationID};
+        String selection;
+        String [] selectionArgs;
+        if (reservationID != null) {
+            selection = Room.COL_RESERVATION_ID + " = ? OR " + Room.COL_STATUS + " != " + String.valueOf(Room.Occupied);
+            selectionArgs = new String[] {reservationID};
+        }
+        else {
+            selection = Room.COL_STATUS + " != " + String.valueOf(Room.Occupied);
+            selectionArgs = null;
+        }
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Room.TABLE_NAME);

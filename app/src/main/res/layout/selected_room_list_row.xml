@@ -49,14 +49,4 @@
 
     </LinearLayout>
 
-    <ImageView android:src="@drawable/ic_hideable_item"
-        android:duplicateParentState="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_weight="1"
-        />
-
 </com.navare.prashant.resortmanager.util.CheckableRelativeLayout>
