@@ -413,6 +413,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID);
         int result = getActivity().getContentResolver().delete(reservationURI, null, null);
         if (result > 0) {
+            releaseSelectedRooms();
             mCallbacks.onReservationDeleted();
         }
     }
@@ -475,8 +476,15 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     }
 
+    private void releaseSelectedRooms() {
+        int size = mSelectedRoomListView.getCount();
+        for (int i = 0; i < size; i++) {
+            updateRoom(i, false);
+        }
+    }
+
     private void updateSelectedRooms() {
-        int size = mSelectedRoomListView.getCount(); // number of name-value pairs in the array
+        int size = mSelectedRoomListView.getCount();
         for (int i = 0; i < size; i++) {
             boolean bChecked = mSelectedRoomListView.isItemChecked(i);
             updateRoom(i, bChecked);
