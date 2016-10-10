@@ -310,6 +310,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         getSelectedRooms();
     }
 
+    public void getSelectedRooms() {
+        getLoaderManager().restartLoader(LOADER_ID_ROOM_DETAILS, null, this);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
@@ -360,6 +364,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             cursor.moveToPosition(i);
             if (cursor.getLong(cursor.getColumnIndex(Room.COL_STATUS)) == Room.Occupied) {
                 mSelectedRoomListView.setItemChecked(i, true);
+            }
+            else {
+                mSelectedRoomListView.setItemChecked(i, false);
             }
         }
         int numRoomsSelected = mSelectedRoomListView.getCheckedItemCount();
@@ -434,9 +441,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 bSuccess = true;
         }
         if (bSuccess) {
-            updateSelectedRooms();
             updateUIFromReservation();
-            getSelectedRooms();
+            updateSelectedRooms();
         }
         return true;
     }
@@ -448,10 +454,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         else
             doTheRealCheckin();
-    }
-
-    public void getSelectedRooms() {
-        getLoaderManager().initLoader(LOADER_ID_ROOM_DETAILS, null, this);
     }
 
     private void doTheRealCheckin() {
@@ -479,7 +481,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             boolean bChecked = mSelectedRoomListView.isItemChecked(i);
             updateRoom(i, bChecked);
         }
-        getSelectedRooms();
     }
 
     private void updateRoom(int position, boolean bSelected) {
