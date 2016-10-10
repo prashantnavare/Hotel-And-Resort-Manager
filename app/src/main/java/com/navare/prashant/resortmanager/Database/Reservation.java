@@ -27,7 +27,8 @@ public class Reservation {
     // and declare a member and so on. See all ++++++++ comment lines below.
     // These fields can be anything you want.
     public static final String COL_NAME = "name";
-    public static final String COL_NUMPEOPLE = "numPeople";
+    public static final String COL_NUMADULTS = "numAdults";
+    public static final String COL_NUMCHILDREN = "numChildren";
     public static final String COL_NUMDAYS = "numDays";
     public static final String COL_FROM_DATE = "fromDate";
     public static final String COL_TO_DATE = "toDate";
@@ -42,7 +43,8 @@ public class Reservation {
     public static final String[] FIELDS = {
             BaseColumns._ID,
             COL_NAME,
-            COL_NUMPEOPLE,
+            COL_NUMADULTS,
+            COL_NUMCHILDREN,
             COL_NUMDAYS,
             COL_FROM_DATE,
             COL_TO_DATE,
@@ -63,7 +65,8 @@ public class Reservation {
 
         map.put(BaseColumns._ID, BaseColumns._ID);
         map.put(COL_NAME, COL_NAME);
-        map.put(COL_NUMPEOPLE, COL_NUMPEOPLE);
+        map.put(COL_NUMADULTS, COL_NUMADULTS);
+        map.put(COL_NUMCHILDREN, COL_NUMCHILDREN);
         map.put(COL_NUMDAYS, COL_NUMDAYS);
         map.put(COL_FROM_DATE, COL_FROM_DATE);
         map.put(COL_TO_DATE, COL_TO_DATE);
@@ -81,7 +84,8 @@ public class Reservation {
             "CREATE TABLE " + TABLE_NAME + "("
                     + BaseColumns._ID + " INTEGER PRIMARY KEY,"
                     + COL_NAME + " TEXT NOT NULL DEFAULT '',"
-                    + COL_NUMPEOPLE + " INTEGER,"
+                    + COL_NUMADULTS + " INTEGER,"
+                    + COL_NUMCHILDREN + " INTEGER,"
                     + COL_NUMDAYS + " INTEGER,"
                     + COL_FROM_DATE + " INTEGER,"
                     + COL_TO_DATE + " INTEGER,"
@@ -92,7 +96,8 @@ public class Reservation {
     // Fields corresponding to ReservationTable columns
     public long mID = -1;
     public String mName = "";
-    public long mNumPeople = 0;
+    public long mNumAdults = 0;
+    public long mNumChildren = 0;
     public long mNumDays = 0;
     public long mFromDate = 0;
     public long mToDate = 0;
@@ -112,7 +117,7 @@ public class Reservation {
         // Indices expected to match order in FIELDS!
         this.mID = cursor.getLong(0);
         this.mName = cursor.getString(1);
-        this.mNumPeople = cursor.getLong(2);
+        this.mNumAdults = cursor.getLong(2);
         this.mNumDays = cursor.getLong(3);
         this.mFromDate = cursor.getLong(4);
         this.mToDate = cursor.getLong(5);
@@ -128,7 +133,8 @@ public class Reservation {
         final ContentValues values = new ContentValues();
         // Note that ID is NOT included here
         values.put(COL_NAME, mName);
-        values.put(COL_NUMPEOPLE, mNumPeople);
+        values.put(COL_NUMADULTS, mNumAdults);
+        values.put(COL_NUMCHILDREN, mNumChildren);
         values.put(COL_NUMDAYS, mNumDays);
         values.put(COL_FROM_DATE, mFromDate);
         values.put(COL_TO_DATE, mToDate);
@@ -143,7 +149,8 @@ public class Reservation {
     public void setContentFromCV(final ContentValues values) {
         // Note that ID is NOT included here
         mName = values.getAsString(COL_NAME);
-        mNumPeople = values.getAsLong(COL_NUMPEOPLE);
+        mNumAdults = values.getAsLong(COL_NUMADULTS);
+        mNumChildren = values.getAsLong(COL_NUMCHILDREN);
         mNumDays = values.getAsLong(COL_NUMDAYS);
         mFromDate = values.getAsLong(COL_FROM_DATE);
         mToDate = values.getAsLong(COL_TO_DATE);

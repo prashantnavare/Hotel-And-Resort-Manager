@@ -63,7 +63,7 @@
 
                 </LinearLayout>
 
-                <!-- Num of people -->
+                <!-- Num of Adults -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,12 +77,12 @@
                         android:textSize="12sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="People"
+                        android:text="Adults"
                         android:padding="5dp"
                         />
 
                     <EditText
-                        android:id="@+id/textNumPeople"
+                        android:id="@+id/textNumAdults"
                         android:layout_weight="1"
                         android:textSize="12sp"
                         android:layout_width="match_parent"
@@ -96,6 +96,38 @@
 
                 </LinearLayout>
 
+                <!-- Num of Children -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Children"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textNumChildren"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
                 <!-- Num of days -->
                 <LinearLayout
                     android:layout_width="match_parent"

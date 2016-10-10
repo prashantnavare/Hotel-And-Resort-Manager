@@ -15,7 +15,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
      * The UI elements showing the details of the reservation
      */
     private TextView mTextName;
-    private TextView mTextNumPeople;
+    private TextView mTextNumAdults;
+    private TextView mTextNumChildren;
     private TextView mTextNumDays;
     private Button mBtnFromDate;
 
@@ -225,8 +225,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextName.addTextChangedListener(this);
 
-        mTextNumPeople = ((TextView) rootView.findViewById(R.id.textNumPeople));
-        mTextNumPeople.addTextChangedListener(this);
+        mTextNumAdults = ((TextView) rootView.findViewById(R.id.textNumAdults));
+        mTextNumAdults.addTextChangedListener(this);
+
+        mTextNumChildren = ((TextView) rootView.findViewById(R.id.textNumChildren));
+        mTextNumChildren.addTextChangedListener(this);
 
         mTextNumDays = (TextView) rootView.findViewById(R.id.textNumDays);
         mTextNumDays.addTextChangedListener(this);
@@ -553,15 +556,18 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mReservation.mName = mTextName.getText().toString();
         }
 
-        if (mTextNumPeople.getText().toString().isEmpty()) {
-            showAlertDialog("People cannot be empty.");
-            mTextNumPeople.requestFocus();
+        if (mTextNumAdults.getText().toString().isEmpty()) {
+            showAlertDialog("Adults cannot be empty.");
+            mTextNumAdults.requestFocus();
             return false;
         }
         else {
-            mReservation.mNumPeople = Long.valueOf(mTextNumPeople.getText().toString());
+            mReservation.mNumAdults = Long.valueOf(mTextNumAdults.getText().toString());
         }
 
+        if (mTextNumChildren.getText().toString().isEmpty() == false) {
+            mReservation.mNumChildren = Long.valueOf(mTextNumChildren.getText().toString());
+        }
         String uiFromDate = mBtnFromDate.getText().toString();
         if (uiFromDate.compareToIgnoreCase("Set") == 0) {
             showAlertDialog("From Date needs to be set.");
@@ -597,7 +603,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mName);
-        mTextNumPeople.setText(String.valueOf(mReservation.mNumPeople));
+        mTextNumAdults.setText(String.valueOf(mReservation.mNumAdults));
+        mTextNumChildren.setText(String.valueOf(mReservation.mNumChildren));
         mTextNumDays.setText(String.valueOf(mReservation.mNumDays));
         if (mReservation.mFromDate > 0) {
             Calendar fromDate = Calendar.getInstance();
@@ -627,7 +634,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void displayUIForNewReservation() {
         mTextName.setText("");
-        mTextNumPeople.setText("");
+        mTextNumAdults.setText("");
+        mTextNumChildren.setText("");
         mTextNumDays.setText("");
         mBtnFromDate.setText("Set");
 
