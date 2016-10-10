@@ -250,6 +250,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
                 int numItemsSelected = mSelectedRoomListView.getCheckedItemCount();
                 mSelectedRoomTextLabel.setText("Selected Rooms for this reservation: " + String.valueOf(numItemsSelected));
+                enableRevertAndSaveButtons();
             }
         });
         // Banner Ad
@@ -397,6 +398,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             updateUIFromReservation();
         }
+        updateSelectedRoomsUI();
     }
 
     public void deleteReservation() {
@@ -422,7 +424,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID = uri.getLastPathSegment();
                 mReservation.mID = Long.valueOf(mReservationID);
                 bSuccess = true;
-                updateSelectedRooms();
             }
         }
         else {
@@ -433,7 +434,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 bSuccess = true;
         }
         if (bSuccess) {
+            updateSelectedRooms();
             updateUIFromReservation();
+            getSelectedRooms();
         }
         return true;
     }
@@ -476,6 +479,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             boolean bChecked = mSelectedRoomListView.isItemChecked(i);
             updateRoom(i, bChecked);
         }
+        getSelectedRooms();
     }
 
     private void updateRoom(int position, boolean bSelected) {
@@ -484,10 +488,13 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         Room room = new Room();
         room.setContentFromCursor(cursor);
         if (bSelected) {
-            room.mReservationID = mReservation.mID;
-            room.mStatus = Room.Occupied;
-            Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI, String.valueOf(room.mID));
-            int result = getActivity().getContentResolver().update(roomURI, room.getContentValues(), null, null);
+            // update the room only if it was NOT occupied before
+            if (room.mStatus != Room.Occupied) {
+                room.mReservationID = mReservation.mID;
+                room.mStatus = Room.Occupied;
+                Uri roomURI = Uri.withAppendedPath(ResortManagerContentProvider.ROOM_URI, String.valueOf(room.mID));
+                int result = getActivity().getContentResolver().update(roomURI, room.getContentValues(), null, null);
+            }
         }
         else {
             // update the room only if it was selected before.
