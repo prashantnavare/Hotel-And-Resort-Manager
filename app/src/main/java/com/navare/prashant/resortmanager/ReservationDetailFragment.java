@@ -460,6 +460,12 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             doTheRealCheckin();
     }
 
+    public void doCheckout() {
+        // 1. Hide the selected rooms layout
+        // 2. Show the checkout layout
+        // 3. What to do after checkout?
+    }
+
     private void doTheRealCheckin() {
         // TODO: Implement this
         // The fromDate becomes today

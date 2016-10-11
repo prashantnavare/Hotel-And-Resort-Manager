@@ -134,11 +134,11 @@ public class ReservationDetailActivity extends AppCompatActivity
                 saveReservation();
                 return true;
             case R.id.menu_checkin:
-                // TODO: Implement this
                 doCheckin();
                 return true;
             case R.id.menu_checkout:
                 // TODO: Implement this
+                doCheckout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -224,6 +224,11 @@ public class ReservationDetailActivity extends AppCompatActivity
     private void doCheckin() {
         ((ReservationDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.reservation_detail_container)).doCheckin();
+    }
+
+    private void doCheckout() {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).doCheckout();
     }
 
     private void revertUI() {

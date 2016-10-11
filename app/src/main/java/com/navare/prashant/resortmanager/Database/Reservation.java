@@ -118,10 +118,11 @@ public class Reservation {
         this.mID = cursor.getLong(0);
         this.mName = cursor.getString(1);
         this.mNumAdults = cursor.getLong(2);
-        this.mNumDays = cursor.getLong(3);
-        this.mFromDate = cursor.getLong(4);
-        this.mToDate = cursor.getLong(5);
-        this.mCurrentStatus = cursor.getLong(6);
+        this.mNumChildren = cursor.getLong(3);
+        this.mNumDays = cursor.getLong(4);
+        this.mFromDate = cursor.getLong(5);
+        this.mToDate = cursor.getLong(6);
+        this.mCurrentStatus = cursor.getLong(7);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
