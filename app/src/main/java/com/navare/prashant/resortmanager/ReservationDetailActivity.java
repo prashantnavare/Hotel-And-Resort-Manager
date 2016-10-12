@@ -44,6 +44,7 @@ public class ReservationDetailActivity extends AppCompatActivity
     private MenuItem checkinMenuItem = null;
 
     private MenuItem checkoutMenuItem = null;
+    private MenuItem completeCheckoutMenuItem = null;
 
     private boolean mbDeleteMenuEnable = false;
     private boolean mbRevertMenuEnable = false;
@@ -51,6 +52,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
     private boolean mbCheckinMenuEnable = false;
     private boolean mbCheckoutMenuEnable = false;
+    private boolean mbCompleteCheckoutMenuEnable = false;
 
     private Activity mThisActivity;
 
@@ -97,7 +99,8 @@ public class ReservationDetailActivity extends AppCompatActivity
         revertMenuItem = menu.getItem(1);
         checkinMenuItem = menu.getItem(2);
         checkoutMenuItem = menu.getItem(3);
-        deleteMenuItem = menu.getItem(4);
+        completeCheckoutMenuItem = menu.getItem(4);
+        deleteMenuItem = menu.getItem(5);
 
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here

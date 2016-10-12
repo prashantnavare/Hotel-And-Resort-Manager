@@ -17,6 +17,10 @@
         android:icon="@drawable/ic_menu_checkout"
         resortmanager:showAsAction="ifRoom|collapseActionView"
         android:title="Check Out"/>
+    <item android:id="@+id/menu_completecheckout"
+        android:icon="@drawable/ic_success"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="Complete Checkout"/>
     <item android:id="@+id/menu_delete"
         android:icon="@drawable/ic_menu_delete"
         resortmanager:showAsAction="ifRoom|collapseActionView"
