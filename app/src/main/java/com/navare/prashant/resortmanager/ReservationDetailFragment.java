@@ -90,6 +90,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     private SelectedRoomListCursorAdapter mRoomCursorAdapter;
 
+    private boolean mbCheckoutInProgress = false;
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -105,6 +107,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void RedrawOptionsMenu();
         void EnableCheckinButton(boolean bEnable);
         void EnableCheckoutButton(boolean bEnable);
+        void EnableCompleteCheckoutButton(boolean bEnable);
         void onReservationDeleted();
         void setTitleString(String titleString);
         void onCheckinCompleted();
@@ -128,6 +131,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         @Override
         public void EnableCheckoutButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableCompleteCheckoutButton(boolean bEnable) {
         }
         @Override
         public void RedrawOptionsMenu() {
@@ -420,7 +426,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        enableRevertAndSaveButtons();
+        if (mbCheckoutInProgress == false)
+            enableRevertAndSaveButtons();
+        else
+            calculateTotalCharge();
     }
 
     private void enableRevertAndSaveButtons() {
@@ -499,6 +508,65 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         // 3. What to do after checkout?
         mSelectedRoomsLayout.setVisibility(View.GONE);
         mCheckoutLayout.setVisibility(View.VISIBLE);
+        mbCheckoutInProgress = true;
+
+        // Show the completeCheckout button and disable the checkout button
+        mCallbacks.EnableCompleteCheckoutButton(true);
+        mCallbacks.EnableCheckoutButton(false);
+    }
+
+    private void calculateTotalCharge() {
+        long totalCharge = 0;
+
+        // TODO: Calculate the number of days stayed.
+        Calendar todayDate = Calendar.getInstance();
+        long numDays = TimeUnit.DAYS.convert((todayDate.getTimeInMillis() - mReservation.mFromDate), TimeUnit.MILLISECONDS);
+        if (numDays == 0)
+            numDays = 1;
+
+        if (mTextRoomCharge.getText().toString().isEmpty() == false) {
+            long roomCharge = Long.valueOf(mTextRoomCharge.getText().toString());
+            totalCharge += (roomCharge * mReservation.mNumRooms * numDays);
+            mReservation.mRoomCharge = roomCharge;
+        }
+        if (mTextAdultCharge.getText().toString().isEmpty() == false) {
+            long adultCharge = Long.valueOf(mTextAdultCharge.getText().toString());
+            totalCharge += (adultCharge * mReservation.mNumAdults * numDays);
+            mReservation.mAdultCharge = adultCharge;
+        }
+        if (mTextChildCharge.getText().toString().isEmpty() == false) {
+            long childCharge = Long.valueOf(mTextChildCharge.getText().toString());
+            totalCharge += (childCharge * mReservation.mNumChildren * numDays);
+            mReservation.mChildCharge = childCharge;
+        }
+        if (mTextAdditionalCharge.getText().toString().isEmpty() == false) {
+            long additionalCharge = Long.valueOf(mTextAdditionalCharge.getText().toString());
+            totalCharge += additionalCharge;
+            mReservation.mAdditionalCharges = additionalCharge;
+        }
+        if (mTextTaxPercent.getText().toString().isEmpty() == false) {
+            long taxPercent = Long.valueOf(mTextTaxPercent.getText().toString());
+            totalCharge += (totalCharge * taxPercent)/100;
+            mReservation.mTaxPercent = taxPercent;
+        }
+        mTextTotalCharge.setText(String.valueOf(totalCharge));
+    }
+
+    public void doCompleteCheckout() {
+        if (mbCheckoutInProgress == false)
+            return;
+
+        // Make sure at least one of room or adult charge is filled in.
+        if (mTextAdultCharge.getText().toString().isEmpty() && mTextRoomCharge.getText().toString().isEmpty()) {
+            showAlertDialog("Either Room or Adult Charges must be specified.");
+            mTextRoomCharge.requestFocus();
+            return;
+        }
+    }
+
+    private void enableCompleteCheckoutButton() {
+        mCallbacks.EnableCompleteCheckoutButton(true);
+        mCallbacks.RedrawOptionsMenu();
     }
 
     private void doTheRealCheckin() {

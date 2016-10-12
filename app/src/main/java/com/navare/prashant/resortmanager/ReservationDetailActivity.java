@@ -111,6 +111,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
         EnableCheckinButton(mbCheckinMenuEnable);
         EnableCheckoutButton(mbCheckoutMenuEnable);
+        EnableCompleteCheckoutButton(mbCompleteCheckoutMenuEnable);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -142,6 +143,10 @@ public class ReservationDetailActivity extends AppCompatActivity
             case R.id.menu_checkout:
                 // TODO: Implement this
                 doCheckout();
+                return true;
+            case R.id.menu_completecheckout:
+                // TODO: Implement this
+                doCompleteCheckout();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -234,6 +239,11 @@ public class ReservationDetailActivity extends AppCompatActivity
                 .findFragmentById(R.id.reservation_detail_container)).doCheckout();
     }
 
+    private void doCompleteCheckout() {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).doCompleteCheckout();
+    }
+
     private void revertUI() {
         ((ReservationDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.reservation_detail_container)).revertUI();
@@ -281,6 +291,15 @@ public class ReservationDetailActivity extends AppCompatActivity
         if (checkoutMenuItem != null) {
             checkoutMenuItem.setEnabled(bEnable);
             checkoutMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableCompleteCheckoutButton(boolean bEnable) {
+        mbCompleteCheckoutMenuEnable = bEnable;
+        if (completeCheckoutMenuItem != null) {
+            completeCheckoutMenuItem.setEnabled(bEnable);
+            completeCheckoutMenuItem.setVisible(bEnable);
         }
     }
 
