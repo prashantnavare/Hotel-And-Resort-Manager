@@ -77,6 +77,15 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private TextView mSelectedRoomTextLabel;
     private ListView mSelectedRoomListView;
 
+    private LinearLayout mCheckoutLayout;
+    private LinearLayout mChildChargeLayout;
+    private TextView mTextRoomCharge;
+    private TextView mTextAdultCharge;
+    private TextView mTextChildCharge;
+    private TextView mTextAdditionalCharge;
+    private TextView mTextTaxPercent;
+    private TextView mTextTotalCharge;
+
     private AdView mAdView;
 
     private SelectedRoomListCursorAdapter mRoomCursorAdapter;
@@ -256,6 +265,30 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 enableRevertAndSaveButtons();
             }
         });
+
+        // Checkout related
+        mCheckoutLayout = (LinearLayout) rootView.findViewById(R.id.checkoutLayout);
+        mCheckoutLayout.setVisibility(View.GONE);
+
+        mChildChargeLayout = (LinearLayout) rootView.findViewById(R.id.childChargeLayout);
+
+        mTextRoomCharge = ((TextView) rootView.findViewById(R.id.textRoomCharge));
+        mTextRoomCharge.addTextChangedListener(this);
+
+        mTextAdultCharge = ((TextView) rootView.findViewById(R.id.textAdultCharge));
+        mTextAdultCharge.addTextChangedListener(this);
+
+        mTextChildCharge = ((TextView) rootView.findViewById(R.id.textChildCharge));
+        mTextChildCharge.addTextChangedListener(this);
+
+        mTextAdditionalCharge = ((TextView) rootView.findViewById(R.id.textAdditionalCharge));
+        mTextAdditionalCharge.addTextChangedListener(this);
+
+        mTextTaxPercent = ((TextView) rootView.findViewById(R.id.textTaxPercent));
+        mTextTaxPercent.addTextChangedListener(this);
+
+        mTextTotalCharge = ((TextView) rootView.findViewById(R.id.textTotalCharge));
+
         // Banner Ad
         mAdView = (AdView) rootView.findViewById(R.id.adView);
         if (ResortManagerApp.isAppPurchased()) {
@@ -464,6 +497,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         // 1. Hide the selected rooms layout
         // 2. Show the checkout layout
         // 3. What to do after checkout?
+        mSelectedRoomsLayout.setVisibility(View.GONE);
+        mCheckoutLayout.setVisibility(View.VISIBLE);
     }
 
     private void doTheRealCheckin() {
@@ -602,6 +637,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             toDate.setTimeInMillis(mReservation.mFromDate + TimeUnit.MILLISECONDS.convert(mReservation.mNumDays, TimeUnit.DAYS));
             mReservation.mToDate = toDate.getTimeInMillis();
         }
+        mReservation.mNumRooms = mSelectedRoomListView.getCheckedItemCount();
         return true;
     }
 

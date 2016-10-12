@@ -230,6 +230,224 @@
                 />
             </LinearLayout>
 
+            <!-- Checkout Layout -->
+            <LinearLayout
+                android:id="@+id/checkoutLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                >
+
+                <!-- Room Charge -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Room Charges Per Day"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textRoomCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Adult Charges -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Adult Charges Per Day"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textAdultCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Children Charges -->
+                <LinearLayout
+                    android:id="@+id/childChargeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Child Charges Per Day"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textChildCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Additional Charges -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Additional Charges"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textAdditionalCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Tax Percentage -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tax Percentage"
+                        android:padding="5dp"
+                        />
+
+                    <EditText
+                        android:id="@+id/textTaxPercent"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Total Charges -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Charges"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textTotalCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
 

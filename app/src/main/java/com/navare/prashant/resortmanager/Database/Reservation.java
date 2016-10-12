@@ -34,9 +34,22 @@ public class Reservation {
     public static final String COL_TO_DATE = "toDate";
     public static final String COL_CURRENT_STATUS = "currentStatus";
 
+    // Checkout related
+    public static final String COL_NUM_ROOMS = "numRooms";
+    public static final String COL_BILLING_TYPE = "billingType";
+    public static final String COL_ROOM_CHARGE = "roomCharge";
+    public static final String COL_ADULT_CHARGE = "adultCharge";
+    public static final String COL_CHILD_CHARGE = "childCharge";
+    public static final String COL_ADDITIONAL_CHARGES = "additionalCharges";
+    public static final String COL_TAX_PERCENT = "taxPercent";
+    public static final String COL_TOTAL_CHARGE = "totalCharge";
+
     public static final int WaitingStatus = 1;
     public static final int CheckedInStatus = 2;
     public static final int CheckedOutStatus = 3;
+
+    public static final int PerRoomBilling = 1;
+    public static final int PerPersonBilling = 2;
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // For database projection so order is consistent
@@ -48,8 +61,16 @@ public class Reservation {
             COL_NUMDAYS,
             COL_FROM_DATE,
             COL_TO_DATE,
-            COL_CURRENT_STATUS
+            COL_CURRENT_STATUS,
 
+            COL_NUM_ROOMS,
+            COL_BILLING_TYPE,
+            COL_ROOM_CHARGE,
+            COL_ADULT_CHARGE,
+            COL_CHILD_CHARGE,
+            COL_ADDITIONAL_CHARGES,
+            COL_TAX_PERCENT,
+            COL_TOTAL_CHARGE
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -71,6 +92,15 @@ public class Reservation {
         map.put(COL_FROM_DATE, COL_FROM_DATE);
         map.put(COL_TO_DATE, COL_TO_DATE);
         map.put(COL_CURRENT_STATUS, COL_CURRENT_STATUS);
+
+        map.put(COL_NUM_ROOMS, COL_NUM_ROOMS);
+        map.put(COL_BILLING_TYPE, COL_BILLING_TYPE);
+        map.put(COL_ROOM_CHARGE, COL_ROOM_CHARGE);
+        map.put(COL_ADULT_CHARGE, COL_ADULT_CHARGE);
+        map.put(COL_CHILD_CHARGE, COL_CHILD_CHARGE);
+        map.put(COL_ADDITIONAL_CHARGES, COL_ADDITIONAL_CHARGES);
+        map.put(COL_TAX_PERCENT, COL_TAX_PERCENT);
+        map.put(COL_TOTAL_CHARGE, COL_TOTAL_CHARGE);
         return map;
     }
 
@@ -89,7 +119,17 @@ public class Reservation {
                     + COL_NUMDAYS + " INTEGER,"
                     + COL_FROM_DATE + " INTEGER,"
                     + COL_TO_DATE + " INTEGER,"
-                    + COL_CURRENT_STATUS + " INTEGER"
+                    + COL_CURRENT_STATUS + " INTEGER, "
+
+                    + COL_NUM_ROOMS + " INTEGER, "
+                    + COL_BILLING_TYPE + " INTEGER, "
+                    + COL_ROOM_CHARGE + " INTEGER, "
+                    + COL_ADULT_CHARGE + " INTEGER, "
+                    + COL_CHILD_CHARGE + " INTEGER, "
+                    + COL_ADDITIONAL_CHARGES + " INTEGER, "
+                    + COL_TAX_PERCENT + " INTEGER, "
+                    + COL_TOTAL_CHARGE + " INTEGER "
+
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -102,6 +142,15 @@ public class Reservation {
     public long mFromDate = 0;
     public long mToDate = 0;
     public long mCurrentStatus = 0;
+
+    public long mNumRooms = 0;
+    public long mBillingType = 0;
+    public long mRoomCharge = 0;
+    public long mAdultCharge = 0;
+    public long mChildCharge = 0;
+    public long mAdditionalCharges = 0;
+    public long mTaxPercent = 0;
+    public long mTotalCharge = 0;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -123,6 +172,15 @@ public class Reservation {
         this.mFromDate = cursor.getLong(5);
         this.mToDate = cursor.getLong(6);
         this.mCurrentStatus = cursor.getLong(7);
+
+        this.mNumRooms = cursor.getLong(8);
+        this.mBillingType = cursor.getLong(9);
+        this.mRoomCharge = cursor.getLong(10);
+        this.mAdultCharge = cursor.getLong(11);
+        this.mChildCharge = cursor.getLong(12);
+        this.mAdditionalCharges = cursor.getLong(13);
+        this.mTaxPercent = cursor.getLong(14);
+        this.mTotalCharge = cursor.getLong(15);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -140,6 +198,15 @@ public class Reservation {
         values.put(COL_FROM_DATE, mFromDate);
         values.put(COL_TO_DATE, mToDate);
         values.put(COL_CURRENT_STATUS, mCurrentStatus);
+
+        values.put(COL_NUM_ROOMS, mNumRooms);
+        values.put(COL_BILLING_TYPE, mBillingType);
+        values.put(COL_ROOM_CHARGE, mRoomCharge);
+        values.put(COL_ADULT_CHARGE, mAdultCharge);
+        values.put(COL_CHILD_CHARGE, mChildCharge);
+        values.put(COL_ADDITIONAL_CHARGES, mAdditionalCharges);
+        values.put(COL_TAX_PERCENT, mTaxPercent);
+        values.put(COL_TOTAL_CHARGE, mTotalCharge);
         return values;
     }
 
@@ -156,6 +223,15 @@ public class Reservation {
         mFromDate = values.getAsLong(COL_FROM_DATE);
         mToDate = values.getAsLong(COL_TO_DATE);
         mCurrentStatus = values.getAsLong(COL_CURRENT_STATUS);
+
+        mNumRooms = values.getAsLong(COL_NUM_ROOMS);
+        mBillingType = values.getAsLong(COL_BILLING_TYPE);
+        mRoomCharge = values.getAsLong(COL_ROOM_CHARGE);
+        mAdultCharge = values.getAsLong(COL_ADULT_CHARGE);
+        mChildCharge = values.getAsLong(COL_CHILD_CHARGE);
+        mAdditionalCharges = values.getAsLong(COL_ADDITIONAL_CHARGES);
+        mTaxPercent = values.getAsLong(COL_TAX_PERCENT);
+        mTotalCharge = values.getAsLong(COL_TOTAL_CHARGE);
     }
 
     public String getStatusString() {
@@ -166,6 +242,16 @@ public class Reservation {
                 return "Checked In";
             case CheckedOutStatus:
                 return "Checked Out";
+        }
+        return "Unknown";
+    }
+
+    public String getBillingTypeString() {
+        switch ((int)mBillingType) {
+            case PerPersonBilling:
+                return "Per Person";
+            case PerRoomBilling:
+                return "Per Room";
         }
         return "Unknown";
     }
