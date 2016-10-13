@@ -127,7 +127,7 @@ public class Reservation {
                     + COL_ADULT_CHARGE + " INTEGER, "
                     + COL_CHILD_CHARGE + " INTEGER, "
                     + COL_ADDITIONAL_CHARGES + " INTEGER, "
-                    + COL_TAX_PERCENT + " INTEGER, "
+                    + COL_TAX_PERCENT + " FLOAT, "
                     + COL_TOTAL_CHARGE + " INTEGER "
 
                     + ")";
@@ -149,7 +149,7 @@ public class Reservation {
     public long mAdultCharge = 0;
     public long mChildCharge = 0;
     public long mAdditionalCharges = 0;
-    public long mTaxPercent = 0;
+    public float mTaxPercent = 0;
     public long mTotalCharge = 0;
 
     /**
@@ -230,7 +230,7 @@ public class Reservation {
         mAdultCharge = values.getAsLong(COL_ADULT_CHARGE);
         mChildCharge = values.getAsLong(COL_CHILD_CHARGE);
         mAdditionalCharges = values.getAsLong(COL_ADDITIONAL_CHARGES);
-        mTaxPercent = values.getAsLong(COL_TAX_PERCENT);
+        mTaxPercent = values.getAsFloat(COL_TAX_PERCENT);
         mTotalCharge = values.getAsLong(COL_TOTAL_CHARGE);
     }
 

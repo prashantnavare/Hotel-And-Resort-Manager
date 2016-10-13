@@ -325,6 +325,14 @@ public class ReservationDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onCheckoutCompleted() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Checkout completed.", Toast.LENGTH_SHORT);
+        toast.show();
+
+        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+    }
+
+    @Override
     public void setTitleString(String titleString) {
         setTitle(titleString);
     }

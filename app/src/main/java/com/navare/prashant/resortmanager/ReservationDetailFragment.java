@@ -79,6 +79,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     private LinearLayout mCheckoutLayout;
     private LinearLayout mChildChargeLayout;
+    private TextView mTextAllocatedRooms;
     private TextView mTextRoomCharge;
     private TextView mTextAdultCharge;
     private TextView mTextChildCharge;
@@ -111,6 +112,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void onReservationDeleted();
         void setTitleString(String titleString);
         void onCheckinCompleted();
+        void onCheckoutCompleted();
     }
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -146,6 +148,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         @Override
         public void onCheckinCompleted() {
+        }
+        @Override
+        public void onCheckoutCompleted() {
         }
     };
 
@@ -277,6 +282,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCheckoutLayout.setVisibility(View.GONE);
 
         mChildChargeLayout = (LinearLayout) rootView.findViewById(R.id.childChargeLayout);
+
+        mTextAllocatedRooms = ((TextView) rootView.findViewById(R.id.textAllocatedRooms));
 
         mTextRoomCharge = ((TextView) rootView.findViewById(R.id.textRoomCharge));
         mTextRoomCharge.addTextChangedListener(this);
@@ -502,12 +509,39 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             doTheRealCheckin();
     }
 
+    private void doTheRealCheckin() {
+        // The fromDate becomes today
+        mReservation.mFromDate = Calendar.getInstance().getTimeInMillis();
+        mReservation.mCurrentStatus = Reservation.CheckedInStatus;
+        Calendar toDate = Calendar.getInstance();
+        toDate.setTimeInMillis(mReservation.mFromDate + TimeUnit.MILLISECONDS.convert(mReservation.mNumDays, TimeUnit.DAYS));
+        mReservation.mToDate = toDate.getTimeInMillis();
+        mReservation.mNumRooms = mSelectedRoomListView.getCheckedItemCount();
+        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
+                mReservationID);
+        int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
+        if (result > 0) {
+            // Get all the selected rooms and update their status
+            updateSelectedRooms();
+            mCallbacks.onCheckinCompleted();
+        }
+
+    }
+
     public void doCheckout() {
         // 1. Hide the selected rooms layout
         // 2. Show the checkout layout
         // 3. What to do after checkout?
         mSelectedRoomsLayout.setVisibility(View.GONE);
         mCheckoutLayout.setVisibility(View.VISIBLE);
+        mTextAllocatedRooms.setText(String.valueOf(mReservation.mNumRooms));
+        if (mReservation.mNumChildren <= 0) {
+            mChildChargeLayout.setVisibility(View.GONE);
+        }
+        else {
+            mChildChargeLayout.setVisibility(View.VISIBLE);
+        }
+
         mbCheckoutInProgress = true;
 
         // Show the completeCheckout button and disable the checkout button
@@ -545,11 +579,12 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mReservation.mAdditionalCharges = additionalCharge;
         }
         if (mTextTaxPercent.getText().toString().isEmpty() == false) {
-            long taxPercent = Long.valueOf(mTextTaxPercent.getText().toString());
+            float taxPercent = Float.valueOf(mTextTaxPercent.getText().toString());
             totalCharge += (totalCharge * taxPercent)/100;
             mReservation.mTaxPercent = taxPercent;
         }
         mTextTotalCharge.setText(String.valueOf(totalCharge));
+        mReservation.mTotalCharge = totalCharge;
     }
 
     public void doCompleteCheckout() {
@@ -562,6 +597,16 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mTextRoomCharge.requestFocus();
             return;
         }
+
+        mReservation.mCurrentStatus = Reservation.CheckedOutStatus;
+        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
+                mReservationID);
+        int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
+        if (result > 0) {
+            // Release all the selected rooms
+            releaseSelectedRooms();
+            mCallbacks.onCheckoutCompleted();
+        }
     }
 
     private void enableCompleteCheckoutButton() {
@@ -569,24 +614,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCallbacks.RedrawOptionsMenu();
     }
 
-    private void doTheRealCheckin() {
-        // TODO: Implement this
-        // The fromDate becomes today
-        mReservation.mFromDate = Calendar.getInstance().getTimeInMillis();
-        mReservation.mCurrentStatus = Reservation.CheckedInStatus;
-        Calendar toDate = Calendar.getInstance();
-        toDate.setTimeInMillis(mReservation.mFromDate + TimeUnit.MILLISECONDS.convert(mReservation.mNumDays, TimeUnit.DAYS));
-        mReservation.mToDate = toDate.getTimeInMillis();
-        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
-                mReservationID);
-        int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
-        if (result > 0) {
-            // Get all the selected rooms and update their status
-            updateSelectedRooms();
-            mCallbacks.onCheckinCompleted();
-        }
-
-    }
 
     private void releaseSelectedRooms() {
         int size = mSelectedRoomListView.getCount();
