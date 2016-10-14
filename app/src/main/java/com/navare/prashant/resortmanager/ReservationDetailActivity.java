@@ -333,6 +333,14 @@ public class ReservationDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSaveCompleted() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Reservation saved.", Toast.LENGTH_SHORT);
+        toast.show();
+
+        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+    }
+
+    @Override
     public void setTitleString(String titleString) {
         setTitle(titleString);
     }

@@ -114,6 +114,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void setTitleString(String titleString);
         void onCheckinCompleted();
         void onCheckoutCompleted();
+        void onSaveCompleted();
     }
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -152,6 +153,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         @Override
         public void onCheckoutCompleted() {
+        }
+        @Override
+        public void onSaveCompleted() {
         }
     };
 
@@ -461,6 +465,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         else {
             updateUIFromReservation();
+            updateSelectedRoomsUI();
         }
     }
 
@@ -499,7 +504,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 bSuccess = true;
         }
         if (bSuccess) {
-            updateUIFromReservation();
+            mCallbacks.onSaveCompleted();
         }
         return true;
     }

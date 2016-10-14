@@ -762,6 +762,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             if (reservation.mCurrentStatus == Reservation.CheckedOutStatus) {
                 addCompletedFTSReservation(reservation);
                 deleteReservation(reservationId);
+                rowsUpdated = 1;
             }
             else {
                 rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
@@ -793,7 +794,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_ADDITIONAL_CHARGE, String.valueOf(reservation.mAdditionalCharges));
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_TAX_PERCENT, String.valueOf(reservation.mTaxPercent));
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_TOTAL_CHARGE, String.valueOf(reservation.mTotalCharge));
-        getWritableDatabase().insert(Task.COMPLETED_FTS_TABLE_NAME, null, completedFTSValues);
+        getWritableDatabase().insert(Reservation.COMPLETED_FTS_TABLE_NAME, null, completedFTSValues);
     }
 
     public long insertTask(ContentValues values) {
