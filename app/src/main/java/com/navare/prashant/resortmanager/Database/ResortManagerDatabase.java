@@ -52,6 +52,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         db.execSQL(Room.CREATE_FTS_TABLE);
         db.execSQL(Reservation.CREATE_TABLE);
         db.execSQL(Reservation.CREATE_FTS_TABLE);
+        db.execSQL(Reservation.CREATE_COMPLETED_FTS_TABLE);
     }
 
     /**
@@ -477,7 +478,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         if (realID > -1) {
             // Also add an entry to the Room FTS table
             ContentValues ftsValues = new ContentValues();
-            String ftsName = room.mName + " " + "(Accomodates : " + String.valueOf(room.mCapacity) + ")" + "(Status : " + room.getStatusString() + ")";
+            String ftsName = room.mName + " " + "( Accomodates : " + String.valueOf(room.mCapacity) + " ) " + "( Status : " + room.getStatusString() + " ) ";
             ftsValues.put(Room.COL_FTS_ROOM_NAME, ftsName);
             ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, room.mDescription);
             ftsValues.put(Room.COL_FTS_ROOM_REALID, Long.toString(realID));
@@ -534,7 +535,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             ContentValues ftsValues = new ContentValues();
             Room room = new Room();
             room.setContentFromCV(values);
-            String ftsName = room.mName + " " + "(Accomodates : " + String.valueOf(room.mCapacity) + ")" + "(Status : " + room.getStatusString() + ")";
+            String ftsName = room.mName + " " + "( Accomodates : " + String.valueOf(room.mCapacity) + " ) " + "( Status : " + room.getStatusString() + " ) ";
             ftsValues.put(Room.COL_FTS_ROOM_NAME, ftsName);
             ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, room.mDescription);
 
@@ -785,13 +786,13 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_CHILDREN, String.valueOf(reservation.mNumChildren));
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_DATES, reservation.getDatesString());
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_ROOMS, String.valueOf(reservation.mNumRooms));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_ROOM_CHARGE, String.valueOf(reservation.mRoomCharge));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_ADULT_CHARGE, String.valueOf(reservation.mAdultCharge));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_CHILD_CHARGE, String.valueOf(reservation.mChildCharge));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_ADDITIONAL_CHARGE, String.valueOf(reservation.mAdditionalCharges));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_TAX_PERCENT, String.valueOf(reservation.mTaxPercent));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_TOTAL_CHARGE, String.valueOf(reservation.mTotalCharge));
         getWritableDatabase().insert(Task.COMPLETED_FTS_TABLE_NAME, null, completedFTSValues);
     }
 

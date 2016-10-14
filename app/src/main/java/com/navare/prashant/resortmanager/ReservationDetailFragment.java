@@ -277,7 +277,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
                 int numItemsSelected = mSelectedRoomListView.getCheckedItemCount();
                 mSelectedRoomTextLabel.setText("Selected Rooms for this reservation: " + String.valueOf(numItemsSelected));
-                enableRevertAndSaveButtons();
+                mCallbacks.EnableRevertButton(true);
             }
         });
 
@@ -359,8 +359,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         else {
             getLoaderManager().initLoader(LOADER_ID_RESERVATION_DETAILS, null, this);
+            getSelectedRooms();
         }
-        getSelectedRooms();
     }
 
     public void getSelectedRooms() {
@@ -412,6 +412,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     }
 
     private void updateSelectedRoomsUI() {
+        mSelectedRoomsLayout.setVisibility(View.VISIBLE);
         Cursor cursor = mRoomCursorAdapter.getCursor();
         for (int i = 0; i < mSelectedRoomListView.getCount(); i++) {
             cursor.moveToPosition(i);
@@ -461,7 +462,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             updateUIFromReservation();
         }
-        updateSelectedRoomsUI();
     }
 
     public void deleteReservation() {
@@ -487,6 +487,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             if (uri != null) {
                 mReservationID = uri.getLastPathSegment();
                 mReservation.mID = Long.valueOf(mReservationID);
+                getSelectedRooms();
                 bSuccess = true;
             }
         }
@@ -499,7 +500,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         if (bSuccess) {
             updateUIFromReservation();
-            updateSelectedRooms();
         }
         return true;
     }
@@ -796,6 +796,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCallbacks.EnableCheckoutButton(false);
 
         mCallbacks.setTitleString("New Reservation");
+
+        // For new reservations, hide the room selection layout
+        mSelectedRoomsLayout.setVisibility(View.GONE);
+
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 }
