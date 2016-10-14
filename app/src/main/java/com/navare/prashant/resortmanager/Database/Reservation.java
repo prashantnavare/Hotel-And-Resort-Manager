@@ -44,6 +44,8 @@ public class Reservation {
     public static final String COL_TAX_PERCENT = "taxPercent";
     public static final String COL_TOTAL_CHARGE = "totalCharge";
 
+    public static final String COL_CONTACT_INFO = "contactInfo";
+
     public static final int WaitingStatus = 1;
     public static final int CheckedInStatus = 2;
     public static final int CheckedOutStatus = 3;
@@ -70,7 +72,9 @@ public class Reservation {
             COL_CHILD_CHARGE,
             COL_ADDITIONAL_CHARGES,
             COL_TAX_PERCENT,
-            COL_TOTAL_CHARGE
+            COL_TOTAL_CHARGE,
+
+            COL_CONTACT_INFO
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -101,6 +105,8 @@ public class Reservation {
         map.put(COL_ADDITIONAL_CHARGES, COL_ADDITIONAL_CHARGES);
         map.put(COL_TAX_PERCENT, COL_TAX_PERCENT);
         map.put(COL_TOTAL_CHARGE, COL_TOTAL_CHARGE);
+
+        map.put(COL_CONTACT_INFO, COL_CONTACT_INFO);
         return map;
     }
 
@@ -128,8 +134,9 @@ public class Reservation {
                     + COL_CHILD_CHARGE + " INTEGER, "
                     + COL_ADDITIONAL_CHARGES + " INTEGER, "
                     + COL_TAX_PERCENT + " FLOAT, "
-                    + COL_TOTAL_CHARGE + " INTEGER "
+                    + COL_TOTAL_CHARGE + " INTEGER, "
 
+                    + COL_CONTACT_INFO + " TEXT DEFAULT '' "
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -151,6 +158,8 @@ public class Reservation {
     public long mAdditionalCharges = 0;
     public float mTaxPercent = 0;
     public long mTotalCharge = 0;
+
+    public String mContactInfo = "";
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -181,6 +190,8 @@ public class Reservation {
         this.mAdditionalCharges = cursor.getLong(13);
         this.mTaxPercent = cursor.getLong(14);
         this.mTotalCharge = cursor.getLong(15);
+
+        this.mContactInfo = cursor.getString(16);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -207,6 +218,8 @@ public class Reservation {
         values.put(COL_ADDITIONAL_CHARGES, mAdditionalCharges);
         values.put(COL_TAX_PERCENT, mTaxPercent);
         values.put(COL_TOTAL_CHARGE, mTotalCharge);
+
+        values.put(COL_CONTACT_INFO, mContactInfo);
         return values;
     }
 
@@ -232,6 +245,8 @@ public class Reservation {
         mAdditionalCharges = values.getAsLong(COL_ADDITIONAL_CHARGES);
         mTaxPercent = values.getAsFloat(COL_TAX_PERCENT);
         mTotalCharge = values.getAsLong(COL_TOTAL_CHARGE);
+
+        mContactInfo = values.getAsString(COL_CONTACT_INFO);
     }
 
     public String getStatusString() {
@@ -269,7 +284,7 @@ public class Reservation {
         return datesString;
     }
 
-    // Reservation FTS Table
+    // Reservation FTS Table - for reservations that are in Waiting or Checked in mode
     public static final String FTS_TABLE_NAME = "FTSReservationTable";
     public static final String COL_FTS_RESERVATION_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
     public static final String COL_FTS_RESERVATION_DATES = SearchManager.SUGGEST_COLUMN_TEXT_2;
@@ -339,4 +354,131 @@ public class Reservation {
         return map;
     }
 
+    // Completed Reservations FTS Table - for reservations that were successfully checked out.
+    public static final String COMPLETED_FTS_TABLE_NAME = "CompletedFTSReservationTable";
+    public static final String COMPLETED_COL_FTS_NAME = "name";
+    public static final String COMPLETED_COL_FTS_CONTACT_INFO = "contactInfo";
+    public static final String COMPLETED_COL_FTS_NUM_ADULTS = "numAdults";
+    public static final String COMPLETED_COL_FTS_NUM_CHILDREN = "numChildren";
+    public static final String COMPLETED_COL_FTS_NUM_DAYS = "numDays";
+    public static final String COMPLETED_COL_FTS_DATES = "dates";
+    public static final String COMPLETED_COL_FTS_NUM_ROOMS = "numRooms";
+    public static final String COMPLETED_COL_FTS_ROOM_CHARGE = "roomCharge";
+    public static final String COMPLETED_COL_FTS_ADULT_CHARGE = "adultCharge";
+    public static final String COMPLETED_COL_FTS_CHILD_CHARGE = "childCharge";
+    public static final String COMPLETED_COL_FTS_ADDITIONAL_CHARGE = "additionalCharge";
+    public static final String COMPLETED_COL_FTS_TAX_PERCENT = "taxPercent";
+    public static final String COMPLETED_COL_FTS_TOTAL_CHARGE = "totalCharge";
+
+    // For database projection so order is consistent
+    public static final String[] COMPLETED_FTS_FIELDS = {
+            BaseColumns._ID,
+            COMPLETED_COL_FTS_NAME,
+            COMPLETED_COL_FTS_CONTACT_INFO,
+            COMPLETED_COL_FTS_NUM_ADULTS,
+            COMPLETED_COL_FTS_NUM_CHILDREN,
+            COMPLETED_COL_FTS_NUM_DAYS,
+            COMPLETED_COL_FTS_DATES,
+            COMPLETED_COL_FTS_NUM_ROOMS,
+            COMPLETED_COL_FTS_ROOM_CHARGE,
+            COMPLETED_COL_FTS_ADULT_CHARGE,
+            COMPLETED_COL_FTS_CHILD_CHARGE,
+            COMPLETED_COL_FTS_ADDITIONAL_CHARGE,
+            COMPLETED_COL_FTS_TAX_PERCENT,
+            COMPLETED_COL_FTS_TOTAL_CHARGE
+    };
+
+    /* Note that FTS3 does not support column constraints and thus, you cannot
+     * declare a primary key. However, "rowid" is automatically used as a unique
+     * identifier, so when making requests, we will use "_id" as an alias for "rowid"
+     */
+    public static final String CREATE_COMPLETED_FTS_TABLE =
+            "CREATE VIRTUAL TABLE " + COMPLETED_FTS_TABLE_NAME +
+                    " USING fts3 (" +
+                    COMPLETED_COL_FTS_NAME + "," +
+                    COMPLETED_COL_FTS_CONTACT_INFO + "," +
+                    COMPLETED_COL_FTS_NUM_ADULTS + "," +
+                    COMPLETED_COL_FTS_NUM_CHILDREN + "," +
+                    COMPLETED_COL_FTS_NUM_DAYS + "," +
+                    COMPLETED_COL_FTS_DATES + "," +
+                    COMPLETED_COL_FTS_NUM_ROOMS + "," +
+
+                    COMPLETED_COL_FTS_ROOM_CHARGE + "," +
+                    COMPLETED_COL_FTS_ADULT_CHARGE + "," +
+                    COMPLETED_COL_FTS_CHILD_CHARGE + "," +
+                    COMPLETED_COL_FTS_ADDITIONAL_CHARGE + "," +
+                    COMPLETED_COL_FTS_TAX_PERCENT + "," +
+                    COMPLETED_COL_FTS_TOTAL_CHARGE +
+                    ");";
+
+    // Fields corresponding to FTSItemTable columns
+    public String mCompletedRowID = "";
+    public String mCompletedFTSName = "";
+    public String mCompletedFTSContactInfo = "";
+    public String mCompletedFTSNumAdults = "";
+    public String mCompletedFTSNumChildren = "";
+    public String mCompletedFTSNumDays = "";
+    public String mCompletedFTSDates = "";
+    public String mCompletedFTSNumRooms = "";
+
+    public String mCompletedFTSRoomCharge = "";
+    public String mCompletedFTSAdultCharge = "";
+    public String mCompletedFTSChildCharge = "";
+    public String mCompletedFTSAdditionalCharge = "";
+    public String mCompletedFTSTaxPercent = "";
+    public String mCompletedFTSTotalCharge = "";
+    /**
+     * Set information from the CompletedFTSItemTable into a Task object.
+     */
+    public void setCompletedFTSContent(final Cursor cursor) {
+        // Indices expected to match order in FIELDS!
+        this.mCompletedRowID = cursor.getString(0);
+        this.mCompletedFTSName = cursor.getString(1);
+        this.mCompletedFTSContactInfo = cursor.getString(2);
+        this.mCompletedFTSNumAdults = cursor.getString(3);
+        this.mCompletedFTSNumChildren = cursor.getString(4);
+        this.mCompletedFTSNumDays = cursor.getString(5);
+        this.mCompletedFTSDates = cursor.getString(6);
+        this.mCompletedFTSNumRooms = cursor.getString(7);
+
+        this.mCompletedFTSRoomCharge = cursor.getString(8);
+        this.mCompletedFTSAdultCharge = cursor.getString(9);
+        this.mCompletedFTSChildCharge = cursor.getString(10);
+        this.mCompletedFTSAdditionalCharge = cursor.getString(11);
+        this.mCompletedFTSTaxPercent = cursor.getString(12);
+        this.mCompletedFTSTotalCharge = cursor.getString(13);
+    }
+
+    public static final HashMap<String, String> mCompletedFTSColumnMap = buildCompletedFTSColumnMap();
+    /**
+     * Builds a map for all Item FTS table columns that may be requested, which will be given to the
+     * SQLiteQueryBuilder. This is a good way to define aliases for column names, but must include
+     * all columns, even if the value is the key. This allows the ContentProvider to request
+     * columns w/o the need to know real column names and create the alias itself.
+     */
+    private static HashMap<String,String> buildCompletedFTSColumnMap() {
+        HashMap<String,String> map = new HashMap<>();
+        map.put(COMPLETED_COL_FTS_NAME, COMPLETED_COL_FTS_NAME);
+        map.put(COMPLETED_COL_FTS_CONTACT_INFO, COMPLETED_COL_FTS_CONTACT_INFO);
+        map.put(COMPLETED_COL_FTS_NUM_ADULTS, COMPLETED_COL_FTS_NUM_ADULTS);
+        map.put(COMPLETED_COL_FTS_NUM_CHILDREN, COMPLETED_COL_FTS_NUM_CHILDREN);
+        map.put(COMPLETED_COL_FTS_NUM_DAYS, COMPLETED_COL_FTS_NUM_DAYS);
+        map.put(COMPLETED_COL_FTS_DATES, COMPLETED_COL_FTS_DATES);
+        map.put(COMPLETED_COL_FTS_NUM_ROOMS, COMPLETED_COL_FTS_NUM_ROOMS);
+
+        map.put(COMPLETED_COL_FTS_ROOM_CHARGE, COMPLETED_COL_FTS_ROOM_CHARGE);
+        map.put(COMPLETED_COL_FTS_ADULT_CHARGE, COMPLETED_COL_FTS_ADULT_CHARGE);
+        map.put(COMPLETED_COL_FTS_CHILD_CHARGE, COMPLETED_COL_FTS_CHILD_CHARGE);
+        map.put(COMPLETED_COL_FTS_ADDITIONAL_CHARGE, COMPLETED_COL_FTS_ADDITIONAL_CHARGE);
+        map.put(COMPLETED_COL_FTS_TAX_PERCENT, COMPLETED_COL_FTS_TAX_PERCENT);
+        map.put(COMPLETED_COL_FTS_TOTAL_CHARGE, COMPLETED_COL_FTS_TOTAL_CHARGE);
+
+        map.put(BaseColumns._ID, "rowid AS " +
+                BaseColumns._ID);
+        map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +
+                SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID);
+        map.put(SearchManager.SUGGEST_COLUMN_SHORTCUT_ID, "rowid AS " +
+                SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
+        return map;
+    }
 }

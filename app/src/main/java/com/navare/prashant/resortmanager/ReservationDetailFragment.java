@@ -68,6 +68,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
      * The UI elements showing the details of the reservation
      */
     private TextView mTextName;
+    private TextView mTextContactInfo;
     private TextView mTextNumAdults;
     private TextView mTextNumChildren;
     private TextView mTextNumDays;
@@ -244,6 +245,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextName.addTextChangedListener(this);
+
+        mTextContactInfo = ((TextView) rootView.findViewById(R.id.textContactInfo));
+        mTextContactInfo.addTextChangedListener(this);
 
         mTextNumAdults = ((TextView) rootView.findViewById(R.id.textNumAdults));
         mTextNumAdults.addTextChangedListener(this);
@@ -599,6 +603,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
 
         mReservation.mCurrentStatus = Reservation.CheckedOutStatus;
+        mReservation.mToDate = Calendar.getInstance().getTimeInMillis();
         Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
                 mReservationID);
         int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
@@ -692,6 +697,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mReservation.mName = mTextName.getText().toString();
         }
 
+        if (mTextContactInfo.getText().toString().isEmpty() == false) {
+            mReservation.mContactInfo = mTextContactInfo.getText().toString();
+        }
+
         if (mTextNumAdults.getText().toString().isEmpty()) {
             showAlertDialog("Adults cannot be empty.");
             mTextNumAdults.requestFocus();
@@ -740,6 +749,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mName);
+        mTextContactInfo.setText(mReservation.mContactInfo);
         mTextNumAdults.setText(String.valueOf(mReservation.mNumAdults));
         mTextNumChildren.setText(String.valueOf(mReservation.mNumChildren));
         mTextNumDays.setText(String.valueOf(mReservation.mNumDays));
@@ -771,6 +781,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void displayUIForNewReservation() {
         mTextName.setText("");
+        mTextContactInfo.setText("");
         mTextNumAdults.setText("");
         mTextNumChildren.setText("");
         mTextNumDays.setText("");

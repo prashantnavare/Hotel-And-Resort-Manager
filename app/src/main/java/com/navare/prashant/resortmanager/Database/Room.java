@@ -139,6 +139,16 @@ public class Room {
     public Room() {
     }
 
+    public String getStatusString() {
+        switch ((int)mStatus) {
+            case Free:
+                return "Free";
+            case Occupied:
+                return "Occupied";
+        }
+        return "Unknown";
+    }
+
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /**
      * Convert information from the RoomTable into an Room object.

@@ -346,54 +346,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         notifyProviderOnItemChange();
         return rowsUpdated;
     }
-    private long addRoom(Room room) {
-        final SQLiteDatabase db = this.getWritableDatabase();
-        long realID = 0;
-        synchronized (ResortManagerApp.sDatabaseLock) {
-            realID = db.insert(Room.TABLE_NAME, null, room.getContentValues());
-        }
-        if (realID > -1) {
-            // Also add an entry to the Room FTS table
-            ContentValues ftsValues = new ContentValues();
-            ftsValues.put(Room.COL_FTS_ROOM_NAME, room.mName);
-            ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, room.mDescription);
-            ftsValues.put(Room.COL_FTS_ROOM_REALID, Long.toString(realID));
-
-            long ftsID = 0;
-            synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsID =  db.insert(Room.FTS_TABLE_NAME, null, ftsValues);
-            }
-            if (ftsID == -1) {
-                deleteRoom(String.valueOf(realID));
-                return ftsID;
-            }
-            ResortManagerApp.incrementRoomCount();
-        }
-        return realID;
-    }
-
-    public int deleteRoom(String roomID) {
-        final SQLiteDatabase db = this.getWritableDatabase();
-        int result = 0;
-        synchronized (ResortManagerApp.sDatabaseLock) {
-            result = db.delete(Room.TABLE_NAME, BaseColumns._ID + " IS ?", new String[]{roomID});
-        }
-
-        if (result > 0) {
-            int ftsResult = 0;
-            synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsResult = db.delete(Room.FTS_TABLE_NAME, Room.COL_FTS_ROOM_REALID + " MATCH ? ", new String[]{roomID});
-            }
-            notifyProviderOnRoomChange();
-
-            // Lastly, delete all tasks and service calls associated with this room
-            deleteAllTasksForRoom(roomID);
-            deleteAllServiceCallsForRoom(roomID);
-            ResortManagerApp.decrementRoomCount();
-            return ftsResult;
-        }
-        return result;
-    }
 
     private void notifyProviderOnRoomChange() {
         mHelperContext.getContentResolver().notifyChange(ResortManagerContentProvider.FTS_ROOM_URI, null, false);
@@ -516,10 +468,60 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    private long addRoom(Room room) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        long realID = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            realID = db.insert(Room.TABLE_NAME, null, room.getContentValues());
+        }
+        if (realID > -1) {
+            // Also add an entry to the Room FTS table
+            ContentValues ftsValues = new ContentValues();
+            String ftsName = room.mName + " " + "(Accomodates : " + String.valueOf(room.mCapacity) + ")" + "(Status : " + room.getStatusString() + ")";
+            ftsValues.put(Room.COL_FTS_ROOM_NAME, ftsName);
+            ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, room.mDescription);
+            ftsValues.put(Room.COL_FTS_ROOM_REALID, Long.toString(realID));
+
+            long ftsID = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsID =  db.insert(Room.FTS_TABLE_NAME, null, ftsValues);
+            }
+            if (ftsID == -1) {
+                deleteRoom(String.valueOf(realID));
+                return ftsID;
+            }
+            ResortManagerApp.incrementRoomCount();
+        }
+        return realID;
+    }
+
     public long insertRoom(ContentValues values) {
         Room room = new Room();
         room.setContentFromCV(values);
         return addRoom(room);
+    }
+
+    public int deleteRoom(String roomID) {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        int result = 0;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            result = db.delete(Room.TABLE_NAME, BaseColumns._ID + " IS ?", new String[]{roomID});
+        }
+
+        if (result > 0) {
+            int ftsResult = 0;
+            synchronized (ResortManagerApp.sDatabaseLock) {
+                ftsResult = db.delete(Room.FTS_TABLE_NAME, Room.COL_FTS_ROOM_REALID + " MATCH ? ", new String[]{roomID});
+            }
+            notifyProviderOnRoomChange();
+
+            // Lastly, delete all tasks and service calls associated with this room
+            deleteAllTasksForRoom(roomID);
+            deleteAllServiceCallsForRoom(roomID);
+            ResortManagerApp.decrementRoomCount();
+            return ftsResult;
+        }
+        return result;
     }
 
     public int updateRoom(String roomId, ContentValues values, String selection, String[] selectionArgs) {
@@ -530,8 +532,11 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         }
         if (rowsUpdated > 0) {
             ContentValues ftsValues = new ContentValues();
-            ftsValues.put(Room.COL_FTS_ROOM_NAME, values.getAsString(Room.COL_NAME));
-            ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, values.getAsString(Room.COL_DESCRIPTION));
+            Room room = new Room();
+            room.setContentFromCV(values);
+            String ftsName = room.mName + " " + "(Accomodates : " + String.valueOf(room.mCapacity) + ")" + "(Status : " + room.getStatusString() + ")";
+            ftsValues.put(Room.COL_FTS_ROOM_NAME, ftsName);
+            ftsValues.put(Room.COL_FTS_ROOM_DESCRIPTION, room.mDescription);
 
             long ftsRowsUpdated = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
@@ -750,24 +755,44 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
     public int updateReservation(String reservationId, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = this.getWritableDatabase();
         int rowsUpdated = 0;
+        Reservation reservation = new Reservation();
+        reservation.setContentFromCV(values);
         synchronized (ResortManagerApp.sDatabaseLock) {
-            rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
-        }
-        if (rowsUpdated > 0) {
-            Reservation reservation = new Reservation();
-            reservation.setContentFromCV(values);
-            ContentValues ftsValues = new ContentValues();
-            ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.mName);
-            ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
-            ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
-
-            long ftsRowsUpdated = 0;
-            synchronized (ResortManagerApp.sDatabaseLock) {
+            if (reservation.mCurrentStatus == Reservation.CheckedOutStatus) {
+                addCompletedFTSReservation(reservation);
+                deleteReservation(reservationId);
+            }
+            else {
+                rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
+                ContentValues ftsValues = new ContentValues();
+                ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.mName);
+                ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
+                ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
+                long ftsRowsUpdated = 0;
                 ftsRowsUpdated =  db.update(Reservation.FTS_TABLE_NAME, ftsValues, Reservation.COL_FTS_RESERVATION_REALID + " MATCH " + reservationId, null);
             }
         }
-        notifyProviderOnRoomChange();
+        notifyProviderOnReservationChange();
         return rowsUpdated;
+    }
+
+    private void addCompletedFTSReservation(Reservation reservation) {
+        ContentValues completedFTSValues = new ContentValues();
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NAME, reservation.mName);
+
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_CONTACT_INFO, reservation.mContactInfo);
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_ADULTS, String.valueOf(reservation.mNumAdults));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_CHILDREN, String.valueOf(reservation.mNumChildren));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_DATES, reservation.getDatesString());
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));
+        getWritableDatabase().insert(Task.COMPLETED_FTS_TABLE_NAME, null, completedFTSValues);
     }
 
     public long insertTask(ContentValues values) {
