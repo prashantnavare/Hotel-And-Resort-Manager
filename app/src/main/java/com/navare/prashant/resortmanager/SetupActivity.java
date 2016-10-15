@@ -3,23 +3,27 @@ package com.navare.prashant.resortmanager;
 import android.app.backup.BackupManager;
 import android.app.backup.RestoreObserver;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-public class BackupRestoreActivity extends AppCompatActivity {
+public class SetupActivity extends AppCompatActivity {
 
     private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_backup_restore);
+        setContentView(R.layout.activity_setup);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
+    }
+
+    public void onSettingsClick(View view) {
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     public void onBackupClick(View view) {

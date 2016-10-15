@@ -21,22 +21,6 @@
         >
 
         <Button
-            android:id="@+id/tasks_button"
-            android:text="@string/tasks_button"
-            android:onClick="onTasksClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="25dp"
-            android:enabled="true"
-            android:longClickable="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
             android:id="@+id/reservations_button"
             android:text="Reservations"
             android:onClick="onReservationsClick"
@@ -44,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
-            android:layout_marginTop="85dp"
+            android:layout_marginTop="25dp"
             android:enabled="true"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -53,14 +37,30 @@
             />
 
         <Button
-            android:id="@+id/inventory_button"
-            android:text="@string/inventory_button"
-            android:onClick="onInventoryClick"
+            android:id="@+id/tasks_button"
+            android:text="@string/tasks_button"
+            android:onClick="onTasksClick"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
+            android:layout_marginTop="85dp"
+            android:enabled="true"
+            android:longClickable="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/reports_button"
+            android:text="Reports"
+            android:onClick="onReportsClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="145dp"
+            android:clickable="true"
             android:enabled="true"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -85,14 +85,14 @@
             />
 
         <Button
-            android:id="@+id/backuprestore_button"
-            android:text="@string/backup_restore_button"
-            android:onClick="onBackupRestoreClick"
+            android:id="@+id/inventory_button"
+            android:text="@string/inventory_button"
+            android:onClick="onInventoryClick"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="265dp"
             android:clickable="true"
+            android:layout_marginTop="265dp"
             android:enabled="true"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -101,9 +101,9 @@
             />
 
         <Button
-            android:id="@+id/settings_button"
-            android:text="@string/settings_button"
-            android:onClick="onSettingsClick"
+            android:id="@+id/setup_button"
+            android:text="Setup"
+            android:onClick="onSetupClick"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

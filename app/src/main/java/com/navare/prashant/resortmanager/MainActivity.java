@@ -29,16 +29,18 @@ import com.navare.prashant.resortmanager.util.SystemUiHider;
  * @see SystemUiHider
  */
 public class MainActivity extends Activity {
-    private Button mButtonTasks;
     private Button mButtonReservations;
-    private Button mButtonInventory;
+    private Button mButtonTasks;
     private Button mButtonRooms;
+    private Button mButtonInventory;
     private Button mButtonRemoveAds;
     private AdView mAdView;
+    private InterstitialAd mInterstitialAdForReservations;
     private InterstitialAd mInterstitialAdForTasks;
-    private InterstitialAd mInterstitialAdForInventory;
     private InterstitialAd mInterstitialAdForReports;
-    private InterstitialAd mInterstitialAdForBackupRestore;
+    private InterstitialAd mInterstitialAdForRooms;
+    private InterstitialAd mInterstitialAdForInventory;
+    private InterstitialAd mInterstitialAdForSetup;
     private IabHelper mHelper;
     private Activity mThisActivity;
 
@@ -68,11 +70,11 @@ public class MainActivity extends Activity {
         // TODO: remove this before final build
         ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
 
-        // Buttons
-        mButtonTasks = (Button) findViewById(R.id.tasks_button);
+        // Buttons that we need to change the text...
         mButtonReservations = (Button) findViewById(R.id.reservations_button);
-        mButtonInventory = (Button) findViewById(R.id.inventory_button);
+        mButtonTasks = (Button) findViewById(R.id.tasks_button);
         mButtonRooms = (Button) findViewById(R.id.rooms_button);
+        mButtonInventory = (Button) findViewById(R.id.inventory_button);
 
         // Set the title to the name of the hospital
         setTitleAndVariousCount();
@@ -89,6 +91,7 @@ public class MainActivity extends Activity {
         mButtonRemoveAds.setVisibility(View.GONE);
         mAdView.setVisibility(View.GONE);
     }
+
     private void doAdsInit() {
 
         if (ResortManagerApp.isAppPurchased()) {
@@ -99,6 +102,18 @@ public class MainActivity extends Activity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        // Reservations related interstitial ad
+        mInterstitialAdForReservations = new InterstitialAd(this);
+        mInterstitialAdForReservations.setAdUnitId(getString(R.string.interstitial_tasks_ad_unit_id));
+
+        mInterstitialAdForReservations.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitialForReservations();
+                onReservationsClick(null);
+            }
+        });
+
         // Tasks related interstitial ad
         mInterstitialAdForTasks = new InterstitialAd(this);
         mInterstitialAdForTasks.setAdUnitId(getString(R.string.interstitial_tasks_ad_unit_id));
@@ -108,6 +123,30 @@ public class MainActivity extends Activity {
             public void onAdClosed() {
                 requestNewInterstitialForTasks();
                 onTasksClick(null);
+            }
+        });
+
+        // Reports related interstitial ad
+        mInterstitialAdForReports = new InterstitialAd(this);
+        mInterstitialAdForReports.setAdUnitId(getString(R.string.interstitial_tasks_ad_unit_id));
+
+        mInterstitialAdForReports.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitialForReports();
+                onReportsClick(null);
+            }
+        });
+
+        // Rooms related interstitial ad
+        mInterstitialAdForRooms = new InterstitialAd(this);
+        mInterstitialAdForRooms.setAdUnitId(getString(R.string.interstitial_reports_ad_unit_id));
+
+        mInterstitialAdForRooms.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitialForRooms();
+                onRoomsClick(null);
             }
         });
 
@@ -123,43 +162,37 @@ public class MainActivity extends Activity {
             }
         });
 
-        // Reports related interstitial ad
-        mInterstitialAdForReports = new InterstitialAd(this);
-        mInterstitialAdForReports.setAdUnitId(getString(R.string.interstitial_reports_ad_unit_id));
+        // Setup related interstitial ad
+        mInterstitialAdForSetup = new InterstitialAd(this);
+        mInterstitialAdForSetup.setAdUnitId(getString(R.string.interstitial_backuprestore_ad_unit_id));
 
-        mInterstitialAdForReports.setAdListener(new AdListener() {
+        mInterstitialAdForSetup.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                requestNewInterstitialForReports();
-                onRoomsClick(null);
-            }
-        });
-
-        // BackupRestore related interstitial ad
-        mInterstitialAdForBackupRestore = new InterstitialAd(this);
-        mInterstitialAdForBackupRestore.setAdUnitId(getString(R.string.interstitial_backuprestore_ad_unit_id));
-
-        mInterstitialAdForBackupRestore.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitialForBackupRestore();
-                onBackupRestoreClick(null);
+                requestNewInterstitialForSetup();
+                onSetupClick(null);
             }
         });
     }
 
     private void doAdsReload() {
+        if (mInterstitialAdForReservations != null && !mInterstitialAdForReservations.isLoaded()) {
+            requestNewInterstitialForReservations();
+        }
         if (mInterstitialAdForTasks != null && !mInterstitialAdForTasks.isLoaded()) {
             requestNewInterstitialForTasks();
-        }
-        if (mInterstitialAdForInventory != null && !mInterstitialAdForInventory.isLoaded()) {
-            requestNewInterstitialForInventory();
         }
         if (mInterstitialAdForReports != null && !mInterstitialAdForReports.isLoaded()) {
             requestNewInterstitialForReports();
         }
-        if (mInterstitialAdForBackupRestore != null && !mInterstitialAdForBackupRestore.isLoaded()) {
-            requestNewInterstitialForBackupRestore();
+        if (mInterstitialAdForRooms != null && !mInterstitialAdForRooms.isLoaded()) {
+            requestNewInterstitialForRooms();
+        }
+        if (mInterstitialAdForInventory != null && !mInterstitialAdForInventory.isLoaded()) {
+            requestNewInterstitialForInventory();
+        }
+        if (mInterstitialAdForSetup != null && !mInterstitialAdForSetup.isLoaded()) {
+            requestNewInterstitialForSetup();
         }
     }
 
@@ -197,14 +230,14 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void requestNewInterstitialForReservations() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAdForReservations.loadAd(adRequest);
+    }
+
     private void requestNewInterstitialForTasks() {
         AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAdForTasks.loadAd(adRequest);
-    }
-
-    private void requestNewInterstitialForInventory() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mInterstitialAdForInventory.loadAd(adRequest);
     }
 
     private void requestNewInterstitialForReports() {
@@ -212,9 +245,28 @@ public class MainActivity extends Activity {
         mInterstitialAdForReports.loadAd(adRequest);
     }
 
-    private void requestNewInterstitialForBackupRestore() {
+    private void requestNewInterstitialForRooms() {
         AdRequest adRequest = new AdRequest.Builder().build();
-        mInterstitialAdForBackupRestore.loadAd(adRequest);
+        mInterstitialAdForRooms.loadAd(adRequest);
+    }
+
+    private void requestNewInterstitialForInventory() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAdForInventory.loadAd(adRequest);
+    }
+
+    private void requestNewInterstitialForSetup() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAdForSetup.loadAd(adRequest);
+    }
+
+    public void onReservationsClick(View view) {
+        if (mInterstitialAdForReservations != null && mInterstitialAdForReservations.isLoaded()) {
+            mInterstitialAdForReservations.show();
+        }
+        else {
+            startActivity(new Intent(this, ReservationListActivity.class));
+        }
     }
 
     public void onTasksClick(View view)
@@ -227,12 +279,21 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onReservationsClick(View view) {
-        if (mInterstitialAdForInventory != null && mInterstitialAdForInventory.isLoaded()) {
-            mInterstitialAdForInventory.show();
+    public void onReportsClick(View view) {
+        if (mInterstitialAdForReports != null && mInterstitialAdForReports.isLoaded()) {
+            mInterstitialAdForReports.show();
         }
         else {
-            startActivity(new Intent(this, ReservationListActivity.class));
+            startActivity(new Intent(this, ReportListActivity.class));
+        }
+    }
+
+    public void onRoomsClick(View view) {
+        if (mInterstitialAdForRooms != null && mInterstitialAdForRooms.isLoaded()) {
+            mInterstitialAdForRooms.show();
+        }
+        else {
+            startActivity(new Intent(this, RoomListActivity.class));
         }
     }
 
@@ -245,21 +306,12 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onRoomsClick(View view) {
-        if (mInterstitialAdForReports != null && mInterstitialAdForReports.isLoaded()) {
-            mInterstitialAdForReports.show();
+    public void onSetupClick(View view) {
+        if (mInterstitialAdForSetup != null && mInterstitialAdForSetup.isLoaded()) {
+            mInterstitialAdForSetup.show();
         }
         else {
-            startActivity(new Intent(this, RoomListActivity.class));
-        }
-    }
-
-    public void onBackupRestoreClick(View view) {
-        if (mInterstitialAdForBackupRestore != null && mInterstitialAdForBackupRestore.isLoaded()) {
-            mInterstitialAdForBackupRestore.show();
-        }
-        else {
-            startActivity(new Intent(this, BackupRestoreActivity.class));
+            startActivity(new Intent(this, SetupActivity.class));
         }
     }
 
