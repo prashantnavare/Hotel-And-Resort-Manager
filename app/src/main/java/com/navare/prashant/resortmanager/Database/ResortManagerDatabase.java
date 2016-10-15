@@ -747,6 +747,50 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getAllFTSCompletedReservations(String[] columns) {
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.COMPLETED_FTS_TABLE_NAME);
+        builder.setProjectionMap(Reservation.mCompletedFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, null, null, null, null, Reservation.COMPLETED_COL_FTS_NAME);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
+    public Cursor getFTSCompletedReservationMatches(String searchString, String[] columns) {
+        String selection = Reservation.COMPLETED_FTS_TABLE_NAME + " MATCH ?";
+        String[] selectionArgs = new String[] {searchString + "*"};
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.COMPLETED_FTS_TABLE_NAME);
+        builder.setProjectionMap(Reservation.mCompletedFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, Reservation.COMPLETED_COL_FTS_NAME);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
     public long insertReservation(ContentValues values) {
         Reservation reservation = new Reservation();
         reservation.setContentFromCV(values);

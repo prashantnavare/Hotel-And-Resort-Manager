@@ -54,8 +54,8 @@ public class ReportDetailActivity extends AppCompatActivity
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ReportDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ReportDetailFragment.ARG_ITEM_ID));
+            arguments.putString(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID,
+                    getIntent().getStringExtra(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID));
             arguments.putString(ReportDetailFragment.ARG_ITEM_NAME,
                     getIntent().getStringExtra(ReportDetailFragment.ARG_ITEM_NAME));
             ReportDetailFragment fragment = new ReportDetailFragment();

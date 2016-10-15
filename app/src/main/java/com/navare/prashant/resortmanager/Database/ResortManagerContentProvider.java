@@ -110,6 +110,13 @@ public class ResortManagerContentProvider extends ContentProvider {
     private static final int RESERVATION_ID = 20;
     private static final int RESERVATION_ROOMS_ID = 21;
 
+    // Completed FTS Reservations related
+    private static final String FTS_COMPLETED_RESERVATIONS_SUB_SCHEME = "/completed_fts_reservations";
+    private static final String FTS_COMPLETED_RESERVATION_URL = SCHEME + PROVIDER_NAME + FTS_COMPLETED_RESERVATIONS_SUB_SCHEME;
+    public static final Uri FTS_COMPLETED_RESERVATION_URI = Uri.parse(FTS_COMPLETED_RESERVATION_URL);
+    // UriMatcher stuff
+    private static final int SEARCH_FTS_COMPLETED_RESERVATIONS = 22;
+
     private static final UriMatcher mURIMatcher = buildUriMatcher();
 
     /**
@@ -158,6 +165,9 @@ public class ResortManagerContentProvider extends ContentProvider {
 
         // for reservation rooms
         matcher.addURI(PROVIDER_NAME, RESERVATION_ROOMS_SUB_SCHEME, RESERVATION_ROOMS_ID);
+
+        // to get FTS completed reservations...
+        matcher.addURI(PROVIDER_NAME, FTS_COMPLETED_RESERVATIONS_SUB_SCHEME, SEARCH_FTS_COMPLETED_RESERVATIONS);
 
         // to get suggestions...
         matcher.addURI(PROVIDER_NAME, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST_ITEMS);
@@ -261,6 +271,7 @@ public class ResortManagerContentProvider extends ContentProvider {
                     resultCursor =  searchFTSReservations(selectionArgs[0]);
                 }
                 break;
+
             case RESERVATION_ID:
                 resultCursor =  getReservation(uri);
                 break;
@@ -271,6 +282,15 @@ public class ResortManagerContentProvider extends ContentProvider {
                 }
                 else {
                     resultCursor =  getReservationRooms(selectionArgs[0]);
+                }
+                break;
+
+            case SEARCH_FTS_COMPLETED_RESERVATIONS:
+                if (selectionArgs == null) {
+                    resultCursor = getAllFTSCompletedReservations();
+                }
+                else {
+                    resultCursor =  searchFTSCompletedReservations(selectionArgs[0]);
                 }
                 break;
 
@@ -322,6 +342,15 @@ public class ResortManagerContentProvider extends ContentProvider {
     private Cursor searchFTSReservations(String query) {
         query = query.toLowerCase();
         return mResortDB.getFTSReservationMatches(query, Reservation.FTS_FIELDS);
+    }
+
+    private Cursor getAllFTSCompletedReservations() {
+        return mResortDB.getAllFTSCompletedReservations(Reservation.COMPLETED_FTS_FIELDS);
+    }
+
+    private Cursor searchFTSCompletedReservations(String query) {
+        query = query.toLowerCase();
+        return mResortDB.getFTSCompletedReservationMatches(query, Reservation.COMPLETED_FTS_FIELDS);
     }
 
     private Cursor getReservation(Uri uri) {

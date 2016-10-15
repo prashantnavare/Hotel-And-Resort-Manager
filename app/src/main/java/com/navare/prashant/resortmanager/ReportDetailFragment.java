@@ -30,7 +30,7 @@ import com.navare.prashant.resortmanager.util.ReportDetailCursorAdapter;
  */
 public class ReportDetailFragment extends Fragment {
 
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_COMPLETED_RESERVATION_ID = "item_id";
     public static final String ARG_ITEM_NAME = "item_name";
 
     private static final int LOADER_ID_TASK_LIST = 11;
@@ -94,8 +94,8 @@ public class ReportDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItemID = getArguments().getString(ARG_ITEM_ID);
+        if (getArguments().containsKey(ARG_COMPLETED_RESERVATION_ID)) {
+            mItemID = getArguments().getString(ARG_COMPLETED_RESERVATION_ID);
             mItemName = getArguments().getString(ARG_ITEM_NAME);
         }
 

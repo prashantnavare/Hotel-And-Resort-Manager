@@ -77,7 +77,7 @@ public class ReportListActivity extends AppCompatActivity
             // handles a search query
             mQuery = intent.getStringExtra(SearchManager.QUERY);
             ((ReportListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.report_list)).getNewItemList(mQuery);
+                    .findFragmentById(R.id.report_list)).getNewReservationList(mQuery);
         }
     }
 
@@ -121,30 +121,29 @@ public class ReportListActivity extends AppCompatActivity
     }
 
     /**
-     * Callback method from {@link ItemListFragment.Callbacks}
+     * Callback method from {@link ReservationListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id, String name) {
+    public void onReservationSelected(String id) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ReportDetailFragment.ARG_ITEM_ID, id);
-            arguments.putString(ReportDetailFragment.ARG_ITEM_NAME, name);
+            arguments.putString(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID, id);
             ReportDetailFragment fragment = new ReportDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.report_detail_container, fragment)
                     .commit();
 
-        } else {
+        }
+        else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, ReportDetailActivity.class);
-            detailIntent.putExtra(ReportDetailFragment.ARG_ITEM_ID, id);
-            detailIntent.putExtra(ReportDetailFragment.ARG_ITEM_NAME, name);
+            detailIntent.putExtra(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID, id);
             startActivity(detailIntent);
         }
     }
@@ -152,6 +151,11 @@ public class ReportListActivity extends AppCompatActivity
     @Override
     public String getQuery() {
         return mQuery;
+    }
+
+    @Override
+    public void setReservationCount(long reservationCount) {
+        setTitle("Completed Reservations (" + String.valueOf(reservationCount) + ")");
     }
 
     @Override
@@ -164,7 +168,7 @@ public class ReportListActivity extends AppCompatActivity
         // handles a search query
         mQuery = !TextUtils.isEmpty(s) ? s : null;
         ((ReportListFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.report_list)).getNewItemList(mQuery);
+                .findFragmentById(R.id.report_list)).getNewReservationList(mQuery);
         return true;
     }
 }

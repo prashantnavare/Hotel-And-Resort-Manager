@@ -16,21 +16,22 @@ import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Item;
 
 /**
- * A list fragment representing a list of Items. This fragment
+ * A list fragment representing a list of completed Reservations. This fragment
  * also supports tablet devices by allowing list items to be given an
  * 'activated' state upon selection. This helps indicate which item is
- * currently being viewed in a {@link ItemDetailFragment}.
+ * currently being viewed in a {@link ReportDetailFragment}.
  * <p/>
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
 public class ReportListFragment extends ListFragment {
 
-    public static final int LOADER_ID_ITEM_LIST = 21;
+    public static final int LOADER_ID_COMPLETED_RESERVATION_LIST = 21;
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
@@ -57,8 +58,9 @@ public class ReportListFragment extends ListFragment {
         /**
          * Callback for when an task has been selected.
          */
-        void onItemSelected(String id, String name);
+        void onReservationSelected(String id);
         String getQuery();
+        void setReservationCount(long reservationCount);
     }
 
     /**
@@ -67,12 +69,14 @@ public class ReportListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id, String name) {
+        public void onReservationSelected(String id) {
         }
-
         @Override
         public String getQuery() {
             return null;
+        }
+        @Override
+        public void setReservationCount(long reservationCount) {
         }
     };
 
@@ -91,9 +95,9 @@ public class ReportListFragment extends ListFragment {
 
         setListAdapter(new SimpleCursorAdapter(getActivity(),
                 R.layout.report_list_row, null, new String[] {
-                Item.COL_FTS_ITEM_NAME, Item.COL_FTS_ITEM_LOCATION}, new int[] { R.id.textName, R.id.textLocation}, 0));
+                Reservation.COMPLETED_COL_FTS_NAME, Reservation.COMPLETED_COL_FTS_DATES}, new int[] { R.id.textName, R.id.textReservationDates}, 0));
 
-        getNewItemList(null);
+        getNewReservationList(null);
     }
 
     @Override
@@ -177,11 +181,11 @@ public class ReportListFragment extends ListFragment {
         super.onListItemClick(listView, view, position, id);
 
         Cursor cursor = (Cursor) getListAdapter().getItem(position);
-        Item item = new Item();
-        item.setFTSContent(cursor);
+        Reservation reservation = new Reservation();
+        reservation.setCompletedFTSContent(cursor);
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(item.mFTSRealID, item.mFTSName);
+        mCallbacks.onReservationSelected(reservation.mCompletedRowID);
     }
 
     @Override
@@ -208,17 +212,18 @@ public class ReportListFragment extends ListFragment {
     private void setActivatedPosition(int position) {
         if (position == ListView.INVALID_POSITION) {
             getListView().setItemChecked(mActivatedPosition, false);
-        } else {
+        }
+        else {
             getListView().setItemChecked(position, true);
         }
 
         mActivatedPosition = position;
     }
 
-    public void getNewItemList(final String searchString){
+    public void getNewReservationList(final String searchString){
 
         // Load the content
-        getLoaderManager().restartLoader(LOADER_ID_ITEM_LIST, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+        getLoaderManager().restartLoader(LOADER_ID_COMPLETED_RESERVATION_LIST, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
                 String [] selectionArgs = null;
@@ -227,13 +232,17 @@ public class ReportListFragment extends ListFragment {
                 }
 
                 return new CursorLoader(getActivity(),
-                        ResortManagerContentProvider.FTS_ITEM_URI, Item.FTS_FIELDS, null, selectionArgs,
+                        ResortManagerContentProvider.FTS_COMPLETED_RESERVATION_URI, Reservation.COMPLETED_FTS_FIELDS, null, selectionArgs,
                         null);
             }
 
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
                 ((SimpleCursorAdapter) getListAdapter()).swapCursor(c);
+                if (c != null)
+                    mCallbacks.setReservationCount(c.getCount());
+                else
+                    mCallbacks.setReservationCount(0);
             }
 
             @Override
