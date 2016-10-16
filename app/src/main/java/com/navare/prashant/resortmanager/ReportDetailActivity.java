@@ -1,5 +1,6 @@
 package com.navare.prashant.resortmanager;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -31,16 +32,9 @@ import android.widget.ListView;
  * to listen for item selections.
  */
 public class ReportDetailActivity extends AppCompatActivity
-        implements ReportDetailFragment.Callbacks, SearchView.OnQueryTextListener {
+        implements ReportDetailFragment.Callbacks {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
-    private String mQuery = null;
-
-    private ListView mReportListView;
+    private Activity mThisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,33 +50,13 @@ public class ReportDetailActivity extends AppCompatActivity
             Bundle arguments = new Bundle();
             arguments.putString(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID,
                     getIntent().getStringExtra(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID));
-            arguments.putString(ReportDetailFragment.ARG_ITEM_NAME,
-                    getIntent().getStringExtra(ReportDetailFragment.ARG_ITEM_NAME));
             ReportDetailFragment fragment = new ReportDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.report_detail_container, fragment)
                     .commit();
         }
-        handleIntent(getIntent());
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        // Because this activity has set launchMode="singleTop", the system calls this method
-        // to deliver the intent if this activity is currently the foreground activity when
-        // invoked again (when the user executes a search from this activity, we don't create
-        // a new instance of this activity, so the system delivers the search intent here)
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            // handles a search query
-            mQuery = intent.getStringExtra(SearchManager.QUERY);
-            ((ReportDetailFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.report_detail_container)).getNewTaskList(mQuery);
-        }
+        mThisActivity = this;
     }
 
     @Override
@@ -92,14 +66,6 @@ public class ReportDetailActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.report_detail_actions, menu);
 
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Not Do not iconify the widget; expand it by default
-        searchView.setOnQueryTextListener(this);
-        searchView.setQueryHint("Search completed tasks...");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -116,30 +82,14 @@ public class ReportDetailActivity extends AppCompatActivity
                 //
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            case R.id.menu_search:
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-
     @Override
-    public String getQuery() {
-        return mQuery;
+    public void setTitleString(String titleString) {
+        setTitle(titleString);
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String s) {
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-        // handles a search query
-        mQuery = !TextUtils.isEmpty(s) ? s : null;
-        ((ReportDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.report_detail_container)).getNewTaskList(mQuery);
-        return true;
-    }
 }

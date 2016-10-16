@@ -116,6 +116,7 @@ public class ResortManagerContentProvider extends ContentProvider {
     public static final Uri FTS_COMPLETED_RESERVATION_URI = Uri.parse(FTS_COMPLETED_RESERVATION_URL);
     // UriMatcher stuff
     private static final int SEARCH_FTS_COMPLETED_RESERVATIONS = 22;
+    private static final int COMPLETED_RESERVATION_ID = 23;
 
     private static final UriMatcher mURIMatcher = buildUriMatcher();
 
@@ -168,6 +169,7 @@ public class ResortManagerContentProvider extends ContentProvider {
 
         // to get FTS completed reservations...
         matcher.addURI(PROVIDER_NAME, FTS_COMPLETED_RESERVATIONS_SUB_SCHEME, SEARCH_FTS_COMPLETED_RESERVATIONS);
+        matcher.addURI(PROVIDER_NAME, FTS_COMPLETED_RESERVATIONS_SUB_SCHEME + "/#", COMPLETED_RESERVATION_ID);
 
         // to get suggestions...
         matcher.addURI(PROVIDER_NAME, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST_ITEMS);
@@ -294,6 +296,10 @@ public class ResortManagerContentProvider extends ContentProvider {
                 }
                 break;
 
+            case COMPLETED_RESERVATION_ID:
+                resultCursor =  getCompletedReservation(uri);
+                break;
+
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
@@ -356,6 +362,11 @@ public class ResortManagerContentProvider extends ContentProvider {
     private Cursor getReservation(Uri uri) {
         String rowId = uri.getLastPathSegment();
         return mResortDB.getReservation(rowId, Reservation.FIELDS);
+    }
+
+    private Cursor getCompletedReservation(Uri uri) {
+        String rowId = uri.getLastPathSegment();
+        return mResortDB.getCompletedReservation(rowId, Reservation.COMPLETED_FTS_FIELDS);
     }
 
     private Cursor getReservationRooms(String reservationID) {

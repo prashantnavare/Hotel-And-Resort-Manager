@@ -599,6 +599,31 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         mHelperContext.getContentResolver().notifyChange(ResortManagerContentProvider.FTS_RESERVATION_URI, null, false);
     }
 
+    public Cursor getCompletedReservation(String reservationID, String[] columns) {
+
+        String selection = BaseColumns._ID + " = ?";
+        String[] selectionArgs = new String[] {reservationID};
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.COMPLETED_FTS_TABLE_NAME);
+        builder.setProjectionMap(Reservation.mCompletedFTSColumnMap);
+
+        Cursor cursor = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(),
+                    columns, selection, selectionArgs, null, null, null);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
     /**
      * Returns a Cursor positioned at the item specified by id
      *
