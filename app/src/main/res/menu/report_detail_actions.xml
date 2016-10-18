@@ -4,11 +4,9 @@
     <item android:id="@+id/menu_email"
         android:icon="@drawable/ic_menu_mail"
         resortmanager:showAsAction="ifRoom|collapseActionView"
-        resortmanager:actionViewClass="android.support.v7.widget.SearchView"
         android:title="Mail"/>
     <item android:id="@+id/menu_message"
         android:icon="@drawable/ic_menu_message"
         resortmanager:showAsAction="ifRoom|collapseActionView"
-        resortmanager:actionViewClass="android.support.v7.widget.SearchView"
         android:title="Message"/>
 </menu>

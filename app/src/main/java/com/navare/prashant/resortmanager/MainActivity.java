@@ -444,7 +444,7 @@ public class MainActivity extends Activity {
     private void setTitleAndVariousCount() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-        titleString = titleString + "  Resort Manager";
+        titleString = titleString + "  Manager";
         setTitle(titleString);
 
         long taskCount = preferences.getLong(ResortManagerApp.sPrefTaskCount, 0);

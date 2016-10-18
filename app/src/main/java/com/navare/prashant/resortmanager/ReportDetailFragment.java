@@ -2,9 +2,12 @@ package com.navare.prashant.resortmanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -228,7 +231,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         mTextNumChildren.setText(mReservation.mCompletedFTSNumChildren);
         mTextNumDays.setText(mReservation.mCompletedFTSNumDays);
         mTextDates.setText(mReservation.mCompletedFTSDates);
-        mCallbacks.setTitleString("Details for " + mReservation.mCompletedFTSName) ;
 
         mTextAllocatedRooms.setText(mReservation.mCompletedFTSNumRooms);
         mTextRoomCharge.setText(mReservation.mCompletedFTSRoomCharge);
@@ -237,13 +239,54 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         mTextAdditionalCharge.setText(mReservation.mCompletedFTSAdditionalCharge);
         mTextTaxPercent.setText(mReservation.mCompletedFTSTaxPercent);
         mTextTotalCharge.setText(mReservation.mCompletedFTSTotalCharge);
+
+        mCallbacks.setTitleString("Details for " + mReservation.mCompletedFTSName) ;
     }
 
     public void doEmail(String emailAddress) {
 
+        String emailSubject = constructEmailSubject();
+        String emailBody = constructEmailBody();
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{ emailAddress});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, emailBody);
+        emailIntent.setType("message/rfc822");
+
+        startActivity(Intent.createChooser(emailIntent, "Send e-mail"));
     }
 
     public void doMessage() {
 
+    }
+
+    String constructEmailSubject() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String organizationName = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
+        String emailSubject = "Your invoice";
+        if (organizationName.isEmpty() == false) {
+            emailSubject = emailSubject + " from " + organizationName;
+        }
+        return emailSubject;
+    }
+
+    String constructEmailBody() {
+        String emailBody = "";
+
+        emailBody = emailBody + "Name                  " + mReservation.mCompletedFTSName + "\r\n";
+        emailBody = emailBody + "Adults                " + mReservation.mCompletedFTSNumAdults + "\r\n";
+        emailBody = emailBody + "Children              " + mReservation.mCompletedFTSNumChildren + "\r\n";
+        emailBody = emailBody + "Days                  " + mReservation.mCompletedFTSNumDays + "\r\n";
+        emailBody = emailBody + "Dates                 " + mReservation.mCompletedFTSDates + "\r\n";
+        emailBody = emailBody + "Rooms                 " + mReservation.mCompletedFTSNumRooms + "\r\n";
+        emailBody = emailBody + "Room Charges Per Day  " + mReservation.mCompletedFTSRoomCharge + "\r\n";
+        emailBody = emailBody + "Adult Charges Per Day " + mReservation.mCompletedFTSAdultCharge + "\r\n";
+        emailBody = emailBody + "Child Charges Per Day " + mReservation.mCompletedFTSChildCharge + "\r\n";
+        emailBody = emailBody + "Additional Charges    " + mReservation.mCompletedFTSAdditionalCharge + "\r\n";
+        emailBody = emailBody + "Tax Percentage        " + mReservation.mCompletedFTSTaxPercent + "\r\n";
+        emailBody = emailBody + "\r\n\r\n";
+        emailBody = emailBody + "Total Charges         " + mReservation.mCompletedFTSTotalCharge + "\r\n";
+
+        return emailBody;
     }
 }
