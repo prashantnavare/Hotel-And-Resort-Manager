@@ -141,11 +141,9 @@ public class ReservationDetailActivity extends AppCompatActivity
                 doCheckin();
                 return true;
             case R.id.menu_checkout:
-                // TODO: Implement this
                 doCheckout();
                 return true;
             case R.id.menu_completecheckout:
-                // TODO: Implement this
                 doCompleteCheckout();
                 return true;
             default:

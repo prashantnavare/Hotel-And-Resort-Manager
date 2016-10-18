@@ -122,7 +122,9 @@
             android:name=".ReportDetailActivity"
             android:label="Reports"
             android:parentActivityName=".ReportListActivity"
-            android:screenOrientation="portrait">
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ReportListActivity" />

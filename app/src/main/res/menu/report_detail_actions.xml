@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:resortmanager="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_mail"
+    <item android:id="@+id/menu_email"
         android:icon="@drawable/ic_menu_mail"
         resortmanager:showAsAction="ifRoom|collapseActionView"
         resortmanager:actionViewClass="android.support.v7.widget.SearchView"

@@ -510,7 +510,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     }
 
     public void doCheckin() {
-        // TODO: verify that at least one room has been selected and doTheRealCheckin().
         if (mSelectedRoomListView.getCheckedItemCount() == 0) {
             showAlertDialog("Please select at least one room for the checkin to proceed.");
         }
@@ -561,9 +560,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private void calculateTotalCharge() {
         long totalCharge = 0;
 
-        // TODO: Calculate the number of days stayed.
         Calendar todayDate = Calendar.getInstance();
-        long numDays = TimeUnit.DAYS.convert((todayDate.getTimeInMillis() - mReservation.mFromDate), TimeUnit.MILLISECONDS);
+        float numMilliseconds = todayDate.getTimeInMillis() - mReservation.mFromDate;
+        float numMillisecondsInADay = (24 * 60 * 60 * 1000);
+        float numFloatDays = numMilliseconds / numMillisecondsInADay;
+        long numDays = Math.round(numFloatDays);
         if (numDays == 0)
             numDays = 1;
 

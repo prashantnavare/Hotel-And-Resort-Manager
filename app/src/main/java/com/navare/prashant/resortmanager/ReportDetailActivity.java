@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -13,6 +14,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+
+import com.navare.prashant.resortmanager.util.EmailDialogFragment;
+import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
 
 /**
@@ -32,9 +36,11 @@ import android.widget.ListView;
  * to listen for item selections.
  */
 public class ReportDetailActivity extends AppCompatActivity
-        implements ReportDetailFragment.Callbacks {
+        implements ReportDetailFragment.Callbacks, EmailDialogFragment.EmailDialogListener {
 
     private Activity mThisActivity;
+    private MenuItem emailMenuItem = null;
+    private MenuItem messageMenuItem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,9 @@ public class ReportDetailActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.report_detail_actions, menu);
 
+        emailMenuItem = menu.getItem(0);
+        messageMenuItem = menu.getItem(1);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -82,9 +91,31 @@ public class ReportDetailActivity extends AppCompatActivity
                 //
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.menu_email:
+                doEmail();
+                return true;
+            case R.id.menu_message:
+                doMessage();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void doEmail() {
+        EmailDialogFragment dialog = new EmailDialogFragment();
+        dialog.show(getSupportFragmentManager(), "ServiceCallDialogFragment");
+        /*
+        ((ReportDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.report_detail_container)).doEmail();
+                */
+    }
+
+    private void doMessage() {
+        /*
+        ((ReportDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.report_detail_container)).doMessage();
+                */
     }
 
     @Override
@@ -92,4 +123,14 @@ public class ReportDetailActivity extends AppCompatActivity
         setTitle(titleString);
     }
 
+    @Override
+    public void onEmailDialogEmailClick(EmailDialogFragment dialog) {
+        ((ReportDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.report_detail_container)).doEmail(dialog.getEmailAddress());
+    }
+
+    @Override
+    public void onEmailDialogCancelClick(EmailDialogFragment dialog) {
+
+    }
 }

@@ -239,4 +239,11 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         mTextTotalCharge.setText(mReservation.mCompletedFTSTotalCharge);
     }
 
+    public void doEmail(String emailAddress) {
+
+    }
+
+    public void doMessage() {
+
+    }
 }
