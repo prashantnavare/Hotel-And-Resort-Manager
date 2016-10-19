@@ -1,23 +1,36 @@
 package com.navare.prashant.resortmanager;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.navare.prashant.resortmanager.util.EmailDialogFragment;
 import com.navare.prashant.resortmanager.util.SMSDialogFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -109,9 +122,110 @@ public class ReportDetailActivity extends AppCompatActivity
     }
 
     private void doMessage() {
-        SMSDialogFragment dialog = new SMSDialogFragment();
-        dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
+        if(checkAndRequestSMSPermissions()) {
+            SMSDialogFragment dialog = new SMSDialogFragment();
+            dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
+        }
     }
+
+    public static final int REQUEST_ID_SMS_PERMISSION = 12;
+
+    private  boolean checkAndRequestSMSPermissions() {
+        int sendSMSPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (sendSMSPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_SMS_PERMISSION);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState.isEmpty()) {
+            outState.putBoolean("bug:fix", true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+
+            case REQUEST_ID_SMS_PERMISSION: {
+
+                Log.d("doMessage()", "SMS Permission callback called");
+                Map<String, Integer> perms = new HashMap<>();
+
+                // Initialize the map with SMS permission
+                perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
+
+                    // Check for both permissions
+                    if (perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+
+                        Log.d("doMessage()", "sms permission granted");
+                        EnableMessageButton(true);
+                        break;
+                    }
+                    else {
+                        Log.d("doMessage()", "SMS permission are not granted. Ask again: ");
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+                            showDialogOK("SMS Permission is required for sending SMS.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
+                                                case DialogInterface.BUTTON_POSITIVE:
+                                                    checkAndRequestSMSPermissions();
+                                                    break;
+                                                case DialogInterface.BUTTON_NEGATIVE:
+                                                    // disable the SMS functionality
+                                                    EnableMessageButton(false);
+                                                    break;
+                                            }
+                                        }
+                                    });
+                            break;
+                        }
+                        //permission is denied (and never ask again is  checked)
+                        //shouldShowRequestPermissionRationale will return false
+                        else {
+                            Toast.makeText(this, "Go to Settings and enable SMS permissions for the  Resort Manager before sending SMSs.", Toast.LENGTH_LONG).show();
+                            // disable the assign task functionality
+                            EnableMessageButton(false);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void EnableMessageButton(boolean bEnable) {
+        if (messageMenuItem != null) {
+            messageMenuItem.setEnabled(bEnable);
+            messageMenuItem.setVisible(bEnable);
+        }
+
+    }
+
+    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", okListener)
+                .create()
+                .show();
+    }
+
 
     @Override
     public void setTitleString(String titleString) {
