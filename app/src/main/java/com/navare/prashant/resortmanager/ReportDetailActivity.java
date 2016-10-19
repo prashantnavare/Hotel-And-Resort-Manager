@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.navare.prashant.resortmanager.util.EmailDialogFragment;
+import com.navare.prashant.resortmanager.util.SMSDialogFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
 
@@ -36,7 +37,7 @@ import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
  * to listen for item selections.
  */
 public class ReportDetailActivity extends AppCompatActivity
-        implements ReportDetailFragment.Callbacks, EmailDialogFragment.EmailDialogListener {
+        implements ReportDetailFragment.Callbacks, EmailDialogFragment.EmailDialogListener, SMSDialogFragment.SMSDialogListener {
 
     private Activity mThisActivity;
     private MenuItem emailMenuItem = null;
@@ -104,18 +105,12 @@ public class ReportDetailActivity extends AppCompatActivity
 
     private void doEmail() {
         EmailDialogFragment dialog = new EmailDialogFragment();
-        dialog.show(getSupportFragmentManager(), "ServiceCallDialogFragment");
-        /*
-        ((ReportDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.report_detail_container)).doEmail();
-                */
+        dialog.show(getSupportFragmentManager(), "EmailDialogFragment");
     }
 
     private void doMessage() {
-        /*
-        ((ReportDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.report_detail_container)).doMessage();
-                */
+        SMSDialogFragment dialog = new SMSDialogFragment();
+        dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
     }
 
     @Override
@@ -131,6 +126,17 @@ public class ReportDetailActivity extends AppCompatActivity
 
     @Override
     public void onEmailDialogCancelClick(EmailDialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onSMSDialogSMSClick(SMSDialogFragment dialog) {
+        ((ReportDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.report_detail_container)).doSMS(dialog.getMobileNumber());
+    }
+
+    @Override
+    public void onSMSDialogCancelClick(SMSDialogFragment dialog) {
 
     }
 }
