@@ -476,5 +476,6 @@ public class MainActivity extends Activity {
     //          1. Can be per person or per room
     //          2. UI for specifying either
     // TODO: In Reservations list, show reservations that are Waiting and FromDate is in the past as RED
+    // TODO: When a room is saved, go back to the list activity (like in reservation)
 }
 
