@@ -492,7 +492,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             if (uri != null) {
                 mReservationID = uri.getLastPathSegment();
                 mReservation.mID = Long.valueOf(mReservationID);
-                getSelectedRooms();
                 bSuccess = true;
             }
         }
@@ -619,12 +618,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mCallbacks.onCheckoutCompleted();
         }
     }
-
-    private void enableCompleteCheckoutButton() {
-        mCallbacks.EnableCompleteCheckoutButton(true);
-        mCallbacks.RedrawOptionsMenu();
-    }
-
 
     private void releaseSelectedRooms() {
         int size = mSelectedRoomListView.getCount();

@@ -134,6 +134,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         void EnableServiceCallButton(boolean bEnable);
         void onItemDeleted();
         void setTitleString(String titleString);
+        void onSaveCompleted();
     }
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -164,9 +165,11 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         @Override
         public void onItemDeleted() {
         }
-
         @Override
         public void setTitleString(String titleString) {
+        }
+        @Override
+        public void onSaveCompleted() {
         }
     };
 
@@ -572,7 +575,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 bSuccess = true;
         }
         if (bSuccess) {
-            updateUIFromItem();
+            mCallbacks.onSaveCompleted();
         }
         return true;
     }

@@ -454,6 +454,14 @@ public class ItemDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSaveCompleted() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Item saved.", Toast.LENGTH_SHORT);
+        toast.show();
+
+        NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
+    }
+
+    @Override
     public void onServiceCallDialogCancelClick(ServiceCallDialogFragment dialog) {
 
     }

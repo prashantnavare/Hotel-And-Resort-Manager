@@ -18,6 +18,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
+import com.navare.prashant.resortmanager.util.ReservationListCursorAdapter;
 
 /**
  * A list fragment representing a list of Reservations. This fragment
@@ -94,7 +95,7 @@ public class ReservationListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setListAdapter(new SimpleCursorAdapter(getActivity(),
+        setListAdapter(new ReservationListCursorAdapter(getActivity(),
                 R.layout.reservation_list_row, null,
                 new String[] {Reservation.COL_FTS_RESERVATION_NAME, Reservation.COL_FTS_RESERVATION_DATES, Reservation.COL_FTS_RESERVATION_STATUS},
                 new int[] { R.id.textReservationName, R.id.textReservationDates, R.id.textReservationStatus},

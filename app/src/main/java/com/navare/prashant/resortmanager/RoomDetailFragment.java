@@ -114,6 +114,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         void RedrawOptionsMenu();
         void onRoomDeleted();
         void setTitleString(String titleString);
+        void onSaveCompleted();
     }
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -141,9 +142,11 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         @Override
         public void onRoomDeleted() {
         }
-
         @Override
         public void setTitleString(String titleString) {
+        }
+        @Override
+        public void onSaveCompleted() {
         }
     };
 
@@ -430,7 +433,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
                 bSuccess = true;
         }
         if (bSuccess) {
-            updateUIFromRoom();
+            mCallbacks.onSaveCompleted();
         }
         return true;
     }
