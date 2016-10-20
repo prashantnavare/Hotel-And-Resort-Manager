@@ -18,7 +18,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
-import com.navare.prashant.resortmanager.Database.Item;
 
 /**
  * A list fragment representing a list of completed Reservations. This fragment

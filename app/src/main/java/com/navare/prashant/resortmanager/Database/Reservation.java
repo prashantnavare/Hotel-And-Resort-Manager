@@ -261,14 +261,9 @@ public class Reservation {
         return "Unknown";
     }
 
-    public String getBillingTypeString() {
-        switch ((int)mBillingType) {
-            case PerPersonBilling:
-                return "Per Person";
-            case PerRoomBilling:
-                return "Per Room";
-        }
-        return "Unknown";
+    public String getFTSReservationName() {
+        String ftsReservationName = mName + " (Adults : " + String.valueOf(mNumAdults) + ") (Children : " + String.valueOf(mNumChildren) + ")";
+        return  ftsReservationName;
     }
 
     public String getDatesString() {

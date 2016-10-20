@@ -96,7 +96,7 @@ public class ContractTaskDoneDialogFragment extends DialogFragment {
 
     private void showDatePicker() {
         Calendar dateToShow = Calendar.getInstance();
-        CalibrationDatePickerFragment datePicker = new CalibrationDatePickerFragment();
+        ResortManagerDatePickerFragment datePicker = new ResortManagerDatePickerFragment();
         Bundle args = new Bundle();
         args.putInt("year", dateToShow.get(Calendar.YEAR));
         args.putInt("month", dateToShow.get(Calendar.MONTH));

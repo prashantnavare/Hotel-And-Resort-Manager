@@ -2,19 +2,13 @@ package com.navare.prashant.resortmanager.util;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.navare.prashant.resortmanager.Database.Room;
-import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.R;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 //extend the SimpleCursorAdapter to create a custom class where we
 //can override the getView to change the row text of the list

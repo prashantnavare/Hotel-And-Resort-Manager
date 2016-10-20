@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.navare.prashant.resortmanager.util.InventoryDialogFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
 import java.util.ArrayList;

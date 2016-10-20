@@ -39,7 +39,7 @@ import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Item;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
-import com.navare.prashant.resortmanager.util.CalibrationDatePickerFragment;
+import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
 import com.navare.prashant.resortmanager.util.InventoryDialogFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
@@ -435,7 +435,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                     break;
             }
         }
-        CalibrationDatePickerFragment datePicker = new CalibrationDatePickerFragment();
+        ResortManagerDatePickerFragment datePicker = new ResortManagerDatePickerFragment();
         Bundle args = new Bundle();
         args.putInt("year", dateToShow.get(Calendar.YEAR));
         args.putInt("month", dateToShow.get(Calendar.MONTH));

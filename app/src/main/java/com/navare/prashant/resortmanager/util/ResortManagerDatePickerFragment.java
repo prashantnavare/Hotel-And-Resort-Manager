@@ -11,12 +11,12 @@ import android.support.v4.app.DialogFragment;
  * Created by prashant on 21-May-15.
  */
 
-public class CalibrationDatePickerFragment extends DialogFragment {
+public class ResortManagerDatePickerFragment extends DialogFragment {
 
     private OnDateSetListener mOnDateSetCallback;
     private int mYear, mMonth, mDay;
 
-    public CalibrationDatePickerFragment() {
+    public ResortManagerDatePickerFragment() {
     }
 
     public void setCallBack(OnDateSetListener ondate) {

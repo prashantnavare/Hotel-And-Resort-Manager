@@ -16,8 +16,8 @@ import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Item;
+import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 
 /**
  * A list fragment representing a list of Items. This fragment

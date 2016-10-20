@@ -22,15 +22,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +37,7 @@ import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
-import com.navare.prashant.resortmanager.util.CalibrationDatePickerFragment;
-import com.navare.prashant.resortmanager.util.InventoryDialogFragment;
+import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -301,7 +297,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
                     break;
             }
         }
-        CalibrationDatePickerFragment datePicker = new CalibrationDatePickerFragment();
+        ResortManagerDatePickerFragment datePicker = new ResortManagerDatePickerFragment();
         Bundle args = new Bundle();
         args.putInt("year", dateToShow.get(Calendar.YEAR));
         args.putInt("month", dateToShow.get(Calendar.MONTH));

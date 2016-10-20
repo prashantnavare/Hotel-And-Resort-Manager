@@ -12,8 +12,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import com.navare.prashant.resortmanager.ResortManagerApp;
 import com.navare.prashant.resortmanager.R;
+import com.navare.prashant.resortmanager.ResortManagerApp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -557,7 +557,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         if (realID > -1) {
             // Also add an entry to the Reservation FTS table
             ContentValues ftsValues = new ContentValues();
-            ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.mName);
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.getFTSReservationName());
             ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
             ftsValues.put(Reservation.COL_FTS_RESERVATION_REALID, Long.toString(realID));
             ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
@@ -836,7 +836,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             else {
                 rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
                 ContentValues ftsValues = new ContentValues();
-                ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.mName);
+                ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.getFTSReservationName());
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
                 long ftsRowsUpdated = 0;

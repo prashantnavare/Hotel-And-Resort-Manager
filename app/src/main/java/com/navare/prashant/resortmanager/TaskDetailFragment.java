@@ -31,14 +31,14 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Item;
+import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
-import com.navare.prashant.resortmanager.util.CalibrationDatePickerFragment;
 import com.navare.prashant.resortmanager.util.ContractTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.InventoryTaskDoneDialogFragment;
+import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
 import com.navare.prashant.resortmanager.util.TaskDoneDialogFragment;
 
 import java.text.ParseException;
@@ -725,7 +725,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         Calendar dateToShow = Calendar.getInstance();
         if (mTask.mDueDate > 0)
             dateToShow.setTimeInMillis(mTask.mDueDate);
-        CalibrationDatePickerFragment datePicker = new CalibrationDatePickerFragment();
+        ResortManagerDatePickerFragment datePicker = new ResortManagerDatePickerFragment();
         Bundle args = new Bundle();
         args.putInt("year", dateToShow.get(Calendar.YEAR));
         args.putInt("month", dateToShow.get(Calendar.MONTH));

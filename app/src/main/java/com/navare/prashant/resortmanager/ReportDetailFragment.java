@@ -16,22 +16,13 @@ import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
-import com.navare.prashant.resortmanager.Database.Room;
-import com.navare.prashant.resortmanager.Database.Task;
-import com.navare.prashant.resortmanager.util.ReportDetailCursorAdapter;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 /**
  * A list fragment representing a list of Tasks. This fragment

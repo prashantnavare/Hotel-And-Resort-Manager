@@ -11,12 +11,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.navare.prashant.resortmanager.Database.Item;
-import com.navare.prashant.resortmanager.Database.Room;
-import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.R;
 
 /**
