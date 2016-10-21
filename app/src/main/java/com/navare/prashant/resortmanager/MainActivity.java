@@ -44,8 +44,7 @@ public class MainActivity extends Activity {
     private IabHelper mHelper;
     private Activity mThisActivity;
 
-    // TODO: replace this with the real SKU
-    static final String SKU_INVENTORY_MANAGER = "android.test.purchased";
+    static final String SKU_RESORT_MANAGER = "com.navare.prashant.resortmanager";
     // (arbitrary) request code for the purchase flow
     static final int PURCHASE_REQUEST = 10001;
 
@@ -353,8 +352,7 @@ public class MainActivity extends Activity {
 
     private void initiatePurchase() {
 
-        // TODO: compute your public key and store it in base64EncodedPublicKey
-        String base64EncodedPublicKey = "Foo";
+        String base64EncodedPublicKey = "com.navare.prashant.resortmanager";
 
         mHelper = new IabHelper(this, base64EncodedPublicKey);
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
@@ -362,12 +360,12 @@ public class MainActivity extends Activity {
                 if (!result.isSuccess()) {
                     // Oh noes, there was a problem.
                     Log.d("initiatePurchase()", "Problem setting up In-app Billing: " + result);
-                    // TODO: Show error message to the user
+                    showPurchaseErrorAlert("There was a problem with the purchase. Please try again later. Thank you.");
                     return;
                 }
                 // Have we been disposed of in the meantime? If so, quit.
                 if (mHelper == null) {
-                    // TODO: Show error message to the user
+                    showPurchaseErrorAlert("There was a problem with the purchase. Please try again later. Thank you.");
                     return;
                 }
                 // Hooray, IAB is fully set up!
@@ -376,7 +374,7 @@ public class MainActivity extends Activity {
 
                 String payload = "";
                 try {
-                    mHelper.launchPurchaseFlow(mThisActivity, SKU_INVENTORY_MANAGER, PURCHASE_REQUEST,
+                    mHelper.launchPurchaseFlow(mThisActivity, SKU_RESORT_MANAGER, PURCHASE_REQUEST,
                             mPurchaseFinishedListener, payload);
                 } catch (IabAsyncInProgressException e) {
                     showPurchaseErrorAlert("Another purchase operation may be in progress. Please try again later.");
@@ -426,7 +424,7 @@ public class MainActivity extends Activity {
 
             Log.d("initiatePurchase()", "Purchase successful.");
 
-            if (purchase.getSku().equals(SKU_INVENTORY_MANAGER)) {
+            if (purchase.getSku().equals(SKU_RESORT_MANAGER)) {
                 // bought the  Resort Manager app!
                 Log.d("initiatePurchase()", "Purchase is premium upgrade. Congratulating user.");
                 showPurchaseSuccessAlert("Thank you for for the purchase.");
@@ -463,18 +461,5 @@ public class MainActivity extends Activity {
         String roomButtonString = "Rooms (" + String.valueOf(roomCount) + ")";
         mButtonRooms.setText(roomButtonString);
     }
-
-    // TODO: don't save completed tasks - just delete the task
-    // TODO: get rid of completed task fts code in task.java
-    // TODO: Revive Reports but for billing (and not for items). Add billing to reports
-    // TODO: reservation entity should have:
-    //          1: way to choose rooms
-    //          2: tarif options (per person or per room)
-    //          3. 3 states: waiting, checked-in and checked-out
-    //          4. FTS name should have the number of people in brackets (e.g. Prashant (4))
-    // TODO: Apply Tariff at the time of checkout
-    //          1. Can be per person or per room
-    //          2. UI for specifying either
-    // TODO: When a room is saved, go back to the list activity (like in reservation)
 }
 

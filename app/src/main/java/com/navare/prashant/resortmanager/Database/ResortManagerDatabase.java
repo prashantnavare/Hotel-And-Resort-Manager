@@ -47,7 +47,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         db.execSQL(ServiceCall.CREATE_TABLE);
         db.execSQL(Task.CREATE_TABLE);
         db.execSQL(Task.CREATE_FTS_TABLE);
-        db.execSQL(Task.CREATE_COMPLETED_FTS_TABLE);
         db.execSQL(Room.CREATE_TABLE);
         db.execSQL(Room.CREATE_FTS_TABLE);
         db.execSQL(Reservation.CREATE_TABLE);
@@ -1105,46 +1104,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
-    /**
-     * Returns a Cursor over all Completed FTS tasks that match the given itemID and searchString
-     *
-     * @param searchString The string to search for
-     * @param columns The columns to include, if null then all are included
-     * @return Cursor over all items that match, or null if none found.
-     */
-    public Cursor getCompletedFTSTaskMatches(String itemID, String searchString, String[] columns) {
-
-        String selectionArgsString;
-        String selection = Task.COMPLETED_FTS_TABLE_NAME + " MATCH ?";
-        if (!searchString.isEmpty()) {
-            selectionArgsString = Task.SPECIAL_ITEM_ID_STRING_FOR_COMPLETED_TASKS + itemID + "  " + searchString + "*";
-        }
-        else {
-            selectionArgsString = Task.SPECIAL_ITEM_ID_STRING_FOR_COMPLETED_TASKS + itemID ;
-        }
-        String[] selectionArgs = new String[] {selectionArgsString};
-
-        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(Task.COMPLETED_FTS_TABLE_NAME);
-        builder.setProjectionMap(Task.mCompletedFTSColumnMap);
-
-        Cursor cursor = null;
-        synchronized (ResortManagerApp.sDatabaseLock) {
-            cursor = builder.query(this.getReadableDatabase(),
-                    columns, selection, selectionArgs, null, null, Task.COMPLETED_COL_FTS_COMPLETION_TIMESTAMP + " DESC ");
-        }
-
-        int numRows = cursor.getCount();
-        if (cursor == null) {
-            return null;
-        }
-        else if (!cursor.moveToFirst()) {
-            cursor.close();
-            return null;
-        }
-        return cursor;
-    }
-
     public int updateTask(String taskId, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = this.getWritableDatabase();
         int rowsUpdated = 0;
@@ -1152,7 +1111,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         task.setContentFromCV(values);
         synchronized (ResortManagerApp.sDatabaseLock) {
             if (task.mStatus == Task.CompletedStatus) {
-                addCompletedFTSTask(task);
                 deleteTask(taskId);
             }
             else {
@@ -1166,26 +1124,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         }
         notifyProviderOnTaskChange();
         return rowsUpdated;
-    }
-
-    private void addCompletedFTSTask(Task task) {
-        ContentValues completedFTSValues = new ContentValues();
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_TASK_TYPE, task.getTaskTypeString());
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_ASSIGNED_TO, task.mAssignedTo);
-
-        Date completedDate = new Date();
-        SimpleDateFormat completedDateFormat = new SimpleDateFormat("dd MMM, yyyy");
-        String dueDateString = completedDateFormat.format(completedDate);
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_COMPLETION_DATE, dueDateString);
-
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_ITEM_ID, Task.SPECIAL_ITEM_ID_STRING_FOR_COMPLETED_TASKS + String.valueOf(task.mItemID));
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_TASK_PRIORITY, task.getTaskPriority());
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_COMPLETION_COMMENTS, task.mCompletionComments);
-
-        long completedDateTimeStamp = Calendar.getInstance().getTimeInMillis();
-        completedFTSValues.put(Task.COMPLETED_COL_FTS_COMPLETION_TIMESTAMP, String.valueOf(completedDateTimeStamp));
-
-        getWritableDatabase().insert(Task.COMPLETED_FTS_TABLE_NAME, null, completedFTSValues);
     }
 
     private void notifyProviderOnTaskChange() {
