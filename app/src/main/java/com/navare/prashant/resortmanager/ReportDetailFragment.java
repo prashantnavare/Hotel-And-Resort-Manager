@@ -272,8 +272,8 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         emailBody = emailBody + "Dates: " + mReservation.mCompletedFTSDates + "\r\n";
         emailBody = emailBody + "Rooms: " + mReservation.mCompletedFTSNumRooms + "\r\n";
         emailBody = emailBody + "Room Charges Per Day: " + mReservation.mCompletedFTSRoomCharge + "\r\n";
-        emailBody = emailBody + "Adult Charges Per Day: " + mReservation.mCompletedFTSAdultCharge + "\r\n";
-        emailBody = emailBody + "Child Charges Per Day: " + mReservation.mCompletedFTSChildCharge + "\r\n";
+        emailBody = emailBody + "Charges per Adult Per Day: " + mReservation.mCompletedFTSAdultCharge + "\r\n";
+        emailBody = emailBody + "Charges per Child Per Day: " + mReservation.mCompletedFTSChildCharge + "\r\n";
         emailBody = emailBody + "Additional Charges: " + mReservation.mCompletedFTSAdditionalCharge + "\r\n";
         emailBody = emailBody + "Tax Percentage: " + mReservation.mCompletedFTSTaxPercent + "\r\n";
         emailBody = emailBody + "\r\n\r\n";
@@ -301,9 +301,9 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         if (mReservation.mCompletedFTSRoomCharge.equalsIgnoreCase("0") == false)
             smsMessage = smsMessage + "Room Charges Per Day: " + mReservation.mCompletedFTSRoomCharge + "\r\n";
         if (mReservation.mCompletedFTSAdultCharge.equalsIgnoreCase("0") == false)
-            smsMessage = smsMessage + "Adult Charges Per Day: " + mReservation.mCompletedFTSAdultCharge + "\r\n";
+            smsMessage = smsMessage + "Charges per Adult Per Day: " + mReservation.mCompletedFTSAdultCharge + "\r\n";
         if (mReservation.mCompletedFTSChildCharge.equalsIgnoreCase("0") == false)
-            smsMessage = smsMessage + "Child Charges Per Day: " + mReservation.mCompletedFTSChildCharge + "\r\n";
+            smsMessage = smsMessage + "Charges per Child Per Day: " + mReservation.mCompletedFTSChildCharge + "\r\n";
         if (mReservation.mCompletedFTSAdditionalCharge.equalsIgnoreCase("0") == false)
             smsMessage = smsMessage + "Additional Charges: " + mReservation.mCompletedFTSAdditionalCharge + "\r\n";
         if (mReservation.mCompletedFTSTaxPercent.equalsIgnoreCase("0") == false)

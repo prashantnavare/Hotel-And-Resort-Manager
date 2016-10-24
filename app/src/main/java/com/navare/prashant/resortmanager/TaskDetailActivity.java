@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.navare.prashant.resortmanager.util.ContractTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.InventoryTaskDoneDialogFragment;
-import com.navare.prashant.resortmanager.util.TaskDoneDialogFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +36,7 @@ import java.util.Map;
  * more than a {@link TaskDetailFragment}.
  */
 public class TaskDetailActivity extends AppCompatActivity
-        implements  TaskDetailFragment.Callbacks, TaskDoneDialogFragment.TaskDoneDialogListener,
+        implements  TaskDetailFragment.Callbacks,
                     ContractTaskDoneDialogFragment.ContractTaskDoneDialogListener,
                     InventoryTaskDoneDialogFragment.InventoryTaskDoneDialogListener {
 
@@ -428,23 +427,10 @@ public class TaskDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskDoneClick(TaskDoneDialogFragment dialog) {
-        String completionComments = dialog.getCompletionComments();
-        ((TaskDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.task_detail_container)).markTaskAsDone(completionComments);
-    }
-
-    @Override
-    public void onCancelClick(TaskDoneDialogFragment dialog) {
-
-    }
-
-    @Override
     public void onContractTaskDoneClick(ContractTaskDoneDialogFragment dialog) {
         long contractValidTillDate = dialog.getContractValidTillDate();
-        String completionComments = dialog.getCompletionComments();
         ((TaskDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.task_detail_container)).markContractTaskAsDone(contractValidTillDate, completionComments);
+                .findFragmentById(R.id.task_detail_container)).markContractTaskAsDone(contractValidTillDate);
 
     }
 
@@ -456,9 +442,8 @@ public class TaskDetailActivity extends AppCompatActivity
     @Override
     public void onInventoryTaskDoneClick(InventoryTaskDoneDialogFragment dialog) {
         long addedQuantity = dialog.getAddedQuantity();
-        String completionComments = dialog.getCompletionComments();
         ((TaskDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.task_detail_container)).markInventoryTaskAsDone(addedQuantity, completionComments);
+                .findFragmentById(R.id.task_detail_container)).markInventoryTaskAsDone(addedQuantity);
 
     }
 

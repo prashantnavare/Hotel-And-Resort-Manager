@@ -17,7 +17,6 @@ import com.navare.prashant.resortmanager.R;
 public class InventoryTaskDoneDialogFragment extends DialogFragment {
 
     private TextView mTextQuantityAdded;
-    private TextView mTextCompletionComments;
     private Button mBtnTaskDone;
     private Button mBtnCancel;
 
@@ -83,15 +82,12 @@ public class InventoryTaskDoneDialogFragment extends DialogFragment {
                                       int before, int count) {
                 if (mTextQuantityAdded.getText().toString().isEmpty()) {
                     mBtnTaskDone.setEnabled(false);
-                    mTextCompletionComments.setText("");
                 }
                 else {
                     mBtnTaskDone.setEnabled(true);
-                    mTextCompletionComments.setText("Quantity Added: " + s);
                 }
             }
         });
-        mTextCompletionComments = ((TextView) rootView.findViewById(R.id.textCompletionComments));
 
         mBtnTaskDone = ((Button) rootView.findViewById(R.id.btnTaskDone));
         mBtnTaskDone.setOnClickListener(onTaskDone);
@@ -122,10 +118,6 @@ public class InventoryTaskDoneDialogFragment extends DialogFragment {
                     dismiss();
                 }
             };
-
-    public String getCompletionComments() {
-        return mTextCompletionComments.getText().toString();
-    }
 
     public long getAddedQuantity() {
         return Long.valueOf(mTextQuantityAdded.getText().toString());

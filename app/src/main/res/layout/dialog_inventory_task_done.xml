@@ -35,31 +35,6 @@
             android:layout_weight="1"
             />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="28dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-            >
-            <TextView
-                android:text="@string/comments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:layout_weight="2"
-                />
-            <EditText
-                android:id="@+id/textCompletionComments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine|textCapSentences"
-                android:textSize="12sp"
-                android:layout_weight="1"
-                />
-    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"

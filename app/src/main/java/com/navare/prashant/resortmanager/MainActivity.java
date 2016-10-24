@@ -467,16 +467,12 @@ public class MainActivity extends Activity {
         mButtonRooms.setText(roomButtonString);
     }
 
-    // TODO: Get rid of comments dialog when the task is done.
     // TODO: split mobile # and e-mail in reservation detail
     // TODO: in reservation detail, if mobile # is specified, then enable call and sms buttons
     // TODO: in reservation detail, if e-mail is specified, then enable e-mail button
     // TODO: Do the above two steps for Completed reservations as well
     // TODO: in reservation detail, flip from date and days so that from date is first
     // TODO: in reservation detail, Add optional Arrival Details for waiting reservations. No arrival Details after checkin. Show arrival details in brackets after dates in FTS list
-    // TODO: in reservation detail check out charges section, gray out allocated rooms to denote non-editable
-    // TODO: in reservation detail, "Charge per Adult" instead of "Adult Charges" (and the same for Child)
-    // TODO: Reservation details should be grayed out as they are non-editable for Historical reservations
     // TODO: Consumable should have a user supplied unit field next to quantity
     // TODO: consumable task done dialog: Quantity Added (instead of just Quantity). Also, remove comments
 

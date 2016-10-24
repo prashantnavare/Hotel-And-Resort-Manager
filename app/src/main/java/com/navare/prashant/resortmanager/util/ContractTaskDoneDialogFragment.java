@@ -22,7 +22,6 @@ import java.util.Calendar;
 public class ContractTaskDoneDialogFragment extends DialogFragment {
 
     private Button mBtnContractValidTillDate;
-    private TextView mTextCompletionComments;
     private Button mBtnTaskDone;
     private Button mBtnCancel;
 
@@ -81,7 +80,6 @@ public class ContractTaskDoneDialogFragment extends DialogFragment {
             }
         });
 
-        mTextCompletionComments = ((TextView) rootView.findViewById(R.id.textCompletionComments));
         mBtnTaskDone = ((Button) rootView.findViewById(R.id.btnTaskDone));
         mBtnTaskDone.setOnClickListener(onTaskDone);
         // By default, disable the TaskDone button till the contract date is set.
@@ -137,10 +135,6 @@ public class ContractTaskDoneDialogFragment extends DialogFragment {
                     dismiss();
                 }
             };
-
-    public String getCompletionComments() {
-        return mTextCompletionComments.getText().toString();
-    }
 
     public long getContractValidTillDate() {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");

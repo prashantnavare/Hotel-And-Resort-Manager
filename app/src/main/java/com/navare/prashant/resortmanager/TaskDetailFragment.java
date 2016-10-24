@@ -39,7 +39,6 @@ import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.util.ContractTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.InventoryTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
-import com.navare.prashant.resortmanager.util.TaskDoneDialogFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -389,8 +388,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         updateUIFromTask();
     }
 
-    public void markTaskAsDone(String completionComments) {
-        mTask.mCompletionComments = completionComments;
+    public void markTaskAsDone() {
         mTask.mCompletedTimeStamp = Calendar.getInstance().getTimeInMillis();
         mTask.mStatus = Task.CompletedStatus;
         Uri taskURI = Uri.withAppendedPath(ResortManagerContentProvider.TASK_URI,
@@ -432,8 +430,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             mCallbacks.onTaskDone();
     }
 
-    public void markContractTaskAsDone(long contractValidTillDate, String completionComments) {
-        mTask.mCompletionComments = completionComments;
+    public void markContractTaskAsDone(long contractValidTillDate) {
         mTask.mCompletedTimeStamp = Calendar.getInstance().getTimeInMillis();
         mTask.mStatus = Task.CompletedStatus;
         Uri taskURI = Uri.withAppendedPath(ResortManagerContentProvider.TASK_URI,
@@ -449,8 +446,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             mCallbacks.onTaskDone();
     }
 
-    public void markInventoryTaskAsDone(long addedQuantity, String completionComments) {
-        mTask.mCompletionComments = completionComments;
+    public void markInventoryTaskAsDone(long addedQuantity) {
         mTask.mCompletedTimeStamp = Calendar.getInstance().getTimeInMillis();
         mTask.mStatus = Task.CompletedStatus;
         Uri taskURI = Uri.withAppendedPath(ResortManagerContentProvider.TASK_URI,
@@ -716,8 +712,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "InventoryTaskDoneDialogFragment");
         }
         else {
-            TaskDoneDialogFragment dialog = new TaskDoneDialogFragment();
-            dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "TaskDoneDialogFragment");
+            markTaskAsDone();
         }
     }
 

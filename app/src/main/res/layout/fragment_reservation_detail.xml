@@ -308,7 +308,7 @@
                         android:inputType="numberDecimal"
                         android:cursorVisible="true"
                         android:padding="5dp"
-                        android:background="@drawable/textview_shape"
+                        android:background="@drawable/textview_shape_readonly"
                         android:layout_marginRight="5dp"
                         />
 
@@ -348,7 +348,7 @@
 
                 </LinearLayout>
 
-                <!-- Adult Charges -->
+                <!-- Charges per Adult -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -362,7 +362,7 @@
                         android:textSize="12sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Adult Charges Per Day"
+                        android:text="Charges per Adult Per Day"
                         android:padding="5dp"
                         />
 
@@ -396,7 +396,7 @@
                         android:textSize="12sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Child Charges Per Day"
+                        android:text="Charges per Child Per Day"
                         android:padding="5dp"
                         />
 

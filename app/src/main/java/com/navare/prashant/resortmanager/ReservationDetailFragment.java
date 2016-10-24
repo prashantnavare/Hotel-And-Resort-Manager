@@ -600,9 +600,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (mbCheckoutInProgress == false)
             return;
 
-        // Make sure at least one of room or adult charge is filled in.
+        // Make sure at least one of room or charges per adult is filled in.
         if (mTextAdultCharge.getText().toString().isEmpty() && mTextRoomCharge.getText().toString().isEmpty()) {
-            showAlertDialog("Either Room or Adult Charges must be specified.");
+            showAlertDialog("Either Room or Charges per Adult must be specified.");
             mTextRoomCharge.requestFocus();
             return;
         }
