@@ -1350,9 +1350,9 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                             priority = Task.UrgentPriority;
                         }
                         else {
-                            // Cleaning reminders are generated 1 week before the actual due date.
+                            // Cleaning reminders are generated 1 day before the actual due date.
                             long numberOfDaysTillNextCleaning = TimeUnit.DAYS.convert((nextCleaningDate.getTimeInMillis() - todayDate.getTimeInMillis()), TimeUnit.MILLISECONDS);
-                            if (numberOfDaysTillNextCleaning < 7) {
+                            if (numberOfDaysTillNextCleaning <= 1) {
                                 bCreateTask = true;
                                 dueDate = nextCleaningDate.getTimeInMillis();
                             }

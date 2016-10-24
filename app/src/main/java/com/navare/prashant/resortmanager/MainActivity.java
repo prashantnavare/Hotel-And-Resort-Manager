@@ -442,7 +442,12 @@ public class MainActivity extends Activity {
     private void setTitleAndVariousCount() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-        titleString = titleString + "  Manager";
+        if (titleString.isEmpty()) {
+            titleString = "Resort Manager";
+        }
+        else {
+            titleString = titleString + " Manager";
+        }
         setTitle(titleString);
 
         long taskCount = preferences.getLong(ResortManagerApp.sPrefTaskCount, 0);
@@ -461,5 +466,41 @@ public class MainActivity extends Activity {
         String roomButtonString = "Rooms (" + String.valueOf(roomCount) + ")";
         mButtonRooms.setText(roomButtonString);
     }
+
+    // TODO: Get rid of comments dialog when the task is done.
+    // TODO: split mobile # and e-mail in reservation detail
+    // TODO: in reservation detail, if mobile # is specified, then enable call and sms buttons
+    // TODO: in reservation detail, if e-mail is specified, then enable e-mail button
+    // TODO: Do the above two steps for Completed reservations as well
+    // TODO: in reservation detail, flip from date and days so that from date is first
+    // TODO: in reservation detail, Add optional Arrival Details for waiting reservations. No arrival Details after checkin. Show arrival details in brackets after dates in FTS list
+    // TODO: in reservation detail check out charges section, gray out allocated rooms to denote non-editable
+    // TODO: in reservation detail, "Charge per Adult" instead of "Adult Charges" (and the same for Child)
+    // TODO: Reservation details should be grayed out as they are non-editable for Historical reservations
+    // TODO: Consumable should have a user supplied unit field next to quantity
+    // TODO: consumable task done dialog: Quantity Added (instead of just Quantity). Also, remove comments
+
+    // TODO: Reservations goes to a new activity with 3 buttons: Pending, Checked In and Historical
+    // TODO: Change Waiting to Pending
+    // TODO: Pending shows only Pending reservations sorted based on fromDate (ascending)
+    // TODO: Checked In shows only Checked In reservations based on expected toDate (ascending)
+    // TODO: Historical shows only Checked out reservations based on toDate (descending)
+    // TODO: Reports has only summary reports of Historical reservations based on Month or Year
+    // TODO: Reports shows only 2 metrics :
+    // TODO:        occupancy (i.e. sum of all adults and children for that month or year)
+    // TODO:        revenue (totalCharges for that month or year)
+    // TODO:
+    // TODO: Room sorting should be alphanumeric (so a 3 is listed above 16) - store it internally as 003 and 016
+    // TODO: Revisit all alert dialogs for proper messaging (e.g. Adults should not empty should read Adults field should not be empty)
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
+    // TODO:
 }
 
