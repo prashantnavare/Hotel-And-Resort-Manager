@@ -24,6 +24,7 @@ public class InventoryDialogFragment extends DialogFragment {
     public enum InventoryDialogType {ADD, SUBTRACT}
 
     private InventoryDialogType mType;
+    private String mMeasuringUnit;
     private TextView mTextMessage;
     private TextView mTextQuantity;
     private Button mBtnYes;
@@ -97,11 +98,11 @@ public class InventoryDialogFragment extends DialogFragment {
         Dialog myDialog = getDialog();
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (mType == InventoryDialogType.ADD) {
-            mTextMessage.setText(getResources().getText(R.string.add_quantity));
+            mTextMessage.setText(mMeasuringUnit + " Added");
             mBtnYes.setText(getResources().getText(R.string.add));
         }
         else if (mType == InventoryDialogType.SUBTRACT) {
-            mTextMessage.setText(getResources().getText(R.string.subtract_quantity));
+            mTextMessage.setText(mMeasuringUnit + " Removed");
             mBtnYes.setText(getResources().getText(R.string.subtract));
         }
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -134,5 +135,8 @@ public class InventoryDialogFragment extends DialogFragment {
     }
     public  void setDialogType(InventoryDialogType type) {
         mType = type;
+    }
+    public  void setMeasuringUnit(String measuringUnit) {
+        mMeasuringUnit = measuringUnit;
     }
 }

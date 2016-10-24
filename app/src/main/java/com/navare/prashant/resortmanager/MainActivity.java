@@ -473,8 +473,6 @@ public class MainActivity extends Activity {
     // TODO: Do the above two steps for Completed reservations as well
     // TODO: in reservation detail, flip from date and days so that from date is first
     // TODO: in reservation detail, Add optional Arrival Details for waiting reservations. No arrival Details after checkin. Show arrival details in brackets after dates in FTS list
-    // TODO: Consumable should have a user supplied unit field next to quantity
-    // TODO: consumable task done dialog: Quantity Added (instead of just Quantity). Also, remove comments
 
     // TODO: Reservations goes to a new activity with 3 buttons: Pending, Checked In and Historical
     // TODO: Change Waiting to Pending

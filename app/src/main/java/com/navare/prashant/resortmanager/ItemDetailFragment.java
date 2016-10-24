@@ -104,6 +104,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     private CheckBox mInventoryCheckBox;
     private TextView mTextMinRequiredQuantity;
     private TextView mTextCurrentQuantity;
+    private TextView mTextMeasuringUnit;
     private TextView mTextReorderInstructions;
 
     private ImageView mImageView;
@@ -379,6 +380,9 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         // Inventory related
         mTextCurrentQuantity = (TextView) rootView.findViewById(R.id.textCurrentQuantity);
         mTextCurrentQuantity.addTextChangedListener(this);
+
+        mTextMeasuringUnit = (TextView) rootView.findViewById(R.id.textMeasuringUnit);
+        mTextMeasuringUnit.addTextChangedListener(this);
 
         mInventoryCheckBox = (CheckBox) rootView.findViewById(R.id.chkInventory);
         mInventoryCheckBox.setOnClickListener(new View.OnClickListener() {
@@ -677,8 +681,22 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             // Consumable
             mItem.mType = Item.ConsumableType;
             // Inventory related
-            if (!mTextCurrentQuantity.getText().toString().isEmpty())
+            if (mTextCurrentQuantity.getText().toString().isEmpty()) {
+                showAlertDialog("Current Quantity cannot be empty.");
+                mTextCurrentQuantity.requestFocus();
+                return false;
+            }
+            else {
                 mItem.mCurrentQuantity = Long.valueOf(mTextCurrentQuantity.getText().toString());
+            }
+            if (mTextMeasuringUnit.getText().toString().isEmpty()) {
+                showAlertDialog("Measuring Unit cannot be empty.");
+                mTextMeasuringUnit.requestFocus();
+                return false;
+            }
+            else {
+                mItem.mMeasuringUnit = mTextMeasuringUnit.getText().toString();
+            }
             if (mInventoryCheckBox.isChecked()) {
                 mItem.mInventoryReminders = 1;
                 if (mTextMinRequiredQuantity.getText().toString().isEmpty()) {
@@ -783,6 +801,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             if (mItem.mCurrentQuantity > 0)
                 mTextCurrentQuantity.setText(String.valueOf(mItem.mCurrentQuantity));
 
+            mTextMeasuringUnit.setText(mItem.mMeasuringUnit);
             // Set the Inventory UI elements
             if (mItem.mInventoryReminders > 0) {
                 mInventoryCheckBox.setChecked(true);
@@ -849,12 +868,14 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     public void showInventoryAddDialog() {
         InventoryDialogFragment dialog = new InventoryDialogFragment();
         dialog.setDialogType(InventoryDialogFragment.InventoryDialogType.ADD);
+        dialog.setMeasuringUnit(mItem.mMeasuringUnit);
         dialog.show(((FragmentActivity) mContext).getSupportFragmentManager(), "InventoryDialogFragment");
     }
 
     public void showInventorySubtractDialog() {
         InventoryDialogFragment dialog = new InventoryDialogFragment();
         dialog.setDialogType(InventoryDialogFragment.InventoryDialogType.SUBTRACT);
+        dialog.setMeasuringUnit(mItem.mMeasuringUnit);
         dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "InventoryDialogFragment");
     }
 

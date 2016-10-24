@@ -41,6 +41,7 @@ public class Item {
     public static final String COL_INVENTORY_REMINDERS = "inventoryReminders";
     public static final String COL_MIN_REQUIRED_QUANTITY = "minRequiredQuantity";
     public static final String COL_CURRENT_QUANTITY = "currentQuantity";
+    public static final String COL_MEASURING_UNIT = "measuringUnit";
     public static final String COL_REORDER_INSTRUCTIONS = "reorderInstructions";
 
     public static final String COL_IMAGE = "imagePath";
@@ -73,6 +74,7 @@ public class Item {
             COL_INVENTORY_REMINDERS,
             COL_MIN_REQUIRED_QUANTITY,
             COL_CURRENT_QUANTITY,
+            COL_MEASURING_UNIT,
             COL_REORDER_INSTRUCTIONS,
 
             COL_IMAGE
@@ -107,6 +109,7 @@ public class Item {
         map.put(COL_INVENTORY_REMINDERS, COL_INVENTORY_REMINDERS);
         map.put(COL_MIN_REQUIRED_QUANTITY, COL_MIN_REQUIRED_QUANTITY);
         map.put(COL_CURRENT_QUANTITY, COL_CURRENT_QUANTITY);
+        map.put(COL_MEASURING_UNIT, COL_MEASURING_UNIT);
         map.put(COL_REORDER_INSTRUCTIONS, COL_REORDER_INSTRUCTIONS);
 
         map.put(COL_IMAGE, COL_IMAGE);
@@ -140,6 +143,7 @@ public class Item {
                     + COL_INVENTORY_REMINDERS + " INTEGER,"
                     + COL_MIN_REQUIRED_QUANTITY + " INTEGER,"
                     + COL_CURRENT_QUANTITY + " INTEGER,"
+                    + COL_MEASURING_UNIT + " TEXT NOT NULL DEFAULT '',"
                     + COL_REORDER_INSTRUCTIONS + " TEXT DEFAULT '',"
 
                     + COL_IMAGE + " BLOB"
@@ -166,6 +170,7 @@ public class Item {
     public long mInventoryReminders = 0;
     public long mMinRequiredQuantity = 0;
     public long mCurrentQuantity = 0;
+    public String mMeasuringUnit = "";
     public String mReorderInstructions = "";
 
     public byte[] mImage;
@@ -200,9 +205,10 @@ public class Item {
         this.mInventoryReminders = cursor.getLong(12);
         this.mMinRequiredQuantity = cursor.getLong(13);
         this.mCurrentQuantity = cursor.getLong(14);
-        this.mReorderInstructions = cursor.getString(15);
+        this.mMeasuringUnit = cursor.getString(15);
+        this.mReorderInstructions = cursor.getString(16);
 
-        this.mImage = cursor.getBlob(16);
+        this.mImage = cursor.getBlob(17);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -230,6 +236,7 @@ public class Item {
         values.put(COL_INVENTORY_REMINDERS, mInventoryReminders);
         values.put(COL_MIN_REQUIRED_QUANTITY, mMinRequiredQuantity);
         values.put(COL_CURRENT_QUANTITY, mCurrentQuantity);
+        values.put(COL_MEASURING_UNIT, mMeasuringUnit);
         values.put(COL_REORDER_INSTRUCTIONS, mReorderInstructions);
 
         values.put(COL_IMAGE, mImage);
@@ -260,6 +267,7 @@ public class Item {
         mInventoryReminders = values.getAsLong(COL_INVENTORY_REMINDERS);
         mMinRequiredQuantity = values.getAsLong(COL_MIN_REQUIRED_QUANTITY);
         mCurrentQuantity = values.getAsLong(COL_CURRENT_QUANTITY);
+        mMeasuringUnit = values.getAsString(COL_MEASURING_UNIT);
         mReorderInstructions = values.getAsString(COL_REORDER_INSTRUCTIONS);
 
         mImage = values.getAsByteArray(COL_IMAGE);

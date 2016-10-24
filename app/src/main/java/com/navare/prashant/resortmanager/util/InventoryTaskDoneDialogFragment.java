@@ -16,9 +16,12 @@ import com.navare.prashant.resortmanager.R;
 
 public class InventoryTaskDoneDialogFragment extends DialogFragment {
 
+    private TextView mTextMessage;
     private TextView mTextQuantityAdded;
     private Button mBtnTaskDone;
     private Button mBtnCancel;
+
+    private String mMeasuringUnit;
 
     // The activity that creates an instance of this dialog fragment must
     // implement this interface in order to receive event callbacks.
@@ -67,6 +70,8 @@ public class InventoryTaskDoneDialogFragment extends DialogFragment {
         getDialog().setTitle("Inventory Task Done");
         View rootView = inflater.inflate(R.layout.dialog_inventory_task_done, container, false);
 
+        mTextMessage = ((TextView) rootView.findViewById(R.id.textMessage));
+        mTextMessage.setText(mMeasuringUnit + " Added");
         mTextQuantityAdded = (TextView) rootView.findViewById(R.id.textQuantityAdded);
         mTextQuantityAdded.addTextChangedListener(new TextWatcher() {
 
@@ -121,5 +126,8 @@ public class InventoryTaskDoneDialogFragment extends DialogFragment {
 
     public long getAddedQuantity() {
         return Long.valueOf(mTextQuantityAdded.getText().toString());
+    }
+    public  void setMeasuringUnit(String measuringUnit) {
+        mMeasuringUnit = measuringUnit;
     }
 }

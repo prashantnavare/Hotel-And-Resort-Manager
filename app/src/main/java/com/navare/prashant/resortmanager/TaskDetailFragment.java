@@ -642,7 +642,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             if (mItem != null) {
                 mRequiredQuantityLayout.setVisibility(View.VISIBLE);
                 long requiredQuantity = mItem.mMinRequiredQuantity - mItem.mCurrentQuantity;
-                mTextRequiredQuantity.setText(String.valueOf(requiredQuantity));
+                mTextRequiredQuantity.setText(String.valueOf(requiredQuantity) + " " + mItem.mMeasuringUnit);
             }
         }
         if (mTask.mTaskType == Task.Contract) {
@@ -709,6 +709,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         }
         else if (mTask.mTaskType == Task.Inventory) {
             InventoryTaskDoneDialogFragment dialog = new InventoryTaskDoneDialogFragment();
+            dialog.setMeasuringUnit(mItem.mMeasuringUnit);
             dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "InventoryTaskDoneDialogFragment");
         }
         else {

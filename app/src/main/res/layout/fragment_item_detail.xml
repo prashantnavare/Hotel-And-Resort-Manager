@@ -444,6 +444,38 @@
                         />
                 </LinearLayout>
 
+                <!-- Measuring Unit -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:text="Measuring Unit"
+                        android:layout_weight="2"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        />
+                    <EditText
+                        android:id="@+id/textMeasuringUnit"
+                        android:hint="e.g. Kilos"
+                        android:inputType="textCapWords"
+                        android:cursorVisible="true"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="160dp"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape"
+                        />
+                </LinearLayout>
+
                 <!-- Inventory Reminders checkbox -->
                 <CheckBox
                     android:id="@+id/chkInventory"
