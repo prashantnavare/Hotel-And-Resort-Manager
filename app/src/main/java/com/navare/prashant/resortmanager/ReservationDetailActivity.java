@@ -25,22 +25,26 @@ import android.widget.Toast;
 public class ReservationDetailActivity extends AppCompatActivity
         implements ReservationDetailFragment.Callbacks {
 
+    private MenuItem checkinMenuItem = null;
+    private MenuItem checkoutMenuItem = null;
+    private MenuItem completeCheckoutMenuItem = null;
+    private MenuItem callMenuItem = null;
+    private MenuItem messageMenuItem = null;
+    private MenuItem emailMenuItem = null;
     private MenuItem deleteMenuItem = null;
     private MenuItem revertMenuItem = null;
     private MenuItem saveMenuItem = null;
 
-    private MenuItem checkinMenuItem = null;
-
-    private MenuItem checkoutMenuItem = null;
-    private MenuItem completeCheckoutMenuItem = null;
-
-    private boolean mbDeleteMenuEnable = false;
-    private boolean mbRevertMenuEnable = false;
-    private boolean mbSaveMenuEnable = false;
-
     private boolean mbCheckinMenuEnable = false;
     private boolean mbCheckoutMenuEnable = false;
     private boolean mbCompleteCheckoutMenuEnable = false;
+    private boolean mbCallMenuEnable = false;
+    private boolean mbMessageMenuEnable = false;
+    private boolean mbEmailMenuEnable = false;
+    private boolean mbSaveMenuEnable = false;
+    private boolean mbRevertMenuEnable = false;
+    private boolean mbDeleteMenuEnable = false;
+
 
     private Activity mThisActivity;
 
@@ -83,23 +87,28 @@ public class ReservationDetailActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.reservation_detail_actions, menu);
 
-        saveMenuItem = menu.getItem(0);
-        revertMenuItem = menu.getItem(1);
-        checkinMenuItem = menu.getItem(2);
-        checkoutMenuItem = menu.getItem(3);
-        completeCheckoutMenuItem = menu.getItem(4);
-        deleteMenuItem = menu.getItem(5);
+        checkinMenuItem = menu.getItem(0);
+        checkoutMenuItem = menu.getItem(1);
+        completeCheckoutMenuItem = menu.getItem(2);
+        callMenuItem = menu.getItem(3);
+        messageMenuItem = menu.getItem(4);
+        emailMenuItem = menu.getItem(5);
+        saveMenuItem = menu.getItem(6);
+        revertMenuItem = menu.getItem(7);
+        deleteMenuItem = menu.getItem(8);
 
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here
         // as it happens on a separate thread. Hence the boolean state keepers
-        EnableSaveButton(mbSaveMenuEnable);
-        EnableRevertButton(mbRevertMenuEnable);
-        EnableDeleteButton(mbDeleteMenuEnable);
-
         EnableCheckinButton(mbCheckinMenuEnable);
         EnableCheckoutButton(mbCheckoutMenuEnable);
         EnableCompleteCheckoutButton(mbCompleteCheckoutMenuEnable);
+        EnableCallButton(mbCallMenuEnable);
+        EnableMessageButton(mbMessageMenuEnable);
+        EnableEmailButton(mbEmailMenuEnable);
+        EnableSaveButton(mbSaveMenuEnable);
+        EnableRevertButton(mbRevertMenuEnable);
+        EnableDeleteButton(mbDeleteMenuEnable);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -116,15 +125,6 @@ public class ReservationDetailActivity extends AppCompatActivity
                     NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
                 }
                 return true;
-            case R.id.menu_revert:
-                revertUI();
-                return true;
-            case R.id.menu_delete:
-                deleteReservation();
-                return true;
-            case R.id.menu_save:
-                saveReservation();
-                return true;
             case R.id.menu_checkin:
                 doCheckin();
                 return true;
@@ -133,6 +133,24 @@ public class ReservationDetailActivity extends AppCompatActivity
                 return true;
             case R.id.menu_completecheckout:
                 doCompleteCheckout();
+                return true;
+            case R.id.menu_call:
+                // TODO: doCall();
+                return true;
+            case R.id.menu_message:
+                // TODO: doMessage();
+                return true;
+            case R.id.menu_email:
+                // TODO: doEmail();
+                return true;
+            case R.id.menu_save:
+                saveReservation();
+                return true;
+            case R.id.menu_revert:
+                revertUI();
+                return true;
+            case R.id.menu_delete:
+                deleteReservation();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -236,33 +254,6 @@ public class ReservationDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void EnableDeleteButton(boolean bEnable) {
-        mbDeleteMenuEnable = bEnable;
-        if (deleteMenuItem != null) {
-            deleteMenuItem.setEnabled(bEnable);
-            deleteMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
-    public void EnableRevertButton(boolean bEnable) {
-        mbRevertMenuEnable = bEnable;
-        if (revertMenuItem != null) {
-            revertMenuItem.setEnabled(bEnable);
-            revertMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
-    public void EnableSaveButton(boolean bEnable) {
-        mbSaveMenuEnable = bEnable;
-        if (saveMenuItem != null) {
-            saveMenuItem.setEnabled(bEnable);
-            saveMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
     public void EnableCheckinButton(boolean bEnable) {
         mbCheckinMenuEnable = bEnable;
         if (checkinMenuItem != null) {
@@ -286,6 +277,60 @@ public class ReservationDetailActivity extends AppCompatActivity
         if (completeCheckoutMenuItem != null) {
             completeCheckoutMenuItem.setEnabled(bEnable);
             completeCheckoutMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableCallButton(boolean bEnable) {
+        mbCallMenuEnable = bEnable;
+        if (callMenuItem != null) {
+            callMenuItem.setEnabled(bEnable);
+            callMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableMessageButton(boolean bEnable) {
+        mbMessageMenuEnable = bEnable;
+        if (messageMenuItem != null) {
+            messageMenuItem.setEnabled(bEnable);
+            messageMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableEmailButton(boolean bEnable) {
+        mbEmailMenuEnable = bEnable;
+        if (emailMenuItem != null) {
+            emailMenuItem.setEnabled(bEnable);
+            emailMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableSaveButton(boolean bEnable) {
+        mbSaveMenuEnable = bEnable;
+        if (saveMenuItem != null) {
+            saveMenuItem.setEnabled(bEnable);
+            saveMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableRevertButton(boolean bEnable) {
+        mbRevertMenuEnable = bEnable;
+        if (revertMenuItem != null) {
+            revertMenuItem.setEnabled(bEnable);
+            revertMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableDeleteButton(boolean bEnable) {
+        mbDeleteMenuEnable = bEnable;
+        if (deleteMenuItem != null) {
+            deleteMenuItem.setEnabled(bEnable);
+            deleteMenuItem.setVisible(bEnable);
         }
     }
 

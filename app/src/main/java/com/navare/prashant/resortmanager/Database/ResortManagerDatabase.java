@@ -849,8 +849,8 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
     private void addCompletedFTSReservation(Reservation reservation) {
         ContentValues completedFTSValues = new ContentValues();
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NAME, reservation.mName);
-
-        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_CONTACT_INFO, reservation.mContactInfo);
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_PHONE_NO, reservation.mPhoneNumber);
+        completedFTSValues.put(Reservation.COMPLETED_COL_FTS_EMAIL, reservation.mEmailAddress);
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_ADULTS, String.valueOf(reservation.mNumAdults));
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_CHILDREN, String.valueOf(reservation.mNumChildren));
         completedFTSValues.put(Reservation.COMPLETED_COL_FTS_NUM_DAYS, String.valueOf(reservation.mNumDays));

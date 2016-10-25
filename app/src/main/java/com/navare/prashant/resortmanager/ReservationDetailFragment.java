@@ -68,7 +68,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
      * The UI elements showing the details of the reservation
      */
     private TextView mTextName;
-    private TextView mTextContactInfo;
+    private TextView mTextPhoneNumber;
+    private TextView mTextEmailAddress;
     private TextView mTextNumAdults;
     private TextView mTextNumChildren;
     private TextView mTextNumDays;
@@ -103,13 +104,16 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         /**
          * Callbacks for when an reservation has been selected.
          */
-        void EnableDeleteButton(boolean bEnable);
-        void EnableRevertButton(boolean bEnable);
-        void EnableSaveButton(boolean bEnable);
-        void RedrawOptionsMenu();
         void EnableCheckinButton(boolean bEnable);
         void EnableCheckoutButton(boolean bEnable);
         void EnableCompleteCheckoutButton(boolean bEnable);
+        void EnableCallButton(boolean bEnable);
+        void EnableMessageButton(boolean bEnable);
+        void EnableEmailButton(boolean bEnable);
+        void EnableSaveButton(boolean bEnable);
+        void EnableRevertButton(boolean bEnable);
+        void EnableDeleteButton(boolean bEnable);
+        void RedrawOptionsMenu();
         void onReservationDeleted();
         void setTitleString(String titleString);
         void onCheckinCompleted();
@@ -122,15 +126,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void EnableDeleteButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableRevertButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableSaveButton(boolean bEnable) {
-        }
-        @Override
         public void EnableCheckinButton(boolean bEnable) {
         }
         @Override
@@ -138,6 +133,24 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         @Override
         public void EnableCompleteCheckoutButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableCallButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableMessageButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableEmailButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableSaveButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableRevertButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableDeleteButton(boolean bEnable) {
         }
         @Override
         public void RedrawOptionsMenu() {
@@ -250,8 +263,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextName.addTextChangedListener(this);
 
-        mTextContactInfo = ((TextView) rootView.findViewById(R.id.textContactInfo));
-        mTextContactInfo.addTextChangedListener(this);
+        mTextPhoneNumber = ((TextView) rootView.findViewById(R.id.textPhoneNumber));
+        mTextPhoneNumber.addTextChangedListener(this);
+
+        mTextEmailAddress = ((TextView) rootView.findViewById(R.id.textEmailAddress));
+        mTextEmailAddress.addTextChangedListener(this);
 
         mTextNumAdults = ((TextView) rootView.findViewById(R.id.textNumAdults));
         mTextNumAdults.addTextChangedListener(this);
@@ -661,24 +677,15 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     private void showAlertDialog(String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-
-        // Setting Dialog Title
         alertDialog.setTitle("Incomplete Data");
-
-        // Setting Dialog Message
         alertDialog.setMessage(message);
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_resort_manager);
-
-        // Setting OK Button
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }
         });
 
-        // Showing Alert Message
         alertDialog.show();
     }
 
@@ -696,8 +703,12 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mReservation.mName = mTextName.getText().toString();
         }
 
-        if (mTextContactInfo.getText().toString().isEmpty() == false) {
-            mReservation.mContactInfo = mTextContactInfo.getText().toString();
+        if (mTextPhoneNumber.getText().toString().isEmpty() == false) {
+            mReservation.mPhoneNumber = mTextPhoneNumber.getText().toString();
+        }
+
+        if (mTextEmailAddress.getText().toString().isEmpty() == false) {
+            mReservation.mEmailAddress = mTextEmailAddress.getText().toString();
         }
 
         if (mTextNumAdults.getText().toString().isEmpty()) {
@@ -748,7 +759,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mName);
-        mTextContactInfo.setText(mReservation.mContactInfo);
+        mTextPhoneNumber.setText(mReservation.mPhoneNumber);
+        mTextEmailAddress.setText(mReservation.mEmailAddress);
         mTextNumAdults.setText(String.valueOf(mReservation.mNumAdults));
         mTextNumChildren.setText(String.valueOf(mReservation.mNumChildren));
         mTextNumDays.setText(String.valueOf(mReservation.mNumDays));
@@ -773,6 +785,13 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mCallbacks.EnableCheckinButton(false);
             mCallbacks.EnableCheckoutButton(true);
         }
+        if (mReservation.mPhoneNumber.isEmpty() == false) {
+            mCallbacks.EnableCallButton(true);
+            mCallbacks.EnableMessageButton(true);
+        }
+        if (mReservation.mEmailAddress.isEmpty() == false) {
+            mCallbacks.EnableEmailButton(true);
+        }
         mCallbacks.RedrawOptionsMenu();
         mCallbacks.setTitleString(mReservation.mName + " - " + mReservation.getStatusString()) ;
     }
@@ -780,7 +799,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void displayUIForNewReservation() {
         mTextName.setText("");
-        mTextContactInfo.setText("");
+        mTextPhoneNumber.setText("");
+        mTextEmailAddress.setText("");
         mTextNumAdults.setText("");
         mTextNumChildren.setText("");
         mTextNumDays.setText("");
@@ -793,6 +813,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         // New reservation so disable checkin and checkout buttons
         mCallbacks.EnableCheckinButton(false);
         mCallbacks.EnableCheckoutButton(false);
+
+        // New reservation so disable call, message and e-mail buttons
+        mCallbacks.EnableCallButton(false);
+        mCallbacks.EnableMessageButton(false);
+        mCallbacks.EnableEmailButton(false);
 
         mCallbacks.setTitleString("New Reservation");
 

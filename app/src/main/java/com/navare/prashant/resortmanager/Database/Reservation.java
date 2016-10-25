@@ -44,7 +44,8 @@ public class Reservation {
     public static final String COL_TAX_PERCENT = "taxPercent";
     public static final String COL_TOTAL_CHARGE = "totalCharge";
 
-    public static final String COL_CONTACT_INFO = "contactInfo";
+    public static final String COL_PHONE_NO = "phoneNumber";
+    public static final String COL_EMAIL = "emailAddress";
 
     public static final int WaitingStatus = 1;
     public static final int CheckedInStatus = 2;
@@ -74,7 +75,8 @@ public class Reservation {
             COL_TAX_PERCENT,
             COL_TOTAL_CHARGE,
 
-            COL_CONTACT_INFO
+            COL_PHONE_NO,
+            COL_EMAIL
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -106,7 +108,8 @@ public class Reservation {
         map.put(COL_TAX_PERCENT, COL_TAX_PERCENT);
         map.put(COL_TOTAL_CHARGE, COL_TOTAL_CHARGE);
 
-        map.put(COL_CONTACT_INFO, COL_CONTACT_INFO);
+        map.put(COL_PHONE_NO, COL_PHONE_NO);
+        map.put(COL_EMAIL, COL_EMAIL);
         return map;
     }
 
@@ -136,7 +139,8 @@ public class Reservation {
                     + COL_TAX_PERCENT + " FLOAT, "
                     + COL_TOTAL_CHARGE + " INTEGER, "
 
-                    + COL_CONTACT_INFO + " TEXT DEFAULT '' "
+                    + COL_PHONE_NO + " TEXT DEFAULT '' ,"
+                    + COL_EMAIL + " TEXT DEFAULT '' "
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -159,7 +163,8 @@ public class Reservation {
     public float mTaxPercent = 0;
     public long mTotalCharge = 0;
 
-    public String mContactInfo = "";
+    public String mPhoneNumber = "";
+    public String mEmailAddress = "";
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -191,7 +196,8 @@ public class Reservation {
         this.mTaxPercent = cursor.getLong(14);
         this.mTotalCharge = cursor.getLong(15);
 
-        this.mContactInfo = cursor.getString(16);
+        this.mPhoneNumber = cursor.getString(16);
+        this.mEmailAddress = cursor.getString(17);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -219,7 +225,8 @@ public class Reservation {
         values.put(COL_TAX_PERCENT, mTaxPercent);
         values.put(COL_TOTAL_CHARGE, mTotalCharge);
 
-        values.put(COL_CONTACT_INFO, mContactInfo);
+        values.put(COL_PHONE_NO, mPhoneNumber);
+        values.put(COL_EMAIL, mEmailAddress);
         return values;
     }
 
@@ -246,7 +253,8 @@ public class Reservation {
         mTaxPercent = values.getAsFloat(COL_TAX_PERCENT);
         mTotalCharge = values.getAsLong(COL_TOTAL_CHARGE);
 
-        mContactInfo = values.getAsString(COL_CONTACT_INFO);
+        mPhoneNumber = values.getAsString(COL_PHONE_NO);
+        mEmailAddress = values.getAsString(COL_EMAIL);
     }
 
     public String getStatusString() {
@@ -352,7 +360,8 @@ public class Reservation {
     // Completed Reservations FTS Table - for reservations that were successfully checked out.
     public static final String COMPLETED_FTS_TABLE_NAME = "CompletedFTSReservationTable";
     public static final String COMPLETED_COL_FTS_NAME = "name";
-    public static final String COMPLETED_COL_FTS_CONTACT_INFO = "contactInfo";
+    public static final String COMPLETED_COL_FTS_PHONE_NO = "phoneNumber";
+    public static final String COMPLETED_COL_FTS_EMAIL = "emailAddress";
     public static final String COMPLETED_COL_FTS_NUM_ADULTS = "numAdults";
     public static final String COMPLETED_COL_FTS_NUM_CHILDREN = "numChildren";
     public static final String COMPLETED_COL_FTS_NUM_DAYS = "numDays";
@@ -369,7 +378,8 @@ public class Reservation {
     public static final String[] COMPLETED_FTS_FIELDS = {
             BaseColumns._ID,
             COMPLETED_COL_FTS_NAME,
-            COMPLETED_COL_FTS_CONTACT_INFO,
+            COMPLETED_COL_FTS_PHONE_NO,
+            COMPLETED_COL_FTS_EMAIL,
             COMPLETED_COL_FTS_NUM_ADULTS,
             COMPLETED_COL_FTS_NUM_CHILDREN,
             COMPLETED_COL_FTS_NUM_DAYS,
@@ -391,7 +401,8 @@ public class Reservation {
             "CREATE VIRTUAL TABLE " + COMPLETED_FTS_TABLE_NAME +
                     " USING fts3 (" +
                     COMPLETED_COL_FTS_NAME + "," +
-                    COMPLETED_COL_FTS_CONTACT_INFO + "," +
+                    COMPLETED_COL_FTS_PHONE_NO + "," +
+                    COMPLETED_COL_FTS_EMAIL + "," +
                     COMPLETED_COL_FTS_NUM_ADULTS + "," +
                     COMPLETED_COL_FTS_NUM_CHILDREN + "," +
                     COMPLETED_COL_FTS_NUM_DAYS + "," +
@@ -409,7 +420,8 @@ public class Reservation {
     // Fields corresponding to FTSItemTable columns
     public String mCompletedRowID = "";
     public String mCompletedFTSName = "";
-    public String mCompletedFTSContactInfo = "";
+    public String mCompletedFTSPhoneNumber = "";
+    public String mCompletedFTSEmailAddress = "";
     public String mCompletedFTSNumAdults = "";
     public String mCompletedFTSNumChildren = "";
     public String mCompletedFTSNumDays = "";
@@ -429,19 +441,20 @@ public class Reservation {
         // Indices expected to match order in FIELDS!
         this.mCompletedRowID = cursor.getString(0);
         this.mCompletedFTSName = cursor.getString(1);
-        this.mCompletedFTSContactInfo = cursor.getString(2);
-        this.mCompletedFTSNumAdults = cursor.getString(3);
-        this.mCompletedFTSNumChildren = cursor.getString(4);
-        this.mCompletedFTSNumDays = cursor.getString(5);
-        this.mCompletedFTSDates = cursor.getString(6);
-        this.mCompletedFTSNumRooms = cursor.getString(7);
+        this.mCompletedFTSPhoneNumber = cursor.getString(2);
+        this.mCompletedFTSEmailAddress = cursor.getString(3);
+        this.mCompletedFTSNumAdults = cursor.getString(4);
+        this.mCompletedFTSNumChildren = cursor.getString(5);
+        this.mCompletedFTSNumDays = cursor.getString(6);
+        this.mCompletedFTSDates = cursor.getString(7);
+        this.mCompletedFTSNumRooms = cursor.getString(8);
 
-        this.mCompletedFTSRoomCharge = cursor.getString(8);
-        this.mCompletedFTSAdultCharge = cursor.getString(9);
-        this.mCompletedFTSChildCharge = cursor.getString(10);
-        this.mCompletedFTSAdditionalCharge = cursor.getString(11);
-        this.mCompletedFTSTaxPercent = cursor.getString(12);
-        this.mCompletedFTSTotalCharge = cursor.getString(13);
+        this.mCompletedFTSRoomCharge = cursor.getString(9);
+        this.mCompletedFTSAdultCharge = cursor.getString(10);
+        this.mCompletedFTSChildCharge = cursor.getString(11);
+        this.mCompletedFTSAdditionalCharge = cursor.getString(12);
+        this.mCompletedFTSTaxPercent = cursor.getString(13);
+        this.mCompletedFTSTotalCharge = cursor.getString(14);
     }
 
     public static final HashMap<String, String> mCompletedFTSColumnMap = buildCompletedFTSColumnMap();
@@ -454,7 +467,8 @@ public class Reservation {
     private static HashMap<String,String> buildCompletedFTSColumnMap() {
         HashMap<String,String> map = new HashMap<>();
         map.put(COMPLETED_COL_FTS_NAME, COMPLETED_COL_FTS_NAME);
-        map.put(COMPLETED_COL_FTS_CONTACT_INFO, COMPLETED_COL_FTS_CONTACT_INFO);
+        map.put(COMPLETED_COL_FTS_PHONE_NO, COMPLETED_COL_FTS_PHONE_NO);
+        map.put(COMPLETED_COL_FTS_EMAIL, COMPLETED_COL_FTS_EMAIL);
         map.put(COMPLETED_COL_FTS_NUM_ADULTS, COMPLETED_COL_FTS_NUM_ADULTS);
         map.put(COMPLETED_COL_FTS_NUM_CHILDREN, COMPLETED_COL_FTS_NUM_CHILDREN);
         map.put(COMPLETED_COL_FTS_NUM_DAYS, COMPLETED_COL_FTS_NUM_DAYS);

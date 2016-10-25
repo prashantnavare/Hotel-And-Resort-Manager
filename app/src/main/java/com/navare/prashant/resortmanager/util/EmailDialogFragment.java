@@ -23,6 +23,7 @@ public class EmailDialogFragment extends DialogFragment {
     private TextView mTextEmail;
     private Button mBtnEmail;
     private Button mBtnCancel;
+    private String mEmailAddress = "";
 
     // The activity that creates an instance of this dialog fragment must
     // implement this interface in order to receive event callbacks.
@@ -74,6 +75,8 @@ public class EmailDialogFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.dialog_email, container, false);
 
         mTextEmail = ((TextView) rootView.findViewById(R.id.textEmail));
+        mTextEmail.setText(mEmailAddress);
+
         mTextEmail.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -96,7 +99,10 @@ public class EmailDialogFragment extends DialogFragment {
         mBtnEmail = ((Button) rootView.findViewById(R.id.btnEmail));
         mBtnEmail.setOnClickListener(onEmail);
         // By default, disable the Report button till Description is non empty.
-        mBtnEmail.setEnabled(false);
+        if (mEmailAddress.isEmpty())
+            mBtnEmail.setEnabled(false);
+        else
+            mBtnEmail.setEnabled(true);
 
         mBtnCancel = ((Button) rootView.findViewById(R.id.btnCancel));
         mBtnCancel.setOnClickListener(onCancel);
@@ -133,4 +139,5 @@ public class EmailDialogFragment extends DialogFragment {
     public String getEmailAddress() {
         return mTextEmail.getText().toString();
     }
+    public void setEmailAddress(String emailAddress) { mEmailAddress = emailAddress; }
 }

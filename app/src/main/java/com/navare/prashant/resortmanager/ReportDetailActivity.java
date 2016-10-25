@@ -47,6 +47,8 @@ public class ReportDetailActivity extends AppCompatActivity
     private Activity mThisActivity;
     private MenuItem emailMenuItem = null;
     private MenuItem messageMenuItem = null;
+    private MenuItem callMenuItem = null;
+    ReportDetailFragment mMyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +64,10 @@ public class ReportDetailActivity extends AppCompatActivity
             Bundle arguments = new Bundle();
             arguments.putString(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID,
                     getIntent().getStringExtra(ReportDetailFragment.ARG_COMPLETED_RESERVATION_ID));
-            ReportDetailFragment fragment = new ReportDetailFragment();
-            fragment.setArguments(arguments);
+            mMyFragment = new ReportDetailFragment();
+            mMyFragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.report_detail_container, fragment)
+                    .add(R.id.report_detail_container, mMyFragment)
                     .commit();
         }
         mThisActivity = this;
@@ -80,6 +82,7 @@ public class ReportDetailActivity extends AppCompatActivity
 
         emailMenuItem = menu.getItem(0);
         messageMenuItem = menu.getItem(1);
+        callMenuItem = menu.getItem(1);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -103,6 +106,9 @@ public class ReportDetailActivity extends AppCompatActivity
             case R.id.menu_message:
                 doMessage();
                 return true;
+            case R.id.menu_call:
+                // TODO: doCall();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -110,12 +116,14 @@ public class ReportDetailActivity extends AppCompatActivity
 
     private void doEmail() {
         EmailDialogFragment dialog = new EmailDialogFragment();
+        dialog.setEmailAddress(mMyFragment.getEmailAddress());
         dialog.show(getSupportFragmentManager(), "EmailDialogFragment");
     }
 
     private void doMessage() {
         if(checkAndRequestSMSPermissions()) {
             SMSDialogFragment dialog = new SMSDialogFragment();
+            dialog.setMobileNumber(mMyFragment.getPhoneNumber());
             dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
         }
     }
@@ -205,6 +213,14 @@ public class ReportDetailActivity extends AppCompatActivity
         if (messageMenuItem != null) {
             messageMenuItem.setEnabled(bEnable);
             messageMenuItem.setVisible(bEnable);
+        }
+
+    }
+
+    private void EnableCallButton(boolean bEnable) {
+        if (callMenuItem != null) {
+            callMenuItem.setEnabled(bEnable);
+            callMenuItem.setVisible(bEnable);
         }
 
     }

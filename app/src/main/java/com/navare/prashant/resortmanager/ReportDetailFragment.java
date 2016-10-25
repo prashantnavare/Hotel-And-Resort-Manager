@@ -218,7 +218,7 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mCompletedFTSName);
-        mTextContactInfo.setText(mReservation.mCompletedFTSContactInfo);
+        mTextContactInfo.setText(mReservation.mCompletedFTSPhoneNumber);
         mTextNumAdults.setText(mReservation.mCompletedFTSNumAdults);
         mTextNumChildren.setText(mReservation.mCompletedFTSNumChildren);
         mTextNumDays.setText(mReservation.mCompletedFTSNumDays);
@@ -314,4 +314,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         return smsMessage;
     }
 
+    public String getEmailAddress() { return mReservation.mEmailAddress; }
+    public String getPhoneNumber() { return mReservation.mPhoneNumber; }
 }
