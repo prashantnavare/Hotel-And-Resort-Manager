@@ -82,7 +82,7 @@ public class ReportDetailActivity extends AppCompatActivity
 
         emailMenuItem = menu.getItem(0);
         messageMenuItem = menu.getItem(1);
-        callMenuItem = menu.getItem(1);
+        callMenuItem = menu.getItem(2);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -107,7 +107,7 @@ public class ReportDetailActivity extends AppCompatActivity
                 doMessage();
                 return true;
             case R.id.menu_call:
-                // TODO: doCall();
+                doCall();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -121,16 +121,24 @@ public class ReportDetailActivity extends AppCompatActivity
     }
 
     private void doMessage() {
-        if(checkAndRequestSMSPermissions()) {
+        if(checkAndRequestSMSPermission()) {
             SMSDialogFragment dialog = new SMSDialogFragment();
             dialog.setMobileNumber(mMyFragment.getPhoneNumber());
             dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
         }
     }
 
-    public static final int REQUEST_ID_SMS_PERMISSION = 12;
+    private void doCall() {
+        if(checkAndRequestCallPhonePermission()) {
+            ((ReportDetailFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.report_detail_container)).callAssignee();
+        }
+    }
 
-    private  boolean checkAndRequestSMSPermissions() {
+    public static final int REQUEST_ID_SMS_PERMISSION = 12;
+    public static final int REQUEST_ID_CALL_PHONE_PERMISSION = 13;
+
+    private  boolean checkAndRequestSMSPermission() {
         int sendSMSPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (sendSMSPermission != PackageManager.PERMISSION_GRANTED) {
@@ -143,12 +151,17 @@ public class ReportDetailActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (outState.isEmpty()) {
-            outState.putBoolean("bug:fix", true);
+    private  boolean checkAndRequestCallPhonePermission() {
+        int callPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (callPhonePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
         }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_CALL_PHONE_PERMISSION);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -168,7 +181,7 @@ public class ReportDetailActivity extends AppCompatActivity
                     for (int i = 0; i < permissions.length; i++)
                         perms.put(permissions[i], grantResults[i]);
 
-                    // Check for both permissions
+                    // Check for SMS permission
                     if (perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
 
                         Log.d("doMessage()", "sms permission granted");
@@ -184,7 +197,7 @@ public class ReportDetailActivity extends AppCompatActivity
                                         public void onClick(DialogInterface dialog, int which) {
                                             switch (which) {
                                                 case DialogInterface.BUTTON_POSITIVE:
-                                                    checkAndRequestSMSPermissions();
+                                                    checkAndRequestSMSPermission();
                                                     break;
                                                 case DialogInterface.BUTTON_NEGATIVE:
                                                     // disable the SMS functionality
@@ -206,23 +219,87 @@ public class ReportDetailActivity extends AppCompatActivity
                     }
                 }
             }
+            case REQUEST_ID_CALL_PHONE_PERMISSION: {
+
+                Log.d("doCall()", "Call Phone Permission callback called");
+                Map<String, Integer> perms = new HashMap<>();
+
+                // Initialize the map
+                perms.put(Manifest.permission.CALL_PHONE, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
+
+                    // Check for CALL permission
+                    if (perms.get(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+
+                        Log.d("doCall()", "call phone permission granted");
+                        EnableCallButton(true);
+                        break;
+                    }
+                    else {
+                        Log.d("doCall()", "Some permissions are not granted. Ask again: ");
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
+                            showDialogOK("Phone Permission is required for calling.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
+                                                case DialogInterface.BUTTON_POSITIVE:
+                                                    checkAndRequestCallPhonePermission();
+                                                    break;
+                                                case DialogInterface.BUTTON_NEGATIVE:
+                                                    // disable the call assignee functionality
+                                                    EnableCallButton(false);
+                                                    break;
+                                            }
+                                        }
+                                    });
+                            break;
+                        }
+                        //permission is denied (and never ask again is  checked)
+                        //shouldShowRequestPermissionRationale will return false
+                        else {
+                            Toast.makeText(this, "Go to Settings and enable Phone permission for the  Resort Manager before calling from the app.", Toast.LENGTH_LONG).show();
+                            // disable the call assignee functionality
+                            EnableCallButton(false);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private void EnableMessageButton(boolean bEnable) {
+    @Override
+    public void EnableEmailButton(boolean bEnable) {
+        if (emailMenuItem != null) {
+            emailMenuItem.setEnabled(bEnable);
+            emailMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableMessageButton(boolean bEnable) {
         if (messageMenuItem != null) {
             messageMenuItem.setEnabled(bEnable);
             messageMenuItem.setVisible(bEnable);
         }
-
     }
 
-    private void EnableCallButton(boolean bEnable) {
+    @Override
+    public void EnableCallButton(boolean bEnable) {
         if (callMenuItem != null) {
             callMenuItem.setEnabled(bEnable);
             callMenuItem.setVisible(bEnable);
         }
+    }
 
+    @Override
+    public void RedrawOptionsMenu() {
+        invalidateOptionsMenu();
     }
 
     private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {

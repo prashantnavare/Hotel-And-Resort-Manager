@@ -471,7 +471,6 @@ public class MainActivity extends Activity {
     // TODO: in reservation detail, if mobile # is specified, then enable call and sms buttons
     // TODO: in reservation detail, if e-mail is specified, then enable e-mail button
     // TODO: Do the above two steps for Completed reservations as well
-    // TODO: in reservation detail, flip from date and days so that from date is first
     // TODO: in reservation detail, Add optional Arrival Details for waiting reservations. No arrival Details after checkin. Show arrival details in brackets after dates in FTS list
 
     // TODO: Reservations goes to a new activity with 3 buttons: Pending, Checked In and Historical

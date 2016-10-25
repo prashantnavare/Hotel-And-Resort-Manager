@@ -45,6 +45,10 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
 
     public interface Callbacks {
         void setTitleString(String titleString);
+        void EnableEmailButton(boolean bEnable);
+        void EnableMessageButton(boolean bEnable);
+        void EnableCallButton(boolean bEnable);
+        void RedrawOptionsMenu();
     }
 
     /**
@@ -55,12 +59,25 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         @Override
         public void setTitleString(String titleString) {
         }
+        @Override
+        public void EnableEmailButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableMessageButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableCallButton(boolean bEnable) {
+        }
+        @Override
+        public void RedrawOptionsMenu() {
+        }
     };
 
     private Callbacks mCallbacks = sDummyCallbacks;
 
     private TextView mTextName;
-    private TextView mTextContactInfo;
+    private TextView mTextPhoneNUmber;
+    private TextView mTextEmailAddress;
     private TextView mTextNumAdults;
     private TextView mTextNumChildren;
     private TextView mTextNumDays;
@@ -148,7 +165,8 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         View rootView = inflater.inflate(R.layout.fragment_report_detail, container, false);
 
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
-        mTextContactInfo = ((TextView) rootView.findViewById(R.id.textContactInfo));
+        mTextPhoneNUmber = ((TextView) rootView.findViewById(R.id.textPhoneNumber));
+        mTextEmailAddress = ((TextView) rootView.findViewById(R.id.textEmailAddress));
         mTextNumAdults = ((TextView) rootView.findViewById(R.id.textNumAdults));
         mTextNumChildren = ((TextView) rootView.findViewById(R.id.textNumChildren));
         mTextNumDays = (TextView) rootView.findViewById(R.id.textNumDays);
@@ -218,7 +236,8 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mCompletedFTSName);
-        mTextContactInfo.setText(mReservation.mCompletedFTSPhoneNumber);
+        mTextPhoneNUmber.setText(mReservation.mCompletedFTSPhoneNumber);
+        mTextEmailAddress.setText(mReservation.mCompletedFTSEmailAddress);
         mTextNumAdults.setText(mReservation.mCompletedFTSNumAdults);
         mTextNumChildren.setText(mReservation.mCompletedFTSNumChildren);
         mTextNumDays.setText(mReservation.mCompletedFTSNumDays);
@@ -233,6 +252,11 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         mTextTotalCharge.setText(mReservation.mCompletedFTSTotalCharge);
 
         mCallbacks.setTitleString("Details for " + mReservation.mCompletedFTSName) ;
+
+        mCallbacks.EnableEmailButton(true);
+        mCallbacks.EnableMessageButton(true);
+        mCallbacks.EnableCallButton(true);
+        mCallbacks.RedrawOptionsMenu();
     }
 
     public void doEmail(String emailAddress) {
@@ -314,6 +338,18 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         return smsMessage;
     }
 
-    public String getEmailAddress() { return mReservation.mEmailAddress; }
-    public String getPhoneNumber() { return mReservation.mPhoneNumber; }
+    public String getEmailAddress() {
+        return mReservation.mCompletedFTSEmailAddress;
+    }
+
+    public String getPhoneNumber() {
+        return mReservation.mCompletedFTSPhoneNumber;
+    }
+
+    public void callAssignee() {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + mReservation.mCompletedFTSPhoneNumber));
+        startActivity(callIntent);
+    }
+
 }

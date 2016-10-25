@@ -197,6 +197,38 @@
                         />
 
                 </LinearLayout>
+
+                <!-- From Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="From Date"
+                        android:padding="5dp"
+                        />
+                    <Button
+                        android:id="@+id/btnFromDate"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:padding="5dp"
+                        android:textStyle="bold"
+                        android:text="@string/set_date"
+                        android:textColor="#ffffff"
+                        android:layout_marginRight="100dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_shape"
+                        />
+                </LinearLayout>
+
                 <!-- Num of days -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -230,36 +262,6 @@
 
                 </LinearLayout>
 
-                <!-- From Date -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="10dp"
-                    >
-                    <TextView
-                        android:layout_weight="3"
-                        android:textSize="12sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="From Date"
-                        android:padding="5dp"
-                        />
-                    <Button
-                        android:id="@+id/btnFromDate"
-                        android:layout_weight="1"
-                        android:textSize="12sp"
-                        android:layout_width="match_parent"
-                        android:padding="5dp"
-                        android:textStyle="bold"
-                        android:text="@string/set_date"
-                        android:textColor="#ffffff"
-                        android:layout_marginRight="100dp"
-                        android:layout_height="30dp"
-                        android:background="@drawable/button_shape"
-                        />
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

@@ -63,7 +63,7 @@
 
             </LinearLayout>
 
-            <!-- Contact Info -->
+            <!-- PhoneNumber -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,13 +78,46 @@
                     android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Contact Info"
+                    android:text="Phone Number"
                     android:padding="5dp"
                     />
 
                 <TextView
-                    android:id="@+id/textContactInfo"
-                    android:hint="Mobile #, email etc."
+                    android:id="@+id/textPhoneNumber"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:inputType="textMultiLine"
+                    android:cursorVisible="true"
+                    android:background="@drawable/textview_shape_readonly"
+                    android:layout_marginRight="5dp"
+                    />
+
+            </LinearLayout>
+
+            <!-- E-mail Address -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                >
+
+                <TextView
+                    android:layout_weight="3"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="E-mail Address"
+                    android:padding="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/textEmailAddress"
                     android:layout_weight="1"
                     android:textSize="12sp"
                     android:layout_width="match_parent"
