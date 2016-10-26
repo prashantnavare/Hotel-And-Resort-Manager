@@ -789,8 +789,15 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mCallbacks.EnableCallButton(true);
             mCallbacks.EnableMessageButton(true);
         }
+        else {
+            mCallbacks.EnableCallButton(false);
+            mCallbacks.EnableMessageButton(false);
+        }
         if (mReservation.mEmailAddress.isEmpty() == false) {
             mCallbacks.EnableEmailButton(true);
+        }
+        else {
+            mCallbacks.EnableEmailButton(false);
         }
         mCallbacks.RedrawOptionsMenu();
         mCallbacks.setTitleString(mReservation.mName + " - " + mReservation.getStatusString()) ;
