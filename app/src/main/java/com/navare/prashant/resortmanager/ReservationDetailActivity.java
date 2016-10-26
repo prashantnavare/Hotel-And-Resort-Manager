@@ -157,8 +157,6 @@ public class ReservationDetailActivity extends AppCompatActivity
         }
     }
 
-    private static final int REQUEST_ID_STORAGE_PERMISSION = 13;
-
     private boolean saveReservation() {
         return ((ReservationDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.reservation_detail_container)).saveReservation();
