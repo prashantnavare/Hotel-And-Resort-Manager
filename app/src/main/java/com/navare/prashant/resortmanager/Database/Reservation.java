@@ -46,6 +46,7 @@ public class Reservation {
 
     public static final String COL_PHONE_NO = "phoneNumber";
     public static final String COL_EMAIL = "emailAddress";
+    public static final String COL_ARRIVAL_DETAILS = "arrivalDetails";
 
     public static final int WaitingStatus = 1;
     public static final int CheckedInStatus = 2;
@@ -76,7 +77,8 @@ public class Reservation {
             COL_TOTAL_CHARGE,
 
             COL_PHONE_NO,
-            COL_EMAIL
+            COL_EMAIL,
+            COL_ARRIVAL_DETAILS
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -110,6 +112,7 @@ public class Reservation {
 
         map.put(COL_PHONE_NO, COL_PHONE_NO);
         map.put(COL_EMAIL, COL_EMAIL);
+        map.put(COL_ARRIVAL_DETAILS, COL_ARRIVAL_DETAILS);
         return map;
     }
 
@@ -140,7 +143,8 @@ public class Reservation {
                     + COL_TOTAL_CHARGE + " INTEGER, "
 
                     + COL_PHONE_NO + " TEXT DEFAULT '' ,"
-                    + COL_EMAIL + " TEXT DEFAULT '' "
+                    + COL_EMAIL + " TEXT DEFAULT '' ,"
+                    + COL_ARRIVAL_DETAILS + " TEXT DEFAULT '' "
                     + ")";
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -165,6 +169,7 @@ public class Reservation {
 
     public String mPhoneNumber = "";
     public String mEmailAddress = "";
+    public String mArrivalDetails = "";
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -198,6 +203,7 @@ public class Reservation {
 
         this.mPhoneNumber = cursor.getString(16);
         this.mEmailAddress = cursor.getString(17);
+        this.mArrivalDetails = cursor.getString(18);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -227,6 +233,7 @@ public class Reservation {
 
         values.put(COL_PHONE_NO, mPhoneNumber);
         values.put(COL_EMAIL, mEmailAddress);
+        values.put(COL_ARRIVAL_DETAILS, mArrivalDetails);
         return values;
     }
 
@@ -255,6 +262,7 @@ public class Reservation {
 
         mPhoneNumber = values.getAsString(COL_PHONE_NO);
         mEmailAddress = values.getAsString(COL_EMAIL);
+        mArrivalDetails = values.getAsString(COL_ARRIVAL_DETAILS);
     }
 
     public String getStatusString() {

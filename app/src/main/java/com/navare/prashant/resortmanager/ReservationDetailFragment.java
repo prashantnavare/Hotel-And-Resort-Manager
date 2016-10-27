@@ -76,6 +76,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private TextView mTextNumChildren;
     private TextView mTextNumDays;
     private Button mBtnFromDate;
+    private LinearLayout mArrivalDetailsLayout;
+    private TextView mTextArrivalDetails;
 
     private LinearLayout mSelectedRoomsLayout;
     private TextView mSelectedRoomTextLabel;
@@ -277,9 +279,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextNumChildren = ((TextView) rootView.findViewById(R.id.textNumChildren));
         mTextNumChildren.addTextChangedListener(this);
 
-        mTextNumDays = (TextView) rootView.findViewById(R.id.textNumDays);
-        mTextNumDays.addTextChangedListener(this);
-
         mBtnFromDate = (Button) rootView.findViewById(R.id.btnFromDate);
         mBtnFromDate.setOnClickListener(new View.OnClickListener() {
 
@@ -288,6 +287,13 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 showDatePicker();
             }
         });
+
+        mTextNumDays = (TextView) rootView.findViewById(R.id.textNumDays);
+        mTextNumDays.addTextChangedListener(this);
+
+        mArrivalDetailsLayout = (LinearLayout) rootView.findViewById(R.id.arrivalDetailsLayout);
+        mTextArrivalDetails = (TextView) rootView.findViewById(R.id.textArrivalDetails);
+        mTextArrivalDetails.addTextChangedListener(this);
 
         mSelectedRoomsLayout = (LinearLayout) rootView.findViewById(R.id.selectedRoomsLayout);
         mSelectedRoomListView = (ListView) rootView.findViewById(R.id.list);
@@ -753,6 +759,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             toDate.setTimeInMillis(mReservation.mFromDate + TimeUnit.MILLISECONDS.convert(mReservation.mNumDays, TimeUnit.DAYS));
             mReservation.mToDate = toDate.getTimeInMillis();
         }
+        if (mTextArrivalDetails.getText().toString().isEmpty() == false) {
+            mReservation.mArrivalDetails = mTextArrivalDetails.getText().toString();
+        }
+
         mReservation.mNumRooms = mSelectedRoomListView.getCheckedItemCount();
         return true;
     }
@@ -775,6 +785,14 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             mBtnFromDate.setText("Set");
         }
+        if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
+            mArrivalDetailsLayout.setVisibility(View.VISIBLE);
+            mTextArrivalDetails.setText(String.valueOf(mReservation.mArrivalDetails));
+        }
+        else if (mReservation.mCurrentStatus == Reservation.CheckedInStatus) {
+            mArrivalDetailsLayout.setVisibility(View.GONE);
+        }
+
         // Toggle the action bar buttons appropriately
         mCallbacks.EnableDeleteButton(true);
         mCallbacks.EnableRevertButton(false);
@@ -814,6 +832,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextNumChildren.setText("");
         mTextNumDays.setText("");
         mBtnFromDate.setText("Set");
+        mTextArrivalDetails.setText("");
 
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
