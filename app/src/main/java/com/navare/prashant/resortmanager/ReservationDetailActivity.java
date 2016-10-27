@@ -1,16 +1,29 @@
 package com.navare.prashant.resortmanager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.navare.prashant.resortmanager.util.EmailDialogFragment;
+import com.navare.prashant.resortmanager.util.SMSDialogFragment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,7 +36,7 @@ import android.widget.Toast;
  * more than a {@link ReservationDetailFragment}.
  */
 public class ReservationDetailActivity extends AppCompatActivity
-        implements ReservationDetailFragment.Callbacks {
+        implements ReservationDetailFragment.Callbacks, EmailDialogFragment.EmailDialogListener, SMSDialogFragment.SMSDialogListener  {
 
     private MenuItem checkinMenuItem = null;
     private MenuItem checkoutMenuItem = null;
@@ -45,7 +58,7 @@ public class ReservationDetailActivity extends AppCompatActivity
     private boolean mbRevertMenuEnable = false;
     private boolean mbDeleteMenuEnable = false;
 
-
+    private ReservationDetailFragment mMyFragment;
     private Activity mThisActivity;
 
     @Override
@@ -71,10 +84,10 @@ public class ReservationDetailActivity extends AppCompatActivity
             Bundle arguments = new Bundle();
             arguments.putString(ReservationDetailFragment.ARG_RESERVATION_ID,
                     getIntent().getStringExtra(ReservationDetailFragment.ARG_RESERVATION_ID));
-            ReservationDetailFragment fragment = new ReservationDetailFragment();
-            fragment.setArguments(arguments);
+            mMyFragment = new ReservationDetailFragment();
+            mMyFragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.reservation_detail_container, fragment)
+                    .add(R.id.reservation_detail_container, mMyFragment)
                     .commit();
         }
         mThisActivity = this;
@@ -135,13 +148,13 @@ public class ReservationDetailActivity extends AppCompatActivity
                 doCompleteCheckout();
                 return true;
             case R.id.menu_call:
-                // TODO: doCall();
+                doCall();
                 return true;
             case R.id.menu_message:
-                // TODO: doMessage();
+                doMessage();
                 return true;
             case R.id.menu_email:
-                // TODO: doEmail();
+                doEmail();
                 return true;
             case R.id.menu_save:
                 saveReservation();
@@ -156,6 +169,175 @@ public class ReservationDetailActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void doEmail() {
+        EmailDialogFragment dialog = new EmailDialogFragment();
+        dialog.setEmailAddress(mMyFragment.getEmailAddress());
+        dialog.show(getSupportFragmentManager(), "EmailDialogFragment");
+    }
+
+    private void doMessage() {
+        if(checkAndRequestSMSPermission()) {
+            SMSDialogFragment dialog = new SMSDialogFragment();
+            dialog.setMobileNumber(mMyFragment.getPhoneNumber());
+            dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
+        }
+    }
+
+    private void doCall() {
+        if(checkAndRequestCallPhonePermission()) {
+            ((ReservationDetailFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.reservation_detail_container)).callCustomer();
+        }
+    }
+
+    public static final int REQUEST_ID_SMS_PERMISSION = 12;
+    public static final int REQUEST_ID_CALL_PHONE_PERMISSION = 13;
+
+    private  boolean checkAndRequestSMSPermission() {
+        int sendSMSPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (sendSMSPermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_SMS_PERMISSION);
+            return false;
+        }
+        return true;
+    }
+
+    private  boolean checkAndRequestCallPhonePermission() {
+        int callPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (callPhonePermission != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_CALL_PHONE_PERMISSION);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+
+            case REQUEST_ID_SMS_PERMISSION: {
+
+                Log.d("doMessage()", "SMS Permission callback called");
+                Map<String, Integer> perms = new HashMap<>();
+
+                // Initialize the map with SMS permission
+                perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
+
+                    // Check for SMS permission
+                    if (perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+
+                        Log.d("doMessage()", "sms permission granted");
+                        EnableMessageButton(true);
+                        break;
+                    }
+                    else {
+                        Log.d("doMessage()", "SMS permission are not granted. Ask again: ");
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
+                            showDialogOK("SMS Permission is required for sending SMS.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
+                                                case DialogInterface.BUTTON_POSITIVE:
+                                                    checkAndRequestSMSPermission();
+                                                    break;
+                                                case DialogInterface.BUTTON_NEGATIVE:
+                                                    // disable the SMS functionality
+                                                    EnableMessageButton(false);
+                                                    break;
+                                            }
+                                        }
+                                    });
+                            break;
+                        }
+                        //permission is denied (and never ask again is  checked)
+                        //shouldShowRequestPermissionRationale will return false
+                        else {
+                            Toast.makeText(this, "Go to Settings and enable SMS permissions for the  Resort Manager before sending SMSs.", Toast.LENGTH_LONG).show();
+                            // disable the assign task functionality
+                            EnableMessageButton(false);
+                            break;
+                        }
+                    }
+                }
+            }
+            case REQUEST_ID_CALL_PHONE_PERMISSION: {
+
+                Log.d("doCall()", "Call Phone Permission callback called");
+                Map<String, Integer> perms = new HashMap<>();
+
+                // Initialize the map
+                perms.put(Manifest.permission.CALL_PHONE, PackageManager.PERMISSION_GRANTED);
+
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
+
+                    // Check for CALL permission
+                    if (perms.get(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+
+                        Log.d("doCall()", "call phone permission granted");
+                        EnableCallButton(true);
+                        break;
+                    }
+                    else {
+                        Log.d("doCall()", "Some permissions are not granted. Ask again: ");
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
+                            showDialogOK("Phone Permission is required for calling.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
+                                                case DialogInterface.BUTTON_POSITIVE:
+                                                    checkAndRequestCallPhonePermission();
+                                                    break;
+                                                case DialogInterface.BUTTON_NEGATIVE:
+                                                    // disable the call assignee functionality
+                                                    EnableCallButton(false);
+                                                    break;
+                                            }
+                                        }
+                                    });
+                            break;
+                        }
+                        //permission is denied (and never ask again is  checked)
+                        //shouldShowRequestPermissionRationale will return false
+                        else {
+                            Toast.makeText(this, "Go to Settings and enable Phone permission for the  Resort Manager before calling from the app.", Toast.LENGTH_LONG).show();
+                            // disable the call assignee functionality
+                            EnableCallButton(false);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", okListener)
+                .create()
+                .show();
+    }
+
 
     private boolean saveReservation() {
         return ((ReservationDetailFragment) getSupportFragmentManager()
@@ -201,17 +383,9 @@ public class ReservationDetailActivity extends AppCompatActivity
 
         // First, get a confirmation from the user
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        // Setting Dialog Title
         alertDialog.setTitle("Delete");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Are you sure you want to delete this reservation?");
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_delete);
-
-        // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -219,15 +393,11 @@ public class ReservationDetailActivity extends AppCompatActivity
                         .findFragmentById(R.id.reservation_detail_container)).deleteReservation();
             }
         });
-
-        // Setting Negative "NO" Button
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-
-        // Showing Alert Message
         alertDialog.show();
     }
 
@@ -374,4 +544,25 @@ public class ReservationDetailActivity extends AppCompatActivity
         setTitle(titleString);
     }
 
+    @Override
+    public void onEmailDialogEmailClick(EmailDialogFragment dialog) {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).doEmail(dialog.getEmailAddress());
+    }
+
+    @Override
+    public void onEmailDialogCancelClick(EmailDialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onSMSDialogSMSClick(SMSDialogFragment dialog) {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).doSMS(dialog.getMobileNumber());
+    }
+
+    @Override
+    public void onSMSDialogCancelClick(SMSDialogFragment dialog) {
+
+    }
 }

@@ -48,7 +48,7 @@ public class ReportDetailActivity extends AppCompatActivity
     private MenuItem emailMenuItem = null;
     private MenuItem messageMenuItem = null;
     private MenuItem callMenuItem = null;
-    ReportDetailFragment mMyFragment;
+    private ReportDetailFragment mMyFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +131,7 @@ public class ReportDetailActivity extends AppCompatActivity
     private void doCall() {
         if(checkAndRequestCallPhonePermission()) {
             ((ReportDetailFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.report_detail_container)).callAssignee();
+                    .findFragmentById(R.id.report_detail_container)).callCustomer();
         }
     }
 

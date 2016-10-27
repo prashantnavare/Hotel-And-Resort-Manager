@@ -272,10 +272,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         startActivity(Intent.createChooser(emailIntent, "Send e-mail"));
     }
 
-    public void doMessage() {
-
-    }
-
     String constructEmailSubject() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String organizationName = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
@@ -346,7 +342,7 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         return mReservation.mCompletedFTSPhoneNumber;
     }
 
-    public void callAssignee() {
+    public void callCustomer() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + mReservation.mCompletedFTSPhoneNumber));
         startActivity(callIntent);

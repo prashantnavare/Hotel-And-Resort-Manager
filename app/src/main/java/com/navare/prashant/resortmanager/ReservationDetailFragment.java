@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -833,4 +835,36 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
+
+    public String getEmailAddress() {
+        return mReservation.mEmailAddress;
+    }
+
+    public String getPhoneNumber() {
+        return mReservation.mPhoneNumber;
+    }
+
+    public void callCustomer() {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + mReservation.mPhoneNumber));
+        startActivity(callIntent);
+    }
+
+    public void doEmail(String emailAddress) {
+
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{ emailAddress});
+        emailIntent.setType("message/rfc822");
+
+        startActivity(Intent.createChooser(emailIntent, "Send e-mail"));
+    }
+
+    public void doSMS(String mobileNumber) {
+        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+        smsIntent.setType("vnd.android-dir/mms-sms");
+        smsIntent.putExtra("address", mobileNumber);
+        startActivity(smsIntent);
+    }
+
+
 }
