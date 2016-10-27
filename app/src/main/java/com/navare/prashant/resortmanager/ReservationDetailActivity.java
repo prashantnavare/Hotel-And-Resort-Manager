@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -171,24 +172,34 @@ public class ReservationDetailActivity extends AppCompatActivity
     }
 
     private void doEmail() {
-        EmailDialogFragment dialog = new EmailDialogFragment();
-        dialog.setEmailAddress(mMyFragment.getEmailAddress());
-        dialog.show(getSupportFragmentManager(), "EmailDialogFragment");
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{ mMyFragment.getEmailAddress()});
+        emailIntent.setType("message/rfc822");
+
+        startActivity(Intent.createChooser(emailIntent, "Send e-mail"));
     }
 
     private void doMessage() {
         if(checkAndRequestSMSPermission()) {
-            SMSDialogFragment dialog = new SMSDialogFragment();
-            dialog.setMobileNumber(mMyFragment.getPhoneNumber());
-            dialog.show(getSupportFragmentManager(), "SMSDialogFragment");
+            invokeSMSManager();
         }
+    }
+
+    private void invokeSMSManager() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("smsto:" + Uri.encode(mMyFragment.getPhoneNumber())));
+        startActivity(intent);
     }
 
     private void doCall() {
         if(checkAndRequestCallPhonePermission()) {
-            ((ReservationDetailFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.reservation_detail_container)).callCustomer();
+            invokeCallingApp();
         }
+    }
+
+    private void invokeCallingApp() {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).callCustomer();
     }
 
     public static final int REQUEST_ID_SMS_PERMISSION = 12;
@@ -242,6 +253,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
                         Log.d("doMessage()", "sms permission granted");
                         EnableMessageButton(true);
+                        invokeSMSManager();
                         break;
                     }
                     else {
@@ -293,6 +305,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
                         Log.d("doCall()", "call phone permission granted");
                         EnableCallButton(true);
+                        invokeCallingApp();
                         break;
                     }
                     else {

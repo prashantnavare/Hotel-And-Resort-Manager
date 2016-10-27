@@ -303,9 +303,11 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
     }
 
     public void doSMS(String mobileNumber) {
-        final SmsManager sms = SmsManager.getDefault();
         String smsMessage = constructSMS();
-        sms.sendTextMessage(mobileNumber, null, smsMessage, null, null);
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("smsto:" + Uri.encode(mobileNumber)));
+        intent.putExtra("sms_body", smsMessage);
+        startActivity(intent);
     }
 
     String constructSMS() {
@@ -328,7 +330,7 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
             smsMessage = smsMessage + "Additional Charges: " + mReservation.mCompletedFTSAdditionalCharge + "\r\n";
         if (mReservation.mCompletedFTSTaxPercent.equalsIgnoreCase("0") == false)
             smsMessage = smsMessage + "Tax Percentage: " + mReservation.mCompletedFTSTaxPercent + "\r\n";
-        smsMessage = smsMessage + "\r\n\r\n";
+        smsMessage = smsMessage + "\r\n";
         smsMessage = smsMessage + "Total Charges: " + mReservation.mCompletedFTSTotalCharge + "\r\n";
 
         return smsMessage;
