@@ -45,9 +45,10 @@ public class ReservationDetailActivity extends AppCompatActivity
     private MenuItem callMenuItem = null;
     private MenuItem messageMenuItem = null;
     private MenuItem emailMenuItem = null;
-    private MenuItem deleteMenuItem = null;
-    private MenuItem revertMenuItem = null;
+    private MenuItem zoomInMenuItem = null;
     private MenuItem saveMenuItem = null;
+    private MenuItem revertMenuItem = null;
+    private MenuItem deleteMenuItem = null;
 
     private boolean mbCheckinMenuEnable = false;
     private boolean mbCheckoutMenuEnable = false;
@@ -55,6 +56,7 @@ public class ReservationDetailActivity extends AppCompatActivity
     private boolean mbCallMenuEnable = false;
     private boolean mbMessageMenuEnable = false;
     private boolean mbEmailMenuEnable = false;
+    private boolean mbZoomInMenuEnable = false;
     private boolean mbSaveMenuEnable = false;
     private boolean mbRevertMenuEnable = false;
     private boolean mbDeleteMenuEnable = false;
@@ -107,9 +109,10 @@ public class ReservationDetailActivity extends AppCompatActivity
         callMenuItem = menu.getItem(3);
         messageMenuItem = menu.getItem(4);
         emailMenuItem = menu.getItem(5);
-        saveMenuItem = menu.getItem(6);
-        revertMenuItem = menu.getItem(7);
-        deleteMenuItem = menu.getItem(8);
+        zoomInMenuItem = menu.getItem(6);
+        saveMenuItem = menu.getItem(7);
+        revertMenuItem = menu.getItem(8);
+        deleteMenuItem = menu.getItem(9);
 
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here
@@ -120,6 +123,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         EnableCallButton(mbCallMenuEnable);
         EnableMessageButton(mbMessageMenuEnable);
         EnableEmailButton(mbEmailMenuEnable);
+        EnableZoomInButton(mbZoomInMenuEnable);
         EnableSaveButton(mbSaveMenuEnable);
         EnableRevertButton(mbRevertMenuEnable);
         EnableDeleteButton(mbDeleteMenuEnable);
@@ -156,6 +160,9 @@ public class ReservationDetailActivity extends AppCompatActivity
                 return true;
             case R.id.menu_email:
                 doEmail();
+                return true;
+            case R.id.menu_zoomin:
+                doZoomIn();
                 return true;
             case R.id.menu_save:
                 saveReservation();
@@ -419,6 +426,11 @@ public class ReservationDetailActivity extends AppCompatActivity
                 .findFragmentById(R.id.reservation_detail_container)).doCheckin();
     }
 
+    private void doZoomIn() {
+        ((ReservationDetailFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.reservation_detail_container)).doZoomIn();
+    }
+
     private void doCheckout() {
         ((ReservationDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.reservation_detail_container)).doCheckout();
@@ -485,6 +497,15 @@ public class ReservationDetailActivity extends AppCompatActivity
         if (emailMenuItem != null) {
             emailMenuItem.setEnabled(bEnable);
             emailMenuItem.setVisible(bEnable);
+        }
+    }
+
+    @Override
+    public void EnableZoomInButton(boolean bEnable) {
+        mbZoomInMenuEnable = bEnable;
+        if (zoomInMenuItem != null) {
+            zoomInMenuItem.setEnabled(bEnable);
+            zoomInMenuItem.setVisible(bEnable);
         }
     }
 

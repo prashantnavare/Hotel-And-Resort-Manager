@@ -117,6 +117,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void EnableCallButton(boolean bEnable);
         void EnableMessageButton(boolean bEnable);
         void EnableEmailButton(boolean bEnable);
+        void EnableZoomInButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
         void EnableDeleteButton(boolean bEnable);
@@ -149,6 +150,9 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         @Override
         public void EnableEmailButton(boolean bEnable) {
+        }
+        @Override
+        public void EnableZoomInButton(boolean bEnable) {
         }
         @Override
         public void EnableSaveButton(boolean bEnable) {
@@ -548,6 +552,19 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         // First swap out the reserveationDetailsScrollView with the roomLayout
         mReservationDetailsScrollView.setVisibility(View.GONE);
         mSelectedRoomsLayout.setVisibility(View.VISIBLE);
+        mBtnCheckin.setText("Checkin");
+        mBtnCheckin.setOnClickListener(onCheckinClicked);
+        mBtnCheckin.setEnabled(false);
+        updateSelectedRoomsUI();
+    }
+
+    public void doZoomIn() {
+        // First swap out the reserveationDetailsScrollView with the roomLayout
+        mReservationDetailsScrollView.setVisibility(View.GONE);
+        mSelectedRoomsLayout.setVisibility(View.VISIBLE);
+        mBtnCheckin.setText("Save");
+        mBtnCheckin.setOnClickListener(onSaveRoomsClicked);
+        mBtnCheckin.setEnabled(false);
         updateSelectedRoomsUI();
     }
 
@@ -568,6 +585,28 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 }
             };
 
+    private View.OnClickListener onSaveRoomsClicked=
+            new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    doSaveSelectedRooms();
+                }
+            };
+
+
+    private void doSaveSelectedRooms() {
+        mReservation.mNumRooms = mSelectedRoomListView.getCheckedItemCount();
+        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
+                mReservationID);
+        int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
+        if (result > 0) {
+            // Get all the selected rooms and update their status
+            updateSelectedRooms();
+            mReservationDetailsScrollView.setVisibility(View.VISIBLE);
+            mSelectedRoomsLayout.setVisibility(View.GONE);
+        }
+
+    }
 
     private void doTheRealCheckin() {
         // The fromDate becomes today
@@ -829,10 +868,12 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
             mCallbacks.EnableCheckinButton(true);
             mCallbacks.EnableCheckoutButton(false);
+            mCallbacks.EnableZoomInButton(false);
         }
         else if (mReservation.mCurrentStatus == Reservation.CheckedInStatus) {
             mCallbacks.EnableCheckinButton(false);
             mCallbacks.EnableCheckoutButton(true);
+            mCallbacks.EnableZoomInButton(true);
         }
         if (mReservation.mPhoneNumber.isEmpty() == false) {
             mCallbacks.EnableCallButton(true);
@@ -915,6 +956,4 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         smsIntent.putExtra("address", mobileNumber);
         startActivity(smsIntent);
     }
-
-
 }

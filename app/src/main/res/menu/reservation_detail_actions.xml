@@ -25,6 +25,10 @@
         android:icon="@drawable/ic_menu_mail"
         resortmanager:showAsAction="ifRoom|collapseActionView"
         android:title="E-mail"/>
+    <item android:id="@+id/menu_zoomin"
+        android:icon="@drawable/ic_menu_zoom_in"
+        resortmanager:showAsAction="ifRoom|collapseActionView"
+        android:title="Zoom In"/>
     <item android:id="@+id/menu_save"
         android:icon="@drawable/ic_menu_save"
         resortmanager:showAsAction="ifRoom|collapseActionView"
