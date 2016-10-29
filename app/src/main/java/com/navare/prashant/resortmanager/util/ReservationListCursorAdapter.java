@@ -50,14 +50,20 @@ public class ReservationListCursorAdapter extends SimpleCursorAdapter {
                 e.printStackTrace();
             }
             if (fromDate.before(todayDate)) {
+                TextView textName = (TextView) view.findViewById(R.id.textReservationName);
+                TextView textDates = (TextView) view.findViewById(R.id.textReservationDates);
+                TextView textStatus = (TextView) view.findViewById(R.id.textReservationStatus);
+
                 long numberOfDaysOld = TimeUnit.DAYS.convert((todayDate.getTimeInMillis() - fromDate.getTimeInMillis()), TimeUnit.MILLISECONDS);
                 if (numberOfDaysOld >= 1) {
-                    TextView textName = (TextView) view.findViewById(R.id.textReservationName);
-                    TextView textDates = (TextView) view.findViewById(R.id.textReservationDates);
-                    TextView textStatus = (TextView) view.findViewById(R.id.textReservationStatus);
                     textName.setTextColor(Color.RED);
                     textDates.setTextColor(Color.RED);
                     textStatus.setTextColor(Color.RED);
+                }
+                else {
+                    textName.setTextColor(Color.DKGRAY);
+                    textDates.setTextColor(Color.DKGRAY);
+                    textStatus.setTextColor(Color.DKGRAY);
                 }
             }
         }

@@ -57,7 +57,6 @@
 
                         <EditText
                             android:id="@+id/textName"
-                            android:hint="Name"
                             android:layout_weight="1"
                             android:textSize="12sp"
                             android:layout_width="match_parent"
@@ -92,7 +91,6 @@
 
                         <EditText
                             android:id="@+id/textPhoneNumber"
-                            android:hint="Mobile # or Landline # with STD code"
                             android:layout_weight="1"
                             android:textSize="12sp"
                             android:layout_width="match_parent"
@@ -127,7 +125,6 @@
 
                         <EditText
                             android:id="@+id/textEmailAddress"
-                            android:hint="e.g. a@b.com"
                             android:layout_weight="1"
                             android:textSize="12sp"
                             android:layout_width="match_parent"

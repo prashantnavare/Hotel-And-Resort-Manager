@@ -467,8 +467,6 @@ public class MainActivity extends Activity {
         mButtonRooms.setText(roomButtonString);
     }
 
-    // TODO: in reservation detail, Add optional Arrival Details for waiting reservations. No arrival Details after checkin. Show arrival details in brackets after dates in FTS list
-
     // TODO: Reservations goes to a new activity with 3 buttons: Pending, Checked In and Historical
     // TODO: Change Waiting to Pending
     // TODO: Pending shows only Pending reservations sorted based on fromDate (ascending)
