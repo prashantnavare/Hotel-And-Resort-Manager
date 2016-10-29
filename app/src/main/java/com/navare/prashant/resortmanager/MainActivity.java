@@ -483,7 +483,7 @@ public class MainActivity extends Activity {
     // TODO: Revisit all alert dialogs for proper messaging (e.g. Adults should not empty should read Adults field should not be empty)
     // TODO:
     // TODO:
-    // TODO:
+    // TODO: Sort rooms based on names (in the query for rooms)
     // TODO:
     // TODO:
     // TODO:

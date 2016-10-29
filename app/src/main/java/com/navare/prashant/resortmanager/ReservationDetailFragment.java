@@ -14,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -26,6 +25,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -69,6 +69,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     /**
      * The UI elements showing the details of the reservation
      */
+    private ScrollView mReservationDetailsScrollView;
     private TextView mTextName;
     private TextView mTextPhoneNumber;
     private TextView mTextEmailAddress;
@@ -82,6 +83,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private LinearLayout mSelectedRoomsLayout;
     private TextView mSelectedRoomTextLabel;
     private ListView mSelectedRoomListView;
+    private Button mBtnCheckinCancel;
+    private Button mBtnCheckin;
 
     private LinearLayout mCheckoutLayout;
     private LinearLayout mChildChargeLayout;
@@ -264,6 +267,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         View rootView = inflater.inflate(R.layout.fragment_reservation_detail, container, false);
 
+        mReservationDetailsScrollView = (ScrollView) rootView.findViewById(R.id.reservationDetailsScrollView);
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextName.addTextChangedListener(this);
 
@@ -304,10 +308,24 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 int numItemsSelected = mSelectedRoomListView.getCheckedItemCount();
-                mSelectedRoomTextLabel.setText("Selected Rooms for this reservation: " + String.valueOf(numItemsSelected));
+                mSelectedRoomTextLabel.setText("Please select rooms for this reservation: " + String.valueOf(numItemsSelected) + " rooms selected.");
                 mCallbacks.EnableRevertButton(true);
+                if (numItemsSelected > 0) {
+                    mBtnCheckin.setEnabled(true);
+                }
+                else {
+                    mBtnCheckin.setEnabled(false);
+                }
             }
         });
+        mBtnCheckin = ((Button) rootView.findViewById(R.id.btnCheckin));
+        mBtnCheckin.setOnClickListener(onCheckinClicked);
+        // By default, disable the button till at least 1 room is selected.
+        mBtnCheckin.setEnabled(false);
+
+        mBtnCheckinCancel = ((Button) rootView.findViewById(R.id.btnCheckinCancel));
+        mBtnCheckinCancel.setOnClickListener(onCheckinCancelClicked);
+
 
         // Checkout related
         mCheckoutLayout = (LinearLayout) rootView.findViewById(R.id.checkoutLayout);
@@ -387,12 +405,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         else {
             getLoaderManager().initLoader(LOADER_ID_RESERVATION_DETAILS, null, this);
-            getSelectedRooms();
+            getLoaderManager().restartLoader(LOADER_ID_ROOM_DETAILS, null, this);
         }
-    }
-
-    public void getSelectedRooms() {
-        getLoaderManager().restartLoader(LOADER_ID_ROOM_DETAILS, null, this);
     }
 
     @Override
@@ -434,13 +448,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             }
             else if (loaderID == LOADER_ID_ROOM_DETAILS) {
                 mRoomCursorAdapter.swapCursor(dataCursor);
-                updateSelectedRoomsUI();
             }
         }
     }
 
     private void updateSelectedRoomsUI() {
-        mSelectedRoomsLayout.setVisibility(View.VISIBLE);
         Cursor cursor = mRoomCursorAdapter.getCursor();
         for (int i = 0; i < mSelectedRoomListView.getCount(); i++) {
             cursor.moveToPosition(i);
@@ -452,7 +464,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             }
         }
         int numRoomsSelected = mSelectedRoomListView.getCheckedItemCount();
-        mSelectedRoomTextLabel.setText("Selected Rooms for this reservation: " + String.valueOf(numRoomsSelected));
+        mSelectedRoomTextLabel.setText("Please select rooms for this reservation: " + String.valueOf(numRoomsSelected) + " rooms selected.");
     }
 
     @Override
@@ -533,12 +545,29 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     }
 
     public void doCheckin() {
-        if (mSelectedRoomListView.getCheckedItemCount() == 0) {
-            showAlertDialog("Please select at least one room for the checkin to proceed.");
-        }
-        else
-            doTheRealCheckin();
+        // First swap out the reserveationDetailsScrollView with the roomLayout
+        mReservationDetailsScrollView.setVisibility(View.GONE);
+        mSelectedRoomsLayout.setVisibility(View.VISIBLE);
+        updateSelectedRoomsUI();
     }
+
+    private View.OnClickListener onCheckinClicked=
+            new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    doTheRealCheckin();
+                }
+            };
+
+    private View.OnClickListener onCheckinCancelClicked=
+            new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    mReservationDetailsScrollView.setVisibility(View.VISIBLE);
+                    mSelectedRoomsLayout.setVisibility(View.GONE);
+                }
+            };
+
 
     private void doTheRealCheckin() {
         // The fromDate becomes today
@@ -825,6 +854,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void displayUIForNewReservation() {
+        // For new reservations, show the reservation details scrollview, & hide the room selection layout and checkout layout
+        mReservationDetailsScrollView.setVisibility(View.VISIBLE);
+        mSelectedRoomsLayout.setVisibility(View.GONE);
+        mCheckoutLayout.setVisibility(View.GONE);
+
         mTextName.setText("");
         mTextPhoneNumber.setText("");
         mTextEmailAddress.setText("");
@@ -848,9 +882,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCallbacks.EnableEmailButton(false);
 
         mCallbacks.setTitleString("New Reservation");
-
-        // For new reservations, hide the room selection layout
-        mSelectedRoomsLayout.setVisibility(View.GONE);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
