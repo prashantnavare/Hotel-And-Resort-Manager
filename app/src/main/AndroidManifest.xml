@@ -54,11 +54,11 @@
             android:name=".ReservationListActivity"
             android:label="Reservations"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ReservationsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ReservationsActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -104,11 +104,11 @@
             android:name=".ReportListActivity"
             android:label="Reports"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".ReservationsActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ReservationsActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -188,6 +188,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ItemListActivity" />
+        </activity>
+
+        <!-- Reservations Activity -->
+        <activity
+            android:name=".ReservationsActivity"
+            android:label="Reservations"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
 
         <!-- Setup Activity -->

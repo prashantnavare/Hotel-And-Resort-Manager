@@ -38,10 +38,15 @@ public class ReservationListActivity extends AppCompatActivity
      */
     private boolean mTwoPane;
     private String mQuery = null;
+    private String mType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getIntent().getExtras();
+        mType = bundle.getString("type");
+
         setContentView(R.layout.activity_reservation_list);
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -156,8 +161,13 @@ public class ReservationListActivity extends AppCompatActivity
     }
 
     @Override
+    public String getType() {
+        return mType;
+    }
+
+    @Override
     public void setReservationCount(long reservationCount) {
-        setTitle("Reservations (" + String.valueOf(reservationCount) + ")");
+        setTitle(mType + " Reservations (" + String.valueOf(reservationCount) + ")");
     }
 
     @Override

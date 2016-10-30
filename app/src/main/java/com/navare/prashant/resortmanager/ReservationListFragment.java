@@ -60,6 +60,7 @@ public class ReservationListFragment extends ListFragment {
          */
         void onReservationSelected(String id);
         String getQuery();
+        String getType();
         void setReservationCount(long reservationCount);
     }
 
@@ -71,12 +72,14 @@ public class ReservationListFragment extends ListFragment {
         @Override
         public void onReservationSelected(String id) {
         }
-
         @Override
         public String getQuery() {
             return null;
         }
-
+        @Override
+        public String getType() {
+            return null;
+        }
         @Override
         public void setReservationCount(long reservationCount) {
         }
@@ -97,8 +100,8 @@ public class ReservationListFragment extends ListFragment {
 
         setListAdapter(new ReservationListCursorAdapter(getActivity(),
                 R.layout.reservation_list_row, null,
-                new String[] {Reservation.COL_FTS_RESERVATION_NAME, Reservation.COL_FTS_RESERVATION_DATES, Reservation.COL_FTS_RESERVATION_STATUS},
-                new int[] { R.id.textReservationName, R.id.textReservationDates, R.id.textReservationStatus},
+                new String[] {Reservation.COL_FTS_RESERVATION_NAME, Reservation.COL_FTS_RESERVATION_DATES},
+                new int[] { R.id.textReservationName, R.id.textReservationDates},
                 0));
 
         getNewReservationList(null);
@@ -229,14 +232,21 @@ public class ReservationListFragment extends ListFragment {
         getLoaderManager().restartLoader(LOADER_ID_RESERVATION_LIST, null, new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
                 String [] selectionArgs = null;
                 if (searchString != null) {
                     selectionArgs = new String[] {searchString};
                 }
 
-                return new CursorLoader(getActivity(),
-                        ResortManagerContentProvider.FTS_RESERVATION_URI, Reservation.FTS_FIELDS, null, selectionArgs,
-                        null);
+                String selection = mCallbacks.getType();
+                String sortOrder = null;
+                if (selection.equalsIgnoreCase(Reservation.getStatusString(Reservation.PendingStatus))) {
+                    sortOrder = Reservation.COL_FTS_FROM_DATE;
+                }
+                else if (selection.equalsIgnoreCase(Reservation.getStatusString(Reservation.CheckedInStatus))) {
+                    sortOrder = Reservation.COL_FTS_TO_DATE;
+                }
+                return new CursorLoader(getActivity(), ResortManagerContentProvider.FTS_RESERVATION_URI, Reservation.FTS_FIELDS, selection, selectionArgs, sortOrder);
             }
 
             @Override

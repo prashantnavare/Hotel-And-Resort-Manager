@@ -558,8 +558,10 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             ContentValues ftsValues = new ContentValues();
             ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.getFTSReservationName());
             ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
-            ftsValues.put(Reservation.COL_FTS_RESERVATION_REALID, Long.toString(realID));
             ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
+            ftsValues.put(Reservation.COL_FTS_RESERVATION_REALID, Long.toString(realID));
+            ftsValues.put(Reservation.COL_FTS_TO_DATE, Long.toString(reservation.mToDate));
+            ftsValues.put(Reservation.COL_FTS_FROM_DATE, Long.toString(reservation.mFromDate));
 
             long ftsID = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
@@ -692,12 +694,11 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     * Returns a Cursor over all FTS Reservation
+     * Returns a Cursor over FTS Reservations
      *
-     * @param columns The columns to include, if null then all are included
      * @return Cursor over all items that match, or null if none found.
      */
-    public Cursor getAllFTSReservations(String[] columns) {
+    public Cursor getFTSReservations(String[] columns, String reservationType, String[] searchArgs, String sortOrder) {
 
         /* This builds a query that looks like:
          *     SELECT <columns> FROM <table>
@@ -710,55 +711,18 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         builder.setTables(Reservation.FTS_TABLE_NAME);
         builder.setProjectionMap(Reservation.mFTSColumnMap);
 
+        String queryString = Reservation.COL_FTS_RESERVATION_STATUS + " = ? ";
+        String querySelectionArgs[] = null;
+        if (searchArgs != null) {
+            queryString += " AND " + Reservation.FTS_TABLE_NAME + " MATCH  ?" ;
+            querySelectionArgs = new String[] { reservationType, searchArgs[0] + "*"};
+        }
+        else {
+            querySelectionArgs = new String[] { reservationType};
+        }
         Cursor cursor = null;
         synchronized (ResortManagerApp.sDatabaseLock) {
-            cursor = builder.query(this.getReadableDatabase(), columns, null, null, null, null, Reservation.COL_FTS_RESERVATION_NAME);
-        }
-
-        if (cursor == null) {
-            return null;
-        }
-        else if (!cursor.moveToFirst()) {
-            cursor.close();
-            return null;
-        }
-        return cursor;
-    }
-    /**
-     * Returns a Cursor over all FTS items that match the given searchString
-     *
-     * @param searchString The string to search for
-     * @param columns The columns to include, if null then all are included
-     * @return Cursor over all items that match, or null if none found.
-     */
-    public Cursor getFTSReservationMatches(String searchString, String[] columns) {
-        String selection = Reservation.FTS_TABLE_NAME + " MATCH ?";
-        String[] selectionArgs = new String[] {searchString + "*"};
-
-        /* This builds a query that looks like:
-         *     SELECT <columns> FROM <table> WHERE <COL_FTS_ITEM_NAME> MATCH 'query*'
-         * which is an FTS3 search for the query text (plus a wildcard) inside the item_name column.
-         *
-         * - "rowid" is the unique id for all rows but we need this value for the "_id" column in
-         *    order for the Adapters to work, so the columns need to make "_id" an alias for "rowid"
-         * - "rowid" also needs to be used by the SUGGEST_COLUMN_INTENT_DATA alias in order
-         *   for suggestions to carry the proper intent data.
-         *   These aliases are defined in the InventoryProvider when queries are made.
-         * - This can be revised to also search the item description text with FTS3 by changing
-         *   the selection clause to use FTS_ITEM_TABLE instead of COL_FTS_ITEM_NAME (to search across
-         *   the entire table, but sorting the relevance could be difficult.
-         */
-        /* The SQLiteBuilder provides a map for all possible columns requested to
-         * actual columns in the database, creating a simple column alias mechanism
-         * by which the ContentProvider does not need to know the real column names
-         */
-        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        builder.setTables(Reservation.FTS_TABLE_NAME);
-        builder.setProjectionMap(Reservation.mFTSColumnMap);
-
-        Cursor cursor = null;
-        synchronized (ResortManagerApp.sDatabaseLock) {
-            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, Reservation.COL_FTS_RESERVATION_NAME);
+            cursor = builder.query(this.getReadableDatabase(), columns, queryString, querySelectionArgs, null, null, sortOrder);
         }
 
         if (cursor == null) {

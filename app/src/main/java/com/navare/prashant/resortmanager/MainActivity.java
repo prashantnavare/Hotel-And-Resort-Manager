@@ -264,7 +264,7 @@ public class MainActivity extends Activity {
             mInterstitialAdForReservations.show();
         }
         else {
-            startActivity(new Intent(this, ReservationListActivity.class));
+            startActivity(new Intent(this, ReservationsActivity.class));
         }
     }
 
@@ -314,24 +314,12 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onSettingsClick(View view) {
-        startActivity(new Intent(this, SettingsActivity.class));
-    }
-
     public void onRemoveAdsClick(View view) {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        // Setting Dialog Title
         alertDialog.setTitle("Remove Ads");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Would you like to purchase  Resort Manager and remove the ads?");
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_resort_manager);
-
-        // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -339,14 +327,12 @@ public class MainActivity extends Activity {
             }
         });
 
-        // Setting Negative "NO" Button
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        // Showing Alert Message
         alertDialog.show();
     }
 
@@ -483,7 +469,7 @@ public class MainActivity extends Activity {
     // TODO:
     // TODO: Sort rooms based on names (in the query for rooms)
     // TODO:
-    // TODO:
+    // TODO: Convert all FTS realID "MATCH ?" to " = ? ". This is important to get exact FTS row
     // TODO:
     // TODO:
     // TODO:

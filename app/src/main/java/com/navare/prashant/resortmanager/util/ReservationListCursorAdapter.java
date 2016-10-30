@@ -36,7 +36,7 @@ public class ReservationListCursorAdapter extends SimpleCursorAdapter {
         Cursor cursor = getCursor();
         cursor.moveToPosition(position);
         String reservationState = cursor.getString(cursor.getColumnIndex(Reservation.COL_FTS_RESERVATION_STATUS));
-        if (reservationState.equalsIgnoreCase("Waiting") == true) {
+        if (reservationState.equalsIgnoreCase(Reservation.getStatusString(Reservation.PendingStatus)) == true) {
             // Next see if fromDate is older than today by a day
             String dateString = cursor.getString(cursor.getColumnIndex(Reservation.COL_FTS_RESERVATION_DATES));
             String[] dates = dateString.split("-");
@@ -52,18 +52,15 @@ public class ReservationListCursorAdapter extends SimpleCursorAdapter {
             if (fromDate.before(todayDate)) {
                 TextView textName = (TextView) view.findViewById(R.id.textReservationName);
                 TextView textDates = (TextView) view.findViewById(R.id.textReservationDates);
-                TextView textStatus = (TextView) view.findViewById(R.id.textReservationStatus);
 
                 long numberOfDaysOld = TimeUnit.DAYS.convert((todayDate.getTimeInMillis() - fromDate.getTimeInMillis()), TimeUnit.MILLISECONDS);
                 if (numberOfDaysOld >= 1) {
                     textName.setTextColor(Color.RED);
                     textDates.setTextColor(Color.RED);
-                    textStatus.setTextColor(Color.RED);
                 }
                 else {
                     textName.setTextColor(Color.DKGRAY);
                     textDates.setTextColor(Color.DKGRAY);
-                    textStatus.setTextColor(Color.DKGRAY);
                 }
             }
         }

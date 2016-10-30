@@ -48,7 +48,7 @@ public class Reservation {
     public static final String COL_EMAIL = "emailAddress";
     public static final String COL_ARRIVAL_DETAILS = "arrivalDetails";
 
-    public static final int WaitingStatus = 1;
+    public static final int PendingStatus = 1;
     public static final int CheckedInStatus = 2;
     public static final int CheckedOutStatus = 3;
 
@@ -266,9 +266,13 @@ public class Reservation {
     }
 
     public String getStatusString() {
-        switch ((int)mCurrentStatus) {
-            case WaitingStatus:
-                return "Waiting";
+        return getStatusString((int)mCurrentStatus);
+    }
+
+    public static String getStatusString(int status) {
+        switch (status) {
+            case PendingStatus:
+                return "Pending";
             case CheckedInStatus:
                 return "Checked In";
             case CheckedOutStatus:
@@ -301,6 +305,8 @@ public class Reservation {
     public static final String COL_FTS_RESERVATION_DATES = SearchManager.SUGGEST_COLUMN_TEXT_2;
     public static final String COL_FTS_RESERVATION_STATUS = "status";
     public static final String COL_FTS_RESERVATION_REALID = "realID";
+    public static final String COL_FTS_TO_DATE = "toDate";
+    public static final String COL_FTS_FROM_DATE = "fromDate";
 
     // For database projection so order is consistent
     public static final String[] FTS_FIELDS = {
@@ -308,7 +314,9 @@ public class Reservation {
             COL_FTS_RESERVATION_NAME,
             COL_FTS_RESERVATION_DATES,
             COL_FTS_RESERVATION_STATUS,
-            COL_FTS_RESERVATION_REALID
+            COL_FTS_RESERVATION_REALID,
+            COL_FTS_TO_DATE,
+            COL_FTS_FROM_DATE
     };
 
     /* Note that FTS3 does not support column constraints and thus, you cannot
@@ -321,7 +329,9 @@ public class Reservation {
                     COL_FTS_RESERVATION_NAME + ", " +
                     COL_FTS_RESERVATION_DATES + "," +
                     COL_FTS_RESERVATION_STATUS + "," +
-                    COL_FTS_RESERVATION_REALID +
+                    COL_FTS_RESERVATION_REALID + "," +
+                    COL_FTS_TO_DATE + "," +
+                    COL_FTS_FROM_DATE +
                     ");";
 
     // Fields corresponding to FTSReservationTable columns
@@ -330,6 +340,8 @@ public class Reservation {
     public String mFTSDates = "";
     public String mFTSStatus = "";
     public String mFTSRealID = "";
+    public String mFTSToDate = "";
+    public String mFTSFromDate = "";
 
     /**
      * Set information from the FTSReservationTable into an Reservation object.
@@ -341,6 +353,8 @@ public class Reservation {
         this.mFTSDates = cursor.getString(2);
         this.mFTSStatus = cursor.getString(3);
         this.mFTSRealID = cursor.getString(4);
+        this.mFTSToDate = cursor.getString(5);
+        this.mFTSFromDate = cursor.getString(6);
     }
 
     public static final HashMap<String, String> mFTSColumnMap = buildFTSColumnMap();
@@ -356,6 +370,8 @@ public class Reservation {
         map.put(COL_FTS_RESERVATION_DATES, COL_FTS_RESERVATION_DATES);
         map.put(COL_FTS_RESERVATION_STATUS, COL_FTS_RESERVATION_STATUS);
         map.put(COL_FTS_RESERVATION_REALID, COL_FTS_RESERVATION_REALID);
+        map.put(COL_FTS_TO_DATE, COL_FTS_TO_DATE);
+        map.put(COL_FTS_FROM_DATE, COL_FTS_FROM_DATE);
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);
         map.put(SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID, "rowid AS " +

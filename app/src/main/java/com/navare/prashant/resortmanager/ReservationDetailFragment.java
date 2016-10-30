@@ -527,7 +527,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         boolean bSuccess = false;
         if (mReservationID.equalsIgnoreCase("-1")) {
             // a new reservation is being inserted. A new reservation always starts life in Waiting status
-            mReservation.mCurrentStatus = Reservation.WaitingStatus;
+            mReservation.mCurrentStatus = Reservation.PendingStatus;
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.RESERVATION_URI, mReservation.getContentValues());
             if (uri != null) {
                 mReservationID = uri.getLastPathSegment();
@@ -853,7 +853,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             mBtnFromDate.setText("Set");
         }
-        if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
+        if (mReservation.mCurrentStatus == Reservation.PendingStatus) {
             mArrivalDetailsLayout.setVisibility(View.VISIBLE);
             mTextArrivalDetails.setText(String.valueOf(mReservation.mArrivalDetails));
         }
@@ -865,7 +865,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCallbacks.EnableDeleteButton(true);
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
-        if (mReservation.mCurrentStatus == Reservation.WaitingStatus) {
+        if (mReservation.mCurrentStatus == Reservation.PendingStatus) {
             mCallbacks.EnableCheckinButton(true);
             mCallbacks.EnableCheckoutButton(false);
             mCallbacks.EnableZoomInButton(false);

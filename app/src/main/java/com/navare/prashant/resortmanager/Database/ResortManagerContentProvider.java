@@ -253,12 +253,7 @@ public class ResortManagerContentProvider extends ContentProvider {
                 break;
 
             case SEARCH_FTS_RESERVATIONS:
-                if (selectionArgs == null) {
-                    resultCursor = getAllFTSReservations();
-                }
-                else {
-                    resultCursor =  searchFTSReservations(selectionArgs[0]);
-                }
+                resultCursor = getFTSReservations(projection, selection, selectionArgs, sortOrder);
                 break;
 
             case RESERVATION_ID:
@@ -328,13 +323,8 @@ public class ResortManagerContentProvider extends ContentProvider {
         return mResortDB.getRoom(rowId, Room.FIELDS);
     }
 
-    private Cursor getAllFTSReservations() {
-        return mResortDB.getAllFTSReservations(Reservation.FTS_FIELDS);
-    }
-
-    private Cursor searchFTSReservations(String query) {
-        query = query.toLowerCase();
-        return mResortDB.getFTSReservationMatches(query, Reservation.FTS_FIELDS);
+    private Cursor getFTSReservations(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        return mResortDB.getFTSReservations(projection, selection, selectionArgs, sortOrder);
     }
 
     private Cursor getAllFTSCompletedReservations() {
