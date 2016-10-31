@@ -186,7 +186,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         if (result > 0) {
             int ftsResult = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsResult = db.delete(Item.FTS_TABLE_NAME, Item.COL_FTS_ITEM_REALID + " MATCH ? ", new String[]{itemID});
+                ftsResult = db.delete(Item.FTS_TABLE_NAME, Item.COL_FTS_ITEM_REALID + " = ? ", new String[]{itemID});
             }
             notifyProviderOnItemChange();
 
@@ -281,7 +281,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
      * @return Cursor over all items that match, or null if none found.
      */
     public Cursor getFTSItemMatches(String searchString, String[] columns) {
-        //String selection = Item.COL_FTS_ITEM_NAME + " MATCH ?";
         String selection = Item.FTS_TABLE_NAME + " MATCH ?";
         String[] selectionArgs = new String[] {searchString + "*"};
 
@@ -340,7 +339,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
 
             long ftsRowsUpdated = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsRowsUpdated =  db.update(Item.FTS_TABLE_NAME, ftsValues, Item.COL_FTS_ITEM_REALID + " MATCH " + itemId, null);
+                ftsRowsUpdated =  db.update(Item.FTS_TABLE_NAME, ftsValues, Item.COL_FTS_ITEM_REALID + " = " + itemId, null);
             }
         }
         notifyProviderOnItemChange();
@@ -511,7 +510,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         if (result > 0) {
             int ftsResult = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsResult = db.delete(Room.FTS_TABLE_NAME, Room.COL_FTS_ROOM_REALID + " MATCH ? ", new String[]{roomID});
+                ftsResult = db.delete(Room.FTS_TABLE_NAME, Room.COL_FTS_ROOM_REALID + " = ? ", new String[]{roomID});
             }
             notifyProviderOnRoomChange();
 
@@ -540,7 +539,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
 
             long ftsRowsUpdated = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsRowsUpdated =  db.update(Room.FTS_TABLE_NAME, ftsValues, Room.COL_FTS_ROOM_REALID + " MATCH " + roomId, null);
+                ftsRowsUpdated =  db.update(Room.FTS_TABLE_NAME, ftsValues, Room.COL_FTS_ROOM_REALID + " = " + roomId, null);
             }
         }
         notifyProviderOnRoomChange();
@@ -571,7 +570,6 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                 deleteReservation(String.valueOf(realID));
                 return ftsID;
             }
-            ResortManagerApp.incrementReservationCount();
         }
         return realID;
     }
@@ -586,11 +584,10 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         if (result > 0) {
             int ftsResult = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsResult = db.delete(Reservation.FTS_TABLE_NAME, Reservation.COL_FTS_RESERVATION_REALID + " MATCH ? ", new String[]{reservationID});
+                ftsResult = db.delete(Reservation.FTS_TABLE_NAME, Reservation.COL_FTS_RESERVATION_REALID + " = ? ", new String[]{reservationID});
             }
             notifyProviderOnReservationChange();
 
-            ResortManagerApp.decrementReservationCount();
             return ftsResult;
         }
         return result;
@@ -711,7 +708,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         builder.setTables(Reservation.FTS_TABLE_NAME);
         builder.setProjectionMap(Reservation.mFTSColumnMap);
 
-        String queryString = Reservation.COL_FTS_RESERVATION_STATUS + " = ? ";
+        String queryString = Reservation.COL_FTS_RESERVATION_STATUS + " MATCH ? ";
         String querySelectionArgs[] = null;
         if (searchArgs != null) {
             queryString += " AND " + Reservation.FTS_TABLE_NAME + " MATCH  ?" ;
@@ -791,19 +788,20 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         Reservation reservation = new Reservation();
         reservation.setContentFromCV(values);
         synchronized (ResortManagerApp.sDatabaseLock) {
+            rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
             if (reservation.mCurrentStatus == Reservation.CheckedOutStatus) {
+                // If it is a checkout, then add the reservation to the Completed FTS table and delete from the regular FTS table.
                 addCompletedFTSReservation(reservation);
-                deleteReservation(reservationId);
-                rowsUpdated = 1;
+                int ftsResult = 0;
+                ftsResult = db.delete(Reservation.FTS_TABLE_NAME, Reservation.COL_FTS_RESERVATION_REALID + " = ? ", new String[]{reservationId});
             }
             else {
-                rowsUpdated = db.update(Reservation.TABLE_NAME, values, BaseColumns._ID + "=" + reservationId, null);
                 ContentValues ftsValues = new ContentValues();
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_NAME, reservation.getFTSReservationName());
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
                 long ftsRowsUpdated = 0;
-                ftsRowsUpdated =  db.update(Reservation.FTS_TABLE_NAME, ftsValues, Reservation.COL_FTS_RESERVATION_REALID + " MATCH " + reservationId, null);
+                ftsRowsUpdated =  db.update(Reservation.FTS_TABLE_NAME, ftsValues, Reservation.COL_FTS_RESERVATION_REALID + " = " + reservationId, null);
             }
         }
         notifyProviderOnReservationChange();
@@ -894,7 +892,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
             int ftsResult = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
                 ftsResult = db.delete(Task.FTS_TABLE_NAME,
-                        Task.COL_FTS_TASK_REALID + " MATCH ? ", new String[]{taskID});
+                        Task.COL_FTS_TASK_REALID + " = ? ", new String[]{taskID});
                 if (ftsResult > 0) {
                     ResortManagerApp.decrementTaskCount();
                     notifyProviderOnTaskChange();
@@ -1083,7 +1081,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                 ftsValues.put(Task.COL_FTS_ASSIGNED_TO, values.getAsString(Task.COL_ASSIGNED_TO));
                 ftsValues.put(Task.COL_FTS_TASK_PRIORITY, task.getTaskPriority());
                 ftsValues.put(Task.COL_FTS_DUE_DATE, task.getTaskDueDateString());
-                long ftsRowsUpdated =  db.update(Task.FTS_TABLE_NAME, ftsValues, Task.COL_FTS_TASK_REALID + " MATCH " + taskId, null);
+                long ftsRowsUpdated =  db.update(Task.FTS_TABLE_NAME, ftsValues, Task.COL_FTS_TASK_REALID + " = " + taskId, null);
             }
         }
         notifyProviderOnTaskChange();

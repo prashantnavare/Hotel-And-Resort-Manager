@@ -23,7 +23,9 @@ public class ResortManagerApp extends Application {
     public static String sPrefTaskCount = "TaskCount";
     public static String sPrefItemCount = "ItemCount";
     public static String sPrefRoomCount = "RoomCount";
-    public static String sPrefReservationCount = "ReservationCount";
+    public static String sPrefPendingReservationCount = "PendingReservationCount";
+    public static String sPrefCheckedInReservationCount = "CheckedInReservationCount";
+    public static String sPrefHistoricalReservationCount = "HistoricalReservationCount";
     private static String sPrefPurchaseValue = "PurchaseValue";
 
     public static long APP_PURCHASED = 0xdeadbeef;
@@ -100,20 +102,53 @@ public class ResortManagerApp extends Application {
         editor.commit();
     }
 
-    static public void incrementReservationCount() {
-        changeReservationCount(1);
+    static public void incrementPendingReservationCount() {
+        changePendingReservationCount(1);
     }
 
-    static public void decrementReservationCount() {
-        changeReservationCount(-1);
+    static public void decrementPendingReservationCount() {
+        changePendingReservationCount(-1);
     }
 
-    static private void changeReservationCount(long numReservations) {
+    static private void changePendingReservationCount(long numReservations) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long reservationCount = prefs.getLong(sPrefReservationCount, 0);
+        long reservationCount = prefs.getLong(sPrefPendingReservationCount, 0);
         reservationCount = reservationCount + numReservations;
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefReservationCount, reservationCount);
+        editor.putLong(sPrefPendingReservationCount, reservationCount);
+        editor.commit();
+    }
+
+    static public void incrementCheckedInReservationCount() {
+        changeCheckedInReservationCount(1);
+    }
+
+    static public void decrementCheckedInReservationCount() {
+        changeCheckedInReservationCount(-1);
+    }
+
+    static private void changeCheckedInReservationCount(long numReservations) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
+        long reservationCount = prefs.getLong(sPrefCheckedInReservationCount, 0);
+        reservationCount = reservationCount + numReservations;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(sPrefCheckedInReservationCount, reservationCount);
+        editor.commit();
+    }
+
+    static public void incrementHistoricalReservationCount() { changeHistoricalReservationCount(1);
+    }
+
+    static public void decrementHistoricalReservationCount() {
+        changeHistoricalReservationCount(-1);
+    }
+
+    static private void changeHistoricalReservationCount(long numReservations) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
+        long reservationCount = prefs.getLong(sPrefHistoricalReservationCount, 0);
+        reservationCount = reservationCount + numReservations;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(sPrefHistoricalReservationCount, reservationCount);
         editor.commit();
     }
 

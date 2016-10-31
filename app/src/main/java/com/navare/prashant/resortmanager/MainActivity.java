@@ -440,10 +440,6 @@ public class MainActivity extends Activity {
         String taskButtonString = "Tasks (" + String.valueOf(taskCount) + ")";
         mButtonTasks.setText(taskButtonString);
 
-        long reservationsCount = preferences.getLong(ResortManagerApp.sPrefReservationCount, 0);
-        String reservationsButtonString = "Reservations (" + String.valueOf(reservationsCount) + ")";
-        mButtonReservations.setText(reservationsButtonString);
-
         long itemCount = preferences.getLong(ResortManagerApp.sPrefItemCount, 0);
         String itemButtonString = "Inventory (" + String.valueOf(itemCount) + ")";
         mButtonInventory.setText(itemButtonString);
@@ -469,11 +465,11 @@ public class MainActivity extends Activity {
     // TODO:
     // TODO: Sort rooms based on names (in the query for rooms)
     // TODO:
-    // TODO: Convert all FTS realID "MATCH ?" to " = ? ". This is important to get exact FTS row
-    // TODO:
-    // TODO:
-    // TODO:
-    // TODO:
+    // TODO: Pending, Checked In and Historical reservation counts
+    // TODO: New reservation ==> pending++
+    // TODO: Checkin reservation ==> pending-- & checkedin++
+    // TODO: checkout reservation ==> checkedin-- and historical++
+    // TODO: delete reservation ==> depending on the state, either pending-- or checkedin--
     // TODO:
 }
 

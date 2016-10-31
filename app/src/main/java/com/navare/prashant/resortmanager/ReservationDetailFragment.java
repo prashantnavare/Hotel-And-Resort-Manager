@@ -514,6 +514,12 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID);
         int result = getActivity().getContentResolver().delete(reservationURI, null, null);
         if (result > 0) {
+            if (mReservation.mCurrentStatus == Reservation.PendingStatus) {
+                ResortManagerApp.decrementPendingReservationCount();
+            }
+            else if (mReservation.mCurrentStatus == Reservation.CheckedInStatus) {
+                ResortManagerApp.decrementCheckedInReservationCount();
+            }
             releaseSelectedRooms();
             mCallbacks.onReservationDeleted();
         }
@@ -533,6 +539,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID = uri.getLastPathSegment();
                 mReservation.mID = Long.valueOf(mReservationID);
                 bSuccess = true;
+                ResortManagerApp.incrementPendingReservationCount();
             }
         }
         else {
@@ -620,6 +627,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID);
         int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
         if (result > 0) {
+            ResortManagerApp.decrementPendingReservationCount();
+            ResortManagerApp.incrementCheckedInReservationCount();
             // Get all the selected rooms and update their status
             updateSelectedRooms();
             mCallbacks.onCheckinCompleted();
@@ -705,6 +714,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID);
         int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
         if (result > 0) {
+            ResortManagerApp.decrementCheckedInReservationCount();
+            ResortManagerApp.incrementHistoricalReservationCount();
             // Release all the selected rooms
             releaseSelectedRooms();
             mCallbacks.onCheckoutCompleted();
