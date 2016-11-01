@@ -712,10 +712,10 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         String querySelectionArgs[] = null;
         if (searchArgs != null) {
             queryString += " AND " + Reservation.FTS_TABLE_NAME + " MATCH  ?" ;
-            querySelectionArgs = new String[] { reservationType, searchArgs[0] + "*"};
+            querySelectionArgs = new String[] { reservationType +"*", searchArgs[0] + "*"};
         }
         else {
-            querySelectionArgs = new String[] { reservationType};
+            querySelectionArgs = new String[] { reservationType+"*"};
         }
         Cursor cursor = null;
         synchronized (ResortManagerApp.sDatabaseLock) {
@@ -801,7 +801,8 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_DATES, reservation.getDatesString());
                 ftsValues.put(Reservation.COL_FTS_RESERVATION_STATUS, reservation.getStatusString());
                 long ftsRowsUpdated = 0;
-                ftsRowsUpdated =  db.update(Reservation.FTS_TABLE_NAME, ftsValues, Reservation.COL_FTS_RESERVATION_REALID + " = " + reservationId, null);
+                ftsRowsUpdated =  db.update(Reservation.FTS_TABLE_NAME, ftsValues, Reservation.COL_FTS_RESERVATION_REALID + " = ? " , new String[] {reservationId});
+                long fooVar = ftsRowsUpdated;
             }
         }
         notifyProviderOnReservationChange();
