@@ -271,10 +271,10 @@ public class ResortManagerContentProvider extends ContentProvider {
 
             case SEARCH_FTS_COMPLETED_RESERVATIONS:
                 if (selectionArgs == null) {
-                    resultCursor = getAllFTSCompletedReservations();
+                    resultCursor = getFTSCompletedReservationMatches(null);
                 }
                 else {
-                    resultCursor =  searchFTSCompletedReservations(selectionArgs[0]);
+                    resultCursor =  getFTSCompletedReservationMatches(selectionArgs[0]);
                 }
                 break;
 
@@ -327,12 +327,9 @@ public class ResortManagerContentProvider extends ContentProvider {
         return mResortDB.getFTSReservations(projection, selection, selectionArgs, sortOrder);
     }
 
-    private Cursor getAllFTSCompletedReservations() {
-        return mResortDB.getAllFTSCompletedReservations(Reservation.COMPLETED_FTS_FIELDS);
-    }
-
-    private Cursor searchFTSCompletedReservations(String query) {
-        query = query.toLowerCase();
+    private Cursor getFTSCompletedReservationMatches(String query) {
+        if (query != null)
+            query = query.toLowerCase();
         return mResortDB.getFTSCompletedReservationMatches(query, Reservation.COMPLETED_FTS_FIELDS);
     }
 

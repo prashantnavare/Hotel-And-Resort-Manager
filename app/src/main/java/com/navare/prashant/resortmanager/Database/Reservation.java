@@ -397,6 +397,7 @@ public class Reservation {
     public static final String COMPLETED_COL_FTS_ADDITIONAL_CHARGE = "additionalCharge";
     public static final String COMPLETED_COL_FTS_TAX_PERCENT = "taxPercent";
     public static final String COMPLETED_COL_FTS_TOTAL_CHARGE = "totalCharge";
+    public static final String COMPLETED_COL_FTS_TO_DATE = "toDate";
 
     // For database projection so order is consistent
     public static final String[] COMPLETED_FTS_FIELDS = {
@@ -414,7 +415,8 @@ public class Reservation {
             COMPLETED_COL_FTS_CHILD_CHARGE,
             COMPLETED_COL_FTS_ADDITIONAL_CHARGE,
             COMPLETED_COL_FTS_TAX_PERCENT,
-            COMPLETED_COL_FTS_TOTAL_CHARGE
+            COMPLETED_COL_FTS_TOTAL_CHARGE,
+            COMPLETED_COL_FTS_TO_DATE
     };
 
     /* Note that FTS3 does not support column constraints and thus, you cannot
@@ -438,7 +440,8 @@ public class Reservation {
                     COMPLETED_COL_FTS_CHILD_CHARGE + "," +
                     COMPLETED_COL_FTS_ADDITIONAL_CHARGE + "," +
                     COMPLETED_COL_FTS_TAX_PERCENT + "," +
-                    COMPLETED_COL_FTS_TOTAL_CHARGE +
+                    COMPLETED_COL_FTS_TOTAL_CHARGE + "," +
+                    COMPLETED_COL_FTS_TO_DATE +
                     ");";
 
     // Fields corresponding to FTSItemTable columns
@@ -458,6 +461,8 @@ public class Reservation {
     public String mCompletedFTSAdditionalCharge = "";
     public String mCompletedFTSTaxPercent = "";
     public String mCompletedFTSTotalCharge = "";
+    public String mCompletedFTSToDate = "";
+
     /**
      * Set information from the CompletedFTSItemTable into a Task object.
      */
@@ -479,6 +484,7 @@ public class Reservation {
         this.mCompletedFTSAdditionalCharge = cursor.getString(12);
         this.mCompletedFTSTaxPercent = cursor.getString(13);
         this.mCompletedFTSTotalCharge = cursor.getString(14);
+        this.mCompletedFTSToDate = cursor.getString(15);
     }
 
     public static final HashMap<String, String> mCompletedFTSColumnMap = buildCompletedFTSColumnMap();
@@ -505,6 +511,7 @@ public class Reservation {
         map.put(COMPLETED_COL_FTS_ADDITIONAL_CHARGE, COMPLETED_COL_FTS_ADDITIONAL_CHARGE);
         map.put(COMPLETED_COL_FTS_TAX_PERCENT, COMPLETED_COL_FTS_TAX_PERCENT);
         map.put(COMPLETED_COL_FTS_TOTAL_CHARGE, COMPLETED_COL_FTS_TOTAL_CHARGE);
+        map.put(COMPLETED_COL_FTS_TO_DATE, COMPLETED_COL_FTS_TO_DATE);
 
         map.put(BaseColumns._ID, "rowid AS " +
                 BaseColumns._ID);

@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.navare.prashant.resortmanager.Database.Reservation;
+
 
 /**
  * An activity representing a list of Reservations. This activity
@@ -94,6 +96,12 @@ public class ReservationListActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.reservation_list_actions, menu);
 
+        // If this is the Checked In reservations list, disable the Add menu item
+        MenuItem addMenuItem = menu.getItem(1);
+        if (mType.equalsIgnoreCase(Reservation.getStatusString(Reservation.CheckedInStatus))) {
+            addMenuItem.setEnabled(false);
+            addMenuItem.setVisible(false);
+        }
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();

@@ -155,7 +155,7 @@ public class ReportListActivity extends AppCompatActivity
 
     @Override
     public void setReservationCount(long reservationCount) {
-        setTitle("Completed Reservations (" + String.valueOf(reservationCount) + ")");
+        setTitle("Historical (" + String.valueOf(reservationCount) + ")");
     }
 
     @Override
