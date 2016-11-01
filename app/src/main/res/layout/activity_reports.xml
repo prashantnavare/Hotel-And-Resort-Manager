@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReportsActivity"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/reservationDetailsScrollView"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <!-- Report Dates Layout -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:layout_gravity="bottom"
+                    android:elevation="6dp"
+                    android:background="@drawable/raised_background"
+                    android:orientation="vertical"
+                    android:textAlignment="center">
+
+                    <!-- From Date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <TextView
+                            android:layout_weight="3"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="From Date"
+                            android:padding="5dp"
+                            />
+                        <Button
+                            android:id="@+id/btnFromDate"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/set_date"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="100dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+                    </LinearLayout>
+
+                    <!-- To Date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <TextView
+                            android:layout_weight="3"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="To Date"
+                            android:padding="5dp"
+                            />
+                        <Button
+                            android:id="@+id/btnToDate"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="@string/set_date"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="100dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+                    </LinearLayout>
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="40px"
+                        />
+
+                    <!-- Get Reports Button -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        >
+                        <TextView
+                            android:layout_weight="3"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:padding="5dp"
+                            />
+                        <Button
+                            android:id="@+id/btnGetReports"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:textStyle="bold"
+                            android:text="Get Reports"
+                            android:textColor="#ffffff"
+                            android:layout_marginRight="100dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_shape"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Report Results Layout -->
+                <LinearLayout
+                    android:id="@+id/resultsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"
+                    android:layout_gravity="bottom"
+                    android:elevation="6dp"
+                    android:background="@drawable/raised_background"
+                    android:orientation="vertical"
+                    android:textAlignment="center"
+                    android:visibility="gone"
+                    >
+
+                    <!-- Total Revenue -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        >
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total Revenue"
+                            android:padding="5dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/textTotalRevenue"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:cursorVisible="true"
+                            android:padding="5dp"
+                            android:background="@drawable/textview_shape_readonly"
+                            android:layout_marginRight="5dp"
+                            />
+
+                    </LinearLayout>
+
+                    <!-- Total Occupancy -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="10dp"
+                        >
+
+                        <TextView
+                            android:layout_weight="2"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total Occupancy"
+                            android:padding="5dp"
+                            />
+
+                        <TextView
+                            android:id="@+id/textTotalOccupancy"
+                            android:layout_weight="1"
+                            android:textSize="12sp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:cursorVisible="true"
+                            android:padding="5dp"
+                            android:background="@drawable/textview_shape_readonly"
+                            android:layout_marginRight="5dp"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -278,15 +278,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onReportsClick(View view) {
-        if (mInterstitialAdForReports != null && mInterstitialAdForReports.isLoaded()) {
-            mInterstitialAdForReports.show();
-        }
-        else {
-            startActivity(new Intent(this, ReportListActivity.class));
-        }
-    }
-
     public void onRoomsClick(View view) {
         if (mInterstitialAdForRooms != null && mInterstitialAdForRooms.isLoaded()) {
             mInterstitialAdForRooms.show();
@@ -302,6 +293,15 @@ public class MainActivity extends Activity {
         }
         else {
             startActivity(new Intent(this, ItemListActivity.class));
+        }
+    }
+
+    public void onReportsClick(View view) {
+        if (mInterstitialAdForReports != null && mInterstitialAdForReports.isLoaded()) {
+            mInterstitialAdForReports.show();
+        }
+        else {
+            startActivity(new Intent(this, ReportsActivity.class));
         }
     }
 

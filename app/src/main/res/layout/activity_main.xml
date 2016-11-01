@@ -53,29 +53,13 @@
             />
 
         <Button
-            android:id="@+id/reports_button"
-            android:text="Reports"
-            android:onClick="onReportsClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="145dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
             android:id="@+id/rooms_button"
             android:text="Rooms"
             android:onClick="onRoomsClick"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="205dp"
+            android:layout_marginTop="145dp"
             android:clickable="true"
             android:enabled="true"
             android:textSize="16sp"
@@ -92,7 +76,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
+            android:layout_marginTop="205dp"
+            android:enabled="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:longClickable="true"
+            android:background="@drawable/button_shape"
+            />
+
+        <Button
+            android:id="@+id/reports_button"
+            android:text="Reports"
+            android:onClick="onReportsClick"
+            android:layout_width="157dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="265dp"
+            android:clickable="true"
             android:enabled="true"
             android:textSize="16sp"
             android:textStyle="bold"
