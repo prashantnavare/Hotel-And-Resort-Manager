@@ -32,7 +32,7 @@ public class ReservationListCursorAdapter extends SimpleCursorAdapter {
         //get reference to the row
         View view = super.getView(position, convertView, parent);
 
-        // If the reservation is in Waiting state and the fromDate is older than today, then mark the whole entry in red
+        // If the reservation is in Pending state and the fromDate is older than today, then mark the whole entry in red
         Cursor cursor = getCursor();
         cursor.moveToPosition(position);
         String reservationState = cursor.getString(cursor.getColumnIndex(Reservation.COL_FTS_RESERVATION_STATUS));

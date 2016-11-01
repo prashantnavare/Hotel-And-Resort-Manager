@@ -449,11 +449,6 @@ public class MainActivity extends Activity {
         mButtonRooms.setText(roomButtonString);
     }
 
-    // TODO: Reservations goes to a new activity with 3 buttons: Pending, Checked In and Historical
-    // TODO: Change Waiting to Pending
-    // TODO: Pending shows only Pending reservations sorted based on fromDate (ascending)
-    // TODO: Checked In shows only Checked In reservations based on expected toDate (ascending)
-    // TODO: Historical shows only Checked out reservations based on toDate (descending)
     // TODO: Reports has only summary reports of Historical reservations based on Month or Year
     // TODO: Reports shows only 2 metrics :
     // TODO:        occupancy (i.e. sum of all adults and children for that month or year)
@@ -464,12 +459,6 @@ public class MainActivity extends Activity {
     // TODO:
     // TODO:
     // TODO: Sort rooms based on names (in the query for rooms)
-    // TODO:
-    // TODO: Pending, Checked In and Historical reservation counts
-    // TODO: New reservation ==> pending++
-    // TODO: Checkin reservation ==> pending-- & checkedin++
-    // TODO: checkout reservation ==> checkedin-- and historical++
-    // TODO: delete reservation ==> depending on the state, either pending-- or checkedin--
     // TODO:
 }
 

@@ -299,7 +299,7 @@ public class Reservation {
         return datesString;
     }
 
-    // Reservation FTS Table - for reservations that are in Waiting or Checked in mode
+    // Reservation FTS Table - for reservations that are in Pending or Checked in mode
     public static final String FTS_TABLE_NAME = "FTSReservationTable";
     public static final String COL_FTS_RESERVATION_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
     public static final String COL_FTS_RESERVATION_DATES = SearchManager.SUGGEST_COLUMN_TEXT_2;

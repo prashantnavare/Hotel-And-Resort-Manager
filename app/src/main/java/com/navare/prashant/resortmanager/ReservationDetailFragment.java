@@ -532,7 +532,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         boolean bSuccess = false;
         if (mReservationID.equalsIgnoreCase("-1")) {
-            // a new reservation is being inserted. A new reservation always starts life in Waiting status
+            // a new reservation is being inserted. A new reservation always starts life in Pending status
             mReservation.mCurrentStatus = Reservation.PendingStatus;
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.RESERVATION_URI, mReservation.getContentValues());
             if (uri != null) {
