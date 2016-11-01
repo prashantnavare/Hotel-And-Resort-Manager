@@ -167,7 +167,7 @@ public class ReservationListActivity extends AppCompatActivity
 
     @Override
     public void setReservationCount(long reservationCount) {
-        setTitle(mType + " Reservations (" + String.valueOf(reservationCount) + ")");
+        setTitle(mType + " (" + String.valueOf(reservationCount) + ")");
     }
 
     @Override

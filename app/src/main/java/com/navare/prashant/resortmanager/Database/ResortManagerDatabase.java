@@ -339,7 +339,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
 
             long ftsRowsUpdated = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsRowsUpdated =  db.update(Item.FTS_TABLE_NAME, ftsValues, Item.COL_FTS_ITEM_REALID + " = " + itemId, null);
+                ftsRowsUpdated =  db.update(Item.FTS_TABLE_NAME, ftsValues, Item.COL_FTS_ITEM_REALID + " = ?", new String[] {itemId});
             }
         }
         notifyProviderOnItemChange();
@@ -539,7 +539,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
 
             long ftsRowsUpdated = 0;
             synchronized (ResortManagerApp.sDatabaseLock) {
-                ftsRowsUpdated =  db.update(Room.FTS_TABLE_NAME, ftsValues, Room.COL_FTS_ROOM_REALID + " = " + roomId, null);
+                ftsRowsUpdated =  db.update(Room.FTS_TABLE_NAME, ftsValues, Room.COL_FTS_ROOM_REALID + " = ?", new String[] {roomId});
             }
         }
         notifyProviderOnRoomChange();
@@ -676,8 +676,9 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         builder.setProjectionMap(Room.mColumnMap);
 
         Cursor cursor = null;
+        String sortOrder = Room.COL_RESERVATION_ID + " DESC, " + Room.COL_NAME + " ASC";
         synchronized (ResortManagerApp.sDatabaseLock) {
-            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, null);
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, sortOrder);
         }
 
         if (cursor == null) {
@@ -708,14 +709,14 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         builder.setTables(Reservation.FTS_TABLE_NAME);
         builder.setProjectionMap(Reservation.mFTSColumnMap);
 
-        String queryString = Reservation.COL_FTS_RESERVATION_STATUS + " MATCH ? ";
+        String queryString = Reservation.COL_FTS_RESERVATION_STATUS + " = ? ";
         String querySelectionArgs[] = null;
         if (searchArgs != null) {
             queryString += " AND " + Reservation.FTS_TABLE_NAME + " MATCH  ?" ;
-            querySelectionArgs = new String[] { reservationType +"*", searchArgs[0] + "*"};
+            querySelectionArgs = new String[] { reservationType, searchArgs[0] + "*"};
         }
         else {
-            querySelectionArgs = new String[] { reservationType+"*"};
+            querySelectionArgs = new String[] { reservationType};
         }
         Cursor cursor = null;
         synchronized (ResortManagerApp.sDatabaseLock) {
@@ -1082,7 +1083,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                 ftsValues.put(Task.COL_FTS_ASSIGNED_TO, values.getAsString(Task.COL_ASSIGNED_TO));
                 ftsValues.put(Task.COL_FTS_TASK_PRIORITY, task.getTaskPriority());
                 ftsValues.put(Task.COL_FTS_DUE_DATE, task.getTaskDueDateString());
-                long ftsRowsUpdated =  db.update(Task.FTS_TABLE_NAME, ftsValues, Task.COL_FTS_TASK_REALID + " = " + taskId, null);
+                long ftsRowsUpdated =  db.update(Task.FTS_TABLE_NAME, ftsValues, Task.COL_FTS_TASK_REALID + " = ?", new String[] {taskId});
             }
         }
         notifyProviderOnTaskChange();
