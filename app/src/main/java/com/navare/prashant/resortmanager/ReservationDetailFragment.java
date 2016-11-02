@@ -703,7 +703,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         // Make sure at least one of room or charges per adult is filled in.
         if (mTextAdultCharge.getText().toString().isEmpty() && mTextRoomCharge.getText().toString().isEmpty()) {
-            showAlertDialog("Either Room or Charges per Adult must be specified.");
+            ResortManagerApp.showAlertDialog(mContext, "Incomplete Data", "Either Room or Charges per Adult must be specified.");
             mTextRoomCharge.requestFocus();
             return;
         }
@@ -762,27 +762,14 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
     }
 
-    private void showAlertDialog(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-        alertDialog.setTitle("Incomplete Data");
-        alertDialog.setMessage(message);
-        alertDialog.setIcon(R.drawable.ic_resort_manager);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        alertDialog.show();
-    }
-
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private boolean updateReservationFromUI() {
         if (mReservation == null)
             mReservation = new Reservation();
 
+        String errorDialogTitle = "Incomplete Data";
         if (mTextName.getText().toString().isEmpty()) {
-            showAlertDialog("Reservation name cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Reservation name cannot be empty.");
             mTextName.requestFocus();
             return false;
         }
@@ -799,7 +786,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
 
         if (mTextNumAdults.getText().toString().isEmpty()) {
-            showAlertDialog("Adults cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Adults cannot be empty.");
             mTextNumAdults.requestFocus();
             return false;
         }
@@ -812,7 +799,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         String uiFromDate = mBtnFromDate.getText().toString();
         if (uiFromDate.compareToIgnoreCase("Set") == 0) {
-            showAlertDialog("From Date needs to be set.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "From Date needs to be set.");
             mBtnFromDate.requestFocus();
             return false;
         }
@@ -828,7 +815,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
 
         if (mTextNumDays.getText().toString().isEmpty()) {
-            showAlertDialog("Days cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Days cannot be empty.");
             mTextNumDays.requestFocus();
             return false;
         }

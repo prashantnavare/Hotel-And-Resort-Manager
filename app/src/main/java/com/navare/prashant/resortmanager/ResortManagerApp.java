@@ -1,7 +1,9 @@
 package com.navare.prashant.resortmanager;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -164,4 +166,19 @@ public class ResortManagerApp extends Application {
         long purchaseValue = prefs.getLong(sPrefPurchaseValue, 0);
         return purchaseValue == APP_PURCHASED;
     }
+
+    static public void showAlertDialog(Context context, String title, String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.ic_resort_manager);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
+    }
+
 }

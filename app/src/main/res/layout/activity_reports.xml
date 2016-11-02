@@ -123,6 +123,7 @@
                             />
                         <Button
                             android:id="@+id/btnGetReports"
+                            android:onClick="onGetReports"
                             android:layout_weight="1"
                             android:textSize="12sp"
                             android:layout_width="match_parent"
