@@ -692,7 +692,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
     }
 
     public Cursor getHistoricalReservations(String fromDate, String toDate, String[] columns) {
-        String selection = Reservation.COL_FROM_DATE + " >= " + fromDate + " AND " + Reservation.COL_FROM_DATE + " <= " + toDate;
+        String selection = Reservation.COL_FROM_DATE + " >= " + fromDate + " AND " + Reservation.COL_FROM_DATE + " <= " + toDate + " AND " + Reservation.COL_CURRENT_STATUS + " = " + String.valueOf(Reservation.CheckedOutStatus);
         String [] selectionArgs = null;
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
