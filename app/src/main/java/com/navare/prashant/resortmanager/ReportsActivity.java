@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
@@ -26,6 +27,8 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
     private Button mButtonFrom;
     private Button mButtonTo;
     private Button mButtonGetReports;
+    private TextView mTextTotalRevenue;
+    private TextView mTextTotalOccupancy;
 
     private String mFromDate;
     private String mToDate;
@@ -46,6 +49,8 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
         mButtonGetReports = (Button) findViewById(R.id.btnGetReports);
 
         mResultsLayout = (LinearLayout) findViewById(R.id.resultsLayout);
+        mTextTotalRevenue = (TextView) findViewById(R.id.textTotalRevenue);
+        mTextTotalOccupancy = (TextView) findViewById(R.id.textTotalOccupancy);
 
         mButtonFrom.setOnClickListener(new View.OnClickListener() {
 
@@ -122,7 +127,7 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
 
         mFromDate = String.valueOf(fromDate.getTimeInMillis());
         mToDate = String.valueOf(toDate.getTimeInMillis());
-        getLoaderManager().restartLoader(LOADER_ID_HISTORICAL_RESERVATIONS, null, (android.app.LoaderManager.LoaderCallbacks<Cursor>)this);
+        getSupportLoaderManager().restartLoader(LOADER_ID_HISTORICAL_RESERVATIONS, null, this);
 
         mResultsLayout.setVisibility(View.VISIBLE);
     }
@@ -146,6 +151,22 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
         if (dataCursor != null) {
             int loaderID = loader.getId();
             if (loaderID == LOADER_ID_HISTORICAL_RESERVATIONS) {
+                long totalCharges = 0;
+                long totalAdults = 0;
+                long totalChildren = 0;
+
+                for (dataCursor.moveToFirst(); !dataCursor.isAfterLast(); dataCursor.moveToNext()) {
+
+                    long charges = dataCursor.getLong(dataCursor.getColumnIndex(Reservation.COL_TOTAL_CHARGE));
+                    long adults = dataCursor.getLong(dataCursor.getColumnIndex(Reservation.COL_NUMADULTS));
+                    long children = dataCursor.getLong(dataCursor.getColumnIndex(Reservation.COL_NUMCHILDREN));
+
+                    totalCharges += charges;
+                    totalAdults += adults;
+                    totalChildren += children;
+                }
+                mTextTotalRevenue.setText(String.valueOf(totalCharges));
+                mTextTotalOccupancy.setText("Adults : " + String.valueOf(totalAdults) + " Children : " + String.valueOf(totalChildren));
             }
         }
     }
