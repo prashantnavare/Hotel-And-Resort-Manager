@@ -456,6 +456,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
     }
 
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
     private void updateSelectedRoomsUI() {
         Cursor cursor = mRoomCursorAdapter.getCursor();
         for (int i = 0; i < mSelectedRoomListView.getCount(); i++) {
@@ -471,10 +475,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mSelectedRoomTextLabel.setText("Please select rooms for this reservation: " + String.valueOf(numRoomsSelected) + " rooms selected.");
     }
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

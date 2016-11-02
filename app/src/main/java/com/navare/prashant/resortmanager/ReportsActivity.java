@@ -4,8 +4,13 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -13,19 +18,26 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 
 import com.navare.prashant.resortmanager.Database.Reservation;
+import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
+import com.navare.prashant.resortmanager.Database.Room;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ReportsActivity extends AppCompatActivity {
+public class ReportsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Context mContext;
     private Button mButtonFrom;
     private Button mButtonTo;
     private Button mButtonGetReports;
 
+    private String mFromDate;
+    private String mToDate;
+
     private LinearLayout mResultsLayout;
+
+    private static final int LOADER_ID_HISTORICAL_RESERVATIONS = 13;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +125,39 @@ public class ReportsActivity extends AppCompatActivity {
             return;
         }
 
+        mFromDate = String.valueOf(fromDate.getTimeInMillis());
+        mToDate = String.valueOf(toDate.getTimeInMillis());
+        getLoaderManager().restartLoader(LOADER_ID_HISTORICAL_RESERVATIONS, null, this);
+
         mResultsLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        if (id == LOADER_ID_HISTORICAL_RESERVATIONS) {
+            String [] selectionArgs = new String[] {mFromDate, mToDate};
+            return new CursorLoader(this,
+                    ResortManagerContentProvider.RESERVATION_HISTORICAL_URI, Reservation.FIELDS, null, selectionArgs,
+                    null);
+        }
+        else
+            return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor dataCursor) {
+
+        if (dataCursor != null) {
+            int loaderID = loader.getId();
+            if (loaderID == LOADER_ID_HISTORICAL_RESERVATIONS) {
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
 }

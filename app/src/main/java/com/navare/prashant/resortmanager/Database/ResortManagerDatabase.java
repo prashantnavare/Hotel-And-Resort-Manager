@@ -691,6 +691,30 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor getHistoricalReservations(String fromDate, String toDate, String[] columns) {
+        String selection = Reservation.COL_FROM_DATE + " > " + fromDate + " AND " + Reservation.COL_FROM_DATE + " < " + toDate;
+        String [] selectionArgs = null;
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Reservation.TABLE_NAME);
+        builder.setProjectionMap(Reservation.mColumnMap);
+
+        Cursor cursor = null;
+        String sortOrder = null;
+        synchronized (ResortManagerApp.sDatabaseLock) {
+            cursor = builder.query(this.getReadableDatabase(), columns, selection, selectionArgs, null, null, sortOrder);
+        }
+
+        if (cursor == null) {
+            return null;
+        }
+        else if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        return cursor;
+    }
+
     /**
      * Returns a Cursor over FTS Reservations
      *

@@ -98,18 +98,22 @@ public class ResortManagerContentProvider extends ContentProvider {
     private static final String RESERVATION_ROOMS_SUB_SCHEME = "/reservationRooms";
     private static final String RESERVATION_ROOMS_URL = SCHEME + PROVIDER_NAME + RESERVATION_ROOMS_SUB_SCHEME;
     public static final Uri RESERVATION_ROOMS_URI = Uri.parse(RESERVATION_ROOMS_URL);
+    private static final String RESERVATION_HISTORICAL_SUB_SCHEME = "/reservationHistorical";
+    private static final String RESERVATION_HISTORICAL_URL = SCHEME + PROVIDER_NAME + RESERVATION_HISTORICAL_SUB_SCHEME;
+    public static final Uri RESERVATION_HISTORICAL_URI = Uri.parse(RESERVATION_HISTORICAL_URL);
     // UriMatcher stuff
     private static final int RESERVATIONS = 19;
     private static final int RESERVATION_ID = 20;
     private static final int RESERVATION_ROOMS_ID = 21;
+    private static final int RESERVATION_HISTORICAL_ID = 22;
 
     // Completed FTS Reservations related
     private static final String FTS_COMPLETED_RESERVATIONS_SUB_SCHEME = "/completed_fts_reservations";
     private static final String FTS_COMPLETED_RESERVATION_URL = SCHEME + PROVIDER_NAME + FTS_COMPLETED_RESERVATIONS_SUB_SCHEME;
     public static final Uri FTS_COMPLETED_RESERVATION_URI = Uri.parse(FTS_COMPLETED_RESERVATION_URL);
     // UriMatcher stuff
-    private static final int SEARCH_FTS_COMPLETED_RESERVATIONS = 22;
-    private static final int COMPLETED_RESERVATION_ID = 23;
+    private static final int SEARCH_FTS_COMPLETED_RESERVATIONS = 23;
+    private static final int COMPLETED_RESERVATION_ID = 24;
 
     private static final UriMatcher mURIMatcher = buildUriMatcher();
 
@@ -156,6 +160,9 @@ public class ResortManagerContentProvider extends ContentProvider {
 
         // for reservation rooms
         matcher.addURI(PROVIDER_NAME, RESERVATION_ROOMS_SUB_SCHEME, RESERVATION_ROOMS_ID);
+
+        // for historical reservations (for reports)
+        matcher.addURI(PROVIDER_NAME, RESERVATION_HISTORICAL_SUB_SCHEME, RESERVATION_HISTORICAL_ID);
 
         // to get FTS completed reservations...
         matcher.addURI(PROVIDER_NAME, FTS_COMPLETED_RESERVATIONS_SUB_SCHEME, SEARCH_FTS_COMPLETED_RESERVATIONS);
@@ -269,6 +276,10 @@ public class ResortManagerContentProvider extends ContentProvider {
                 }
                 break;
 
+            case RESERVATION_HISTORICAL_ID:
+                resultCursor =  getHistoricalReservations(selectionArgs[0], selectionArgs[1]);
+                break;
+
             case SEARCH_FTS_COMPLETED_RESERVATIONS:
                 if (selectionArgs == null) {
                     resultCursor = getFTSCompletedReservationMatches(null);
@@ -345,6 +356,10 @@ public class ResortManagerContentProvider extends ContentProvider {
 
     private Cursor getReservationRooms(String reservationID) {
         return mResortDB.getReservationRooms(reservationID, Room.FIELDS);
+    }
+
+    private Cursor getHistoricalReservations(String fromDate, String toDate) {
+        return mResortDB.getHistoricalReservations(fromDate, toDate, Reservation.FIELDS);
     }
 
     private Cursor getAllFTSTasks() {
