@@ -438,36 +438,14 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         return true;
     }
 
-    private void showAlertDialog(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-
-        // Setting Dialog Title
-        alertDialog.setTitle("Incomplete Data");
-
-        // Setting Dialog Message
-        alertDialog.setMessage(message);
-
-        // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_resort_manager);
-
-        // Setting OK Button
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private boolean updateRoomFromUI() {
         if (mRoom == null)
             mRoom = new Room();
 
+        String errorDialogTitle = "Incomplete Data";
         if (mTextName.getText().toString().isEmpty()) {
-            showAlertDialog("Room name cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Room name cannot be empty.");
             mTextName.requestFocus();
             return false;
         }
@@ -477,7 +455,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mRoom.mDescription = mTextDescription.getText().toString();
 
         if (mTextCapacity.getText().toString().isEmpty()) {
-            showAlertDialog("Capacity cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Capacity cannot be empty.");
             mTextCapacity.requestFocus();
             return false;
         }
@@ -489,7 +467,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         if (mCleaningCheckBox.isChecked()) {
             mRoom.mCleaningReminders = 1;
             if (mTextCleaningFrequency.getText().toString().isEmpty()) {
-                showAlertDialog("Cleaning frequency cannot be empty.");
+                ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Cleaning frequency cannot be empty.");
                 mTextCleaningFrequency.requestFocus();
                 return false;
             }

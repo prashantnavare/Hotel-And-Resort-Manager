@@ -584,36 +584,14 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         return true;
     }
 
-    private void showAlertDialog(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-
-        // Setting Dialog Title
-        alertDialog.setTitle("Incomplete Data");
-
-        // Setting Dialog Message
-        alertDialog.setMessage(message);
-
-        // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_resort_manager);
-
-        // Setting OK Button
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private boolean updateItemFromUI() {
         if (mItem == null)
             mItem = new Item();
 
+        String errorDialogTitle = "Incomplete Data";
         if (mTextName.getText().toString().isEmpty()) {
-            showAlertDialog("Item name cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Item name cannot be empty.");
             mTextName.requestFocus();
             return false;
         }
@@ -630,7 +608,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             if (mMaintenanceCheckBox.isChecked()) {
                 mItem.mMaintenanceReminders = 1;
                 if (mTextMaintenanceFrequency.getText().toString().isEmpty()) {
-                    showAlertDialog("Maintenance frequency cannot be empty.");
+                    ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Maintenance frequency cannot be empty.");
                     mTextMaintenanceFrequency.requestFocus();
                     return false;
                 }
@@ -682,7 +660,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             mItem.mType = Item.ConsumableType;
             // Inventory related
             if (mTextCurrentQuantity.getText().toString().isEmpty()) {
-                showAlertDialog("Current Quantity cannot be empty.");
+                ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Current Quantity cannot be empty.");
                 mTextCurrentQuantity.requestFocus();
                 return false;
             }
@@ -690,7 +668,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 mItem.mCurrentQuantity = Long.valueOf(mTextCurrentQuantity.getText().toString());
             }
             if (mTextMeasuringUnit.getText().toString().isEmpty()) {
-                showAlertDialog("Measuring Unit cannot be empty.");
+                ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Measuring Unit cannot be empty.");
                 mTextMeasuringUnit.requestFocus();
                 return false;
             }
@@ -700,7 +678,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             if (mInventoryCheckBox.isChecked()) {
                 mItem.mInventoryReminders = 1;
                 if (mTextMinRequiredQuantity.getText().toString().isEmpty()) {
-                    showAlertDialog("Minimum quantity cannot be empty.");
+                    ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Minimum quantity cannot be empty.");
                     mTextMinRequiredQuantity.requestFocus();
                     return false;
                 }

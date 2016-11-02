@@ -108,6 +108,11 @@ public class ReportsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        if (fromDate.getTimeInMillis() >= toDate.getTimeInMillis()) {
+            ResortManagerApp. showAlertDialog(mContext, "Incorrect Dates", "To Date needs to be later than From Date.");
+            return;
+        }
+
         mResultsLayout.setVisibility(View.VISIBLE);
     }
 
