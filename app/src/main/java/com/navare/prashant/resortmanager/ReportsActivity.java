@@ -2,12 +2,8 @@ package com.navare.prashant.resortmanager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,7 +15,6 @@ import android.widget.LinearLayout;
 
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
-import com.navare.prashant.resortmanager.Database.Room;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,7 +122,7 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
 
         mFromDate = String.valueOf(fromDate.getTimeInMillis());
         mToDate = String.valueOf(toDate.getTimeInMillis());
-        getLoaderManager().restartLoader(LOADER_ID_HISTORICAL_RESERVATIONS, null, this);
+        getLoaderManager().restartLoader(LOADER_ID_HISTORICAL_RESERVATIONS, null, (android.app.LoaderManager.LoaderCallbacks<Cursor>)this);
 
         mResultsLayout.setVisibility(View.VISIBLE);
     }
