@@ -247,17 +247,9 @@ public class RoomDetailActivity extends AppCompatActivity
     private void promptUserForSavingRoom() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        // Setting Dialog Title
         alertDialog.setTitle("Save Changes");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Would you like to save the changes to this room?");
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_save);
-
-        // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -266,16 +258,12 @@ public class RoomDetailActivity extends AppCompatActivity
                     NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, RoomListActivity.class));
             }
         });
-
-        // Setting Negative "NO" Button
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, RoomListActivity.class));
             }
         });
-
-        // Showing Alert Message
         alertDialog.show();
     }
 

@@ -322,17 +322,9 @@ public class TaskDetailActivity extends AppCompatActivity
     private void promptUserForSavingTask() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        // Setting Dialog Title
         alertDialog.setTitle("Save Changes");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Would you like to save the changes to this task?");
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_save);
-
-        // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -340,16 +332,12 @@ public class TaskDetailActivity extends AppCompatActivity
                 NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, TaskListActivity.class));
             }
         });
-
-        // Setting Negative "NO" Button
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, TaskListActivity.class));
             }
         });
-
-        // Showing Alert Message
         alertDialog.show();
     }
 

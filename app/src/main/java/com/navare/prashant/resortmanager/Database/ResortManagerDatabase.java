@@ -1017,7 +1017,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
 
         Cursor cursor = null;
         synchronized (ResortManagerApp.sDatabaseLock) {
-            cursor = builder.query(this.getReadableDatabase(), columns, null, null, null, null, Item.COL_FTS_ITEM_NAME);
+            cursor = builder.query(this.getReadableDatabase(), columns, null, null, null, null, Task.COL_FTS_ITEM_NAME);
         }
 
         if (cursor == null) {

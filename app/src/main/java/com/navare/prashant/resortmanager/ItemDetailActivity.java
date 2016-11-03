@@ -275,17 +275,9 @@ public class ItemDetailActivity extends AppCompatActivity
     private void promptUserForSavingItem() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        // Setting Dialog Title
         alertDialog.setTitle("Save Changes");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Would you like to save the changes to this item?");
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_save);
-
-        // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -294,8 +286,6 @@ public class ItemDetailActivity extends AppCompatActivity
                     NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ItemListActivity.class));
             }
         });
-
-        // Setting Negative "NO" Button
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -303,7 +293,6 @@ public class ItemDetailActivity extends AppCompatActivity
             }
         });
 
-        // Showing Alert Message
         alertDialog.show();
     }
 
@@ -311,17 +300,9 @@ public class ItemDetailActivity extends AppCompatActivity
 
         // First, get a confirmation from the user
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-
-        // Setting Dialog Title
         alertDialog.setTitle("Delete");
-
-        // Setting Dialog Message
         alertDialog.setMessage("Are you sure you want to delete this item?");
-
-        // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.ic_menu_delete);
-
-        // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -329,15 +310,12 @@ public class ItemDetailActivity extends AppCompatActivity
                         .findFragmentById(R.id.item_detail_container)).deleteItem();
             }
         });
-
-        // Setting Negative "NO" Button
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        // Showing Alert Message
         alertDialog.show();
     }
 
