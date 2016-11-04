@@ -449,16 +449,10 @@ public class MainActivity extends Activity {
         mButtonRooms.setText(roomButtonString);
     }
 
-    // TODO: Reports has only summary reports of Historical reservations based on Month or Year
-    // TODO: Reports shows only 2 metrics :
-    // TODO:        occupancy (i.e. sum of all adults and children for that month or year)
-    // TODO:        revenue (totalCharges for that month or year)
     // TODO:
-    // TODO: Room sorting should be alphanumeric (so a 3 is listed above 16) - store it internally as 003 and 016
     // TODO: Revisit all alert dialogs for proper messaging (e.g. Adults should not empty should read Adults field should not be empty)
     // TODO:
     // TODO:
-    // TODO: Sort rooms based on names (in the query for rooms)
     // TODO:
 }
 

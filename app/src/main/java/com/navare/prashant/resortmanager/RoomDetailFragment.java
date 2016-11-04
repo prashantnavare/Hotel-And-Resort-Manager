@@ -455,7 +455,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mRoom.mDescription = mTextDescription.getText().toString();
 
         if (mTextCapacity.getText().toString().isEmpty()) {
-            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Capacity cannot be empty.");
+            ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Capacity field cannot be empty.");
             mTextCapacity.requestFocus();
             return false;
         }
@@ -467,7 +467,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         if (mCleaningCheckBox.isChecked()) {
             mRoom.mCleaningReminders = 1;
             if (mTextCleaningFrequency.getText().toString().isEmpty()) {
-                ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Cleaning frequency cannot be empty.");
+                ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "Cleaning frequency field cannot be empty.");
                 mTextCleaningFrequency.requestFocus();
                 return false;
             }
