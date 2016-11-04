@@ -166,7 +166,7 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
                     totalChildren += children;
                 }
                 mTextTotalRevenue.setText(String.valueOf(totalCharges));
-                mTextTotalOccupancy.setText("Adults : " + String.valueOf(totalAdults) + " Children : " + String.valueOf(totalChildren));
+                mTextTotalOccupancy.setText("Adults : " + String.valueOf(totalAdults) + "   Children : " + String.valueOf(totalChildren));
             }
         }
     }
