@@ -1,4 +1,4 @@
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -10,515 +10,524 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_above="@+id/adView"
         >
-        <!-- Reservation Name, etc. -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:padding="5dp"
-            android:layout_gravity="bottom"
-            android:elevation="6dp"
-            android:background="@drawable/raised_background"
             android:orientation="vertical"
-            android:textAlignment="center"
+            android:layout_above="@+id/adView"
             >
-
-            <!-- Reservation Name -->
+            <!-- Reservation Name, etc. -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
                 >
 
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
+                <!-- Reservation Name -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:padding="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
 
-                <TextView
-                    android:id="@+id/textName"
-                    android:hint="Name"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textName"
+                        android:hint="Name"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="textCapWords|textMultiLine"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- PhoneNumber -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:inputType="textCapWords|textMultiLine"
-                    android:cursorVisible="true"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
 
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Phone Number"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textPhoneNumber"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="textMultiLine"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- E-mail Address -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="E-mail Address"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textEmailAddress"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="textMultiLine"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Num of Adults -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Adults"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textNumAdults"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Num of Children -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Children"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textNumChildren"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Num of days -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Days"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textNumDays"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Dates -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <TextView
+                        android:layout_weight="3"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dates"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/textDates"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- PhoneNumber -->
+            <!-- Checkout Layout -->
             <LinearLayout
+                android:id="@+id/checkoutLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
+                android:elevation="6dp"
+                android:background="@drawable/raised_background"
+                android:orientation="vertical"
+                android:textAlignment="center"
                 >
 
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
+                <!-- Allocated Rooms -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Phone Number"
-                    android:padding="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
 
-                <TextView
-                    android:id="@+id/textPhoneNumber"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Allocated Rooms"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textAllocatedRooms"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Room Charge -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:inputType="textMultiLine"
-                    android:cursorVisible="true"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    >
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Room Charges Per Day"
+                        android:padding="5dp"
+                        />
 
-            <!-- E-mail Address -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                >
+                    <TextView
+                        android:id="@+id/textRoomCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
 
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
+                </LinearLayout>
+
+                <!-- Charges per Adult -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="E-mail Address"
-                    android:padding="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
 
-                <TextView
-                    android:id="@+id/textEmailAddress"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Charges per Adult Per Day"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textAdultCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Children Charges -->
+                <LinearLayout
+                    android:id="@+id/childChargeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:inputType="textMultiLine"
-                    android:cursorVisible="true"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Charges per Child Per Day"
+                        android:padding="5dp"
+                        />
 
-            <!-- Num of Adults -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
+                    <TextView
+                        android:id="@+id/textChildCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
 
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
+                </LinearLayout>
+
+                <!-- Additional Charges -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Adults"
-                    android:padding="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
 
-                <TextView
-                    android:id="@+id/textNumAdults"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Additional Charges"
+                        android:padding="5dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/textAdditionalCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- Tax Percentage -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tax Percentage"
+                        android:padding="5dp"
+                        />
 
-            <!-- Num of Children -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
+                    <TextView
+                        android:id="@+id/textTaxPercent"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
 
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
+                </LinearLayout>
+
+                <!-- Total Charges -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Children"
-                    android:padding="5dp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="10dp"
+                    >
 
-                <TextView
-                    android:id="@+id/textNumChildren"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
+                    <TextView
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Charges"
+                        android:padding="5dp"
+                        />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textTotalCharge"
+                        android:layout_weight="1"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:cursorVisible="true"
+                        android:padding="5dp"
+                        android:background="@drawable/textview_shape_readonly"
+                        android:layout_marginRight="5dp"
+                        />
 
-            <!-- Num of days -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Days"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textNumDays"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Dates -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-                <TextView
-                    android:layout_weight="3"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Dates"
-                    android:padding="5dp"
-                    />
-                <TextView
-                    android:id="@+id/textDates"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Checkout Layout -->
-        <LinearLayout
-            android:id="@+id/checkoutLayout"
-            android:layout_width="match_parent"
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:padding="5dp"
-            android:layout_gravity="bottom"
-            android:elevation="6dp"
-            android:background="@drawable/raised_background"
-            android:orientation="vertical"
-            android:textAlignment="center"
-            >
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_report_detail_ad_unit_id">
+        </com.google.android.gms.ads.AdView>
 
-            <!-- Allocated Rooms -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Allocated Rooms"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textAllocatedRooms"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Room Charge -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Room Charges Per Day"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textRoomCharge"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Charges per Adult -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Charges per Adult Per Day"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textAdultCharge"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Children Charges -->
-            <LinearLayout
-                android:id="@+id/childChargeLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Charges per Child Per Day"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textChildCharge"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Additional Charges -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Additional Charges"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textAdditionalCharge"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Tax Percentage -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tax Percentage"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textTaxPercent"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-
-            <!-- Total Charges -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="10dp"
-                >
-
-                <TextView
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Total Charges"
-                    android:padding="5dp"
-                    />
-
-                <TextView
-                    android:id="@+id/textTotalCharge"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:cursorVisible="true"
-                    android:padding="5dp"
-                    android:background="@drawable/textview_shape_readonly"
-                    android:layout_marginRight="5dp"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_report_detail_ad_unit_id">
-    </com.google.android.gms.ads.AdView>
-</RelativeLayout>
+</ScrollView>

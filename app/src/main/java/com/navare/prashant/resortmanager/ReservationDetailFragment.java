@@ -376,6 +376,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     }
 
     private void showDatePicker() {
+        Calendar minDate = Calendar.getInstance();
         Calendar dateToShow = Calendar.getInstance();
         if (mReservation != null) {
             if (mReservation.mFromDate > 0) {
@@ -398,7 +399,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         int month = dateToShow.get(Calendar.MONTH);
         int day = dateToShow.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePicker = new DatePickerDialog(mContext, onDateChangeCallback, year, month, day);
-        datePicker.getDatePicker().setMinDate(Calendar.getInstance().getTime().getTime());
+        datePicker.getDatePicker().setMinDate(minDate.getTime().getTime());
         datePicker.show();
     }
 
@@ -710,8 +711,16 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         mReservation.mCurrentStatus = Reservation.CheckedOutStatus;
         mReservation.mToDate = Calendar.getInstance().getTimeInMillis();
-        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI,
-                mReservationID);
+
+        float numMilliseconds = mReservation.mToDate - mReservation.mFromDate;
+        float numMillisecondsInADay = (24 * 60 * 60 * 1000);
+        float numFloatDays = numMilliseconds / numMillisecondsInADay;
+        long numDays = Math.round(numFloatDays);
+        if (numDays == 0)
+            numDays = 1;
+        mReservation.mNumDays = numDays;
+
+        Uri reservationURI = Uri.withAppendedPath(ResortManagerContentProvider.RESERVATION_URI, mReservationID);
         int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
         if (result > 0) {
             ResortManagerApp.decrementCheckedInReservationCount();
