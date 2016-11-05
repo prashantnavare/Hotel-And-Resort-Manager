@@ -148,12 +148,12 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor dataCursor) {
 
-        if (dataCursor != null) {
-            int loaderID = loader.getId();
-            if (loaderID == LOADER_ID_HISTORICAL_RESERVATIONS) {
-                long totalCharges = 0;
-                long totalAdults = 0;
-                long totalChildren = 0;
+        int loaderID = loader.getId();
+        if (loaderID == LOADER_ID_HISTORICAL_RESERVATIONS) {
+            long totalCharges = 0;
+            long totalAdults = 0;
+            long totalChildren = 0;
+            if (dataCursor != null) {
 
                 for (dataCursor.moveToFirst(); !dataCursor.isAfterLast(); dataCursor.moveToNext()) {
 
@@ -165,9 +165,9 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
                     totalAdults += adults;
                     totalChildren += children;
                 }
-                mTextTotalRevenue.setText(String.valueOf(totalCharges));
-                mTextTotalOccupancy.setText("Adults : " + String.valueOf(totalAdults) + "   Children : " + String.valueOf(totalChildren));
             }
+            mTextTotalRevenue.setText(String.valueOf(totalCharges));
+            mTextTotalOccupancy.setText("Adults : " + String.valueOf(totalAdults) + "   Children : " + String.valueOf(totalChildren));
         }
     }
 
