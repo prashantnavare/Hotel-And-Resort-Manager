@@ -1,11 +1,9 @@
 package com.navare.prashant.resortmanager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -515,8 +513,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID);
         int result = getActivity().getContentResolver().delete(reservationURI, null, null);
         if (result > 0) {
-            if (mReservation.mCurrentStatus == Reservation.PendingStatus) {
-                ResortManagerApp.decrementPendingReservationCount();
+            if (mReservation.mCurrentStatus == Reservation.NewStatus) {
+                ResortManagerApp.decrementNewReservationCount();
             }
             else if (mReservation.mCurrentStatus == Reservation.CheckedInStatus) {
                 ResortManagerApp.decrementCheckedInReservationCount();
@@ -533,14 +531,14 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         boolean bSuccess = false;
         if (mReservationID.equalsIgnoreCase("-1")) {
-            // a new reservation is being inserted. A new reservation always starts life in Pending status
-            mReservation.mCurrentStatus = Reservation.PendingStatus;
+            // a new reservation is being inserted. A new reservation always starts life with New status
+            mReservation.mCurrentStatus = Reservation.NewStatus;
             Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.RESERVATION_URI, mReservation.getContentValues());
             if (uri != null) {
                 mReservationID = uri.getLastPathSegment();
                 mReservation.mID = Long.valueOf(mReservationID);
                 bSuccess = true;
-                ResortManagerApp.incrementPendingReservationCount();
+                ResortManagerApp.incrementNewReservationCount();
             }
         }
         else {
@@ -628,7 +626,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservationID);
         int result = getActivity().getContentResolver().update(reservationURI, mReservation.getContentValues(), null, null);
         if (result > 0) {
-            ResortManagerApp.decrementPendingReservationCount();
+            ResortManagerApp.decrementNewReservationCount();
             ResortManagerApp.incrementCheckedInReservationCount();
             // Get all the selected rooms and update their status
             updateSelectedRooms();
@@ -860,7 +858,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         else {
             mBtnFromDate.setText("Set");
         }
-        if (mReservation.mCurrentStatus == Reservation.PendingStatus) {
+        if (mReservation.mCurrentStatus == Reservation.NewStatus) {
             mArrivalDetailsLayout.setVisibility(View.VISIBLE);
             mTextArrivalDetails.setText(String.valueOf(mReservation.mArrivalDetails));
         }
@@ -872,7 +870,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCallbacks.EnableDeleteButton(true);
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
-        if (mReservation.mCurrentStatus == Reservation.PendingStatus) {
+        if (mReservation.mCurrentStatus == Reservation.NewStatus) {
             mCallbacks.EnableCheckinButton(true);
             mCallbacks.EnableCheckoutButton(false);
             mCallbacks.EnableZoomInButton(false);

@@ -70,6 +70,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
     private TextView mTextItemType;
     private TextView mTextItemName;
+    private LinearLayout mItemDescriptionLayout;
     private TextView mTextLocation;
     private TextView mTextItemLocation;
     private Button mBtnChangeDueDate;
@@ -218,6 +219,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
         mTextItemType = ((TextView) rootView.findViewById(R.id.textItemType));
         mTextItemName = ((TextView) rootView.findViewById(R.id.textItemName));
+        mItemDescriptionLayout = (LinearLayout) rootView.findViewById(R.id.itemDescriptionLayout);
         mTextLocation = ((TextView) rootView.findViewById(R.id.textLocation));
         mTextItemLocation = ((TextView) rootView.findViewById(R.id.textItemLocation));
 
@@ -512,8 +514,14 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
                     case Activity.RESULT_OK:
                         if (!mCurrentAssignee.isEmpty()) {
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                            String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-                            titleString = titleString + "  Resort Manager: ";
+                            String orgString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
+                            if (orgString.isEmpty()) {
+                                orgString = "Resort Manager";
+                            }
+                            else {
+                                orgString = orgString + " Manager";
+                            }
+                            String titleString = "From " + orgString + ": ";
                             String smsUnAssignMessage = titleString + "You have been unassigned from a " + mTask.getTaskTypeString() + " task for " + mTask.mItemName;
                             if (!mTask.mItemLocation.isEmpty()) {
                                 smsUnAssignMessage = smsUnAssignMessage + " located at " + mTask.mItemLocation;
@@ -606,6 +614,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     private void updateUIFromTask() {
         if (mTask.mItemID >= 0) {
             // This task for an item
+            mItemDescriptionLayout.setVisibility(View.VISIBLE);
             if (mTask.mTaskType == Task.Inventory)
                 mTextItemType.setText("Consumable");
             else
@@ -613,6 +622,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         }
         else if (mTask.mRoomID >= 0) {
             // This is a room
+            mItemDescriptionLayout.setVisibility(View.GONE);
             mTextItemType.setText("Room");
             mTextLocation.setText("Description");
         }

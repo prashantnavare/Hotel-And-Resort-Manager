@@ -6,9 +6,4 @@
         android:fragment="com.navare.prashant.resortmanager.SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" android:icon="@drawable/ic_settings_general" />
 
-    <header
-        android:fragment="com.navare.prashant.resortmanager.SettingsActivity$DatabasePreferenceFragment"
-        android:title="@string/pref_header_database"
-        android:icon="@drawable/ic_settings_database" />
-
 </preference-headers>

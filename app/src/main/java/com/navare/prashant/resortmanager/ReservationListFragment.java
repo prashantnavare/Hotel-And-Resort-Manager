@@ -240,7 +240,7 @@ public class ReservationListFragment extends ListFragment {
 
                 String selection = mCallbacks.getType();
                 String sortOrder = null;
-                if (selection.equalsIgnoreCase(Reservation.getStatusString(Reservation.PendingStatus))) {
+                if (selection.equalsIgnoreCase(Reservation.getStatusString(Reservation.NewStatus))) {
                     sortOrder = Reservation.COL_FTS_FROM_DATE;
                 }
                 else if (selection.equalsIgnoreCase(Reservation.getStatusString(Reservation.CheckedInStatus))) {

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.navare.prashant.resortmanager.Database.Reservation;
-import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.R;
 
 import java.text.ParseException;
@@ -32,11 +31,11 @@ public class ReservationListCursorAdapter extends SimpleCursorAdapter {
         //get reference to the row
         View view = super.getView(position, convertView, parent);
 
-        // If the reservation is in Pending state and the fromDate is older than today, then mark the whole entry in red
+        // If the reservation is in New state and the fromDate is older than today, then mark the whole entry in red
         Cursor cursor = getCursor();
         cursor.moveToPosition(position);
         String reservationState = cursor.getString(cursor.getColumnIndex(Reservation.COL_FTS_RESERVATION_STATUS));
-        if (reservationState.equalsIgnoreCase(Reservation.getStatusString(Reservation.PendingStatus)) == true) {
+        if (reservationState.equalsIgnoreCase(Reservation.getStatusString(Reservation.NewStatus)) == true) {
             // Next see if fromDate is older than today by a day
             String dateString = cursor.getString(cursor.getColumnIndex(Reservation.COL_FTS_RESERVATION_DATES));
             String[] dates = dateString.split("-");

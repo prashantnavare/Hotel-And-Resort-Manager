@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.navare.prashant.resortmanager.Database.Task;
@@ -34,14 +35,17 @@ public class TaskListCursorAdapter extends SimpleCursorAdapter {
         cursor.moveToPosition(position);
 
         // Check to see if an item or a room task and set the textItemType to room/item and textLocation to location/description
+        LinearLayout itemLocationLayout = (LinearLayout) view.findViewById(R.id.itemLocationLayout);
         TextView textItemType = (TextView) view.findViewById(R.id.textItemType);
         TextView textLocation = (TextView) view.findViewById(R.id.textLocation);
         String itemType = cursor.getString(cursor.getColumnIndex(Task.COL_FTS_ITEM_TYPE));
         if (itemType.equalsIgnoreCase("Room")) {
+            itemLocationLayout.setVisibility(View.GONE);
             textItemType.setText("Room");
             textLocation.setText("Description");
         }
         else {
+            itemLocationLayout.setVisibility(View.VISIBLE);
             textItemType.setText("Item");
             textLocation.setText("Location");
         }

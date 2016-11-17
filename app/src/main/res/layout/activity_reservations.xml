@@ -15,9 +15,9 @@
         >
 
         <Button
-            android:id="@+id/pendingButton"
-            android:text="Pending"
-            android:onClick="onPendingClick"
+            android:id="@+id/newButton"
+            android:text="New"
+            android:onClick="onNewClick"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

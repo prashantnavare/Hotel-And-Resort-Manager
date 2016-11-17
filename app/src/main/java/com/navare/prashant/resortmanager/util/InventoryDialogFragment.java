@@ -99,11 +99,11 @@ public class InventoryDialogFragment extends DialogFragment {
         myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (mType == InventoryDialogType.ADD) {
             mTextMessage.setText(mMeasuringUnit + " Added");
-            mBtnYes.setText(getResources().getText(R.string.add));
+            mBtnYes.setText("OK");
         }
         else if (mType == InventoryDialogType.SUBTRACT) {
             mTextMessage.setText(mMeasuringUnit + " Removed");
-            mBtnYes.setText(getResources().getText(R.string.subtract));
+            mBtnYes.setText("OK");
         }
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         return rootView;

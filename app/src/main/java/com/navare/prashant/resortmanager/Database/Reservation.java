@@ -48,7 +48,7 @@ public class Reservation {
     public static final String COL_EMAIL = "emailAddress";
     public static final String COL_ARRIVAL_DETAILS = "arrivalDetails";
 
-    public static final int PendingStatus = 1;
+    public static final int NewStatus = 1;
     public static final int CheckedInStatus = 2;
     public static final int CheckedOutStatus = 3;
 
@@ -271,8 +271,8 @@ public class Reservation {
 
     public static String getStatusString(int status) {
         switch (status) {
-            case PendingStatus:
-                return "Pending";
+            case NewStatus:
+                return "New";
             case CheckedInStatus:
                 return "Checked In";
             case CheckedOutStatus:
@@ -299,7 +299,7 @@ public class Reservation {
         return datesString;
     }
 
-    // Reservation FTS Table - for reservations that are in Pending or Checked in mode
+    // Reservation FTS Table - for reservations that are in New or Checked in mode
     public static final String FTS_TABLE_NAME = "FTSReservationTable";
     public static final String COL_FTS_RESERVATION_NAME = SearchManager.SUGGEST_COLUMN_TEXT_1;
     public static final String COL_FTS_RESERVATION_DATES = SearchManager.SUGGEST_COLUMN_TEXT_2;

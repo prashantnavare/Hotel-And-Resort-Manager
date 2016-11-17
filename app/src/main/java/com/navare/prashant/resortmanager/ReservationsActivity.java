@@ -1,7 +1,5 @@
 package com.navare.prashant.resortmanager;
 
-import android.app.backup.BackupManager;
-import android.app.backup.RestoreObserver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,14 +8,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.navare.prashant.resortmanager.Database.Reservation;
 
 public class ReservationsActivity extends AppCompatActivity {
 
     private Context mContext;
-    private Button mButtonPending;
+    private Button mButtonNew;
     private Button mButtonCheckedIn;
     private Button mButtonHistorical;
 
@@ -28,7 +25,7 @@ public class ReservationsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
-        mButtonPending = (Button) findViewById(R.id.pendingButton);
+        mButtonNew = (Button) findViewById(R.id.newButton);
         mButtonCheckedIn = (Button) findViewById(R.id.checkedInButton);
         mButtonHistorical = (Button) findViewById(R.id.historicalButton);
     }
@@ -39,9 +36,9 @@ public class ReservationsActivity extends AppCompatActivity {
         setVariousCounts();
     }
 
-    public void onPendingClick(View view) {
+    public void onNewClick(View view) {
         Intent intent = new Intent(this, ReservationListActivity.class);
-        intent.putExtra("type", Reservation.getStatusString(Reservation.PendingStatus));
+        intent.putExtra("type", Reservation.getStatusString(Reservation.NewStatus));
         startActivity(intent);
     }
 
@@ -58,9 +55,9 @@ public class ReservationsActivity extends AppCompatActivity {
     private void setVariousCounts() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        long pendingCount = preferences.getLong(ResortManagerApp.sPrefPendingReservationCount, 0);
-        String pendingButtonString = "Pending (" + String.valueOf(pendingCount) + ")";
-        mButtonPending.setText(pendingButtonString);
+        long newCount = preferences.getLong(ResortManagerApp.sPrefNewReservationCount, 0);
+        String newButtonString = "New (" + String.valueOf(newCount) + ")";
+        mButtonNew.setText(newButtonString);
 
         long checkedInCount = preferences.getLong(ResortManagerApp.sPrefCheckedInReservationCount, 0);
         String checkedInButtonString = "Checked In (" + String.valueOf(checkedInCount) + ")";

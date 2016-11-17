@@ -25,7 +25,7 @@ public class ResortManagerApp extends Application {
     public static String sPrefTaskCount = "TaskCount";
     public static String sPrefItemCount = "ItemCount";
     public static String sPrefRoomCount = "RoomCount";
-    public static String sPrefPendingReservationCount = "PendingReservationCount";
+    public static String sPrefNewReservationCount = "NewReservationCount";
     public static String sPrefCheckedInReservationCount = "CheckedInReservationCount";
     public static String sPrefHistoricalReservationCount = "HistoricalReservationCount";
     private static String sPrefPurchaseValue = "PurchaseValue";
@@ -104,20 +104,20 @@ public class ResortManagerApp extends Application {
         editor.commit();
     }
 
-    static public void incrementPendingReservationCount() {
-        changePendingReservationCount(1);
+    static public void incrementNewReservationCount() {
+        changeNewReservationCount(1);
     }
 
-    static public void decrementPendingReservationCount() {
-        changePendingReservationCount(-1);
+    static public void decrementNewReservationCount() {
+        changeNewReservationCount(-1);
     }
 
-    static private void changePendingReservationCount(long numReservations) {
+    static private void changeNewReservationCount(long numReservations) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long reservationCount = prefs.getLong(sPrefPendingReservationCount, 0);
+        long reservationCount = prefs.getLong(sPrefNewReservationCount, 0);
         reservationCount = reservationCount + numReservations;
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefPendingReservationCount, reservationCount);
+        editor.putLong(sPrefNewReservationCount, reservationCount);
         editor.commit();
     }
 
