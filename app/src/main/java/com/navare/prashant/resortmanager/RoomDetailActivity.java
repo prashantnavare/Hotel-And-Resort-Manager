@@ -359,7 +359,7 @@ public class RoomDetailActivity extends AppCompatActivity
 
     @Override
     public void onRoomDeleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Room deleted.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Room deleted.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));
@@ -378,7 +378,7 @@ public class RoomDetailActivity extends AppCompatActivity
 
     @Override
     public void onSaveCompleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Room saved.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Room saved.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));

@@ -29,7 +29,7 @@ public class SetupActivity extends AppCompatActivity {
     public void onBackupClick(View view) {
         BackupManager backupManager = new BackupManager(this);
         backupManager.dataChanged();
-        Toast toast = Toast.makeText(mContext, "Backup operation has been scheduled.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(mContext, "Backup operation has been scheduled.", Toast.LENGTH_LONG);
         toast.show();
     }
 
@@ -39,13 +39,13 @@ public class SetupActivity extends AppCompatActivity {
                 new RestoreObserver(){
                     public void restoreFinished(int error) {
                         if (error == 0) {
-                            Toast toast = Toast.makeText(mContext, "ResortManager data has been restored.", Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(mContext, "ResortManager data has been restored.", Toast.LENGTH_LONG);
                             toast.show();
                         }
                     }
                 }
         );
-        Toast toast = Toast.makeText(mContext, "Restore operation has been scheduled. You will be notified when the restore operation is completed.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(mContext, "Restore operation has been scheduled. You will be notified when the restore operation is completed.", Toast.LENGTH_LONG);
         toast.show();
 
     }

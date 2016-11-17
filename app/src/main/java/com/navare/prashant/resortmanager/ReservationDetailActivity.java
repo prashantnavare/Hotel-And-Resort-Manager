@@ -543,7 +543,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
     @Override
     public void onReservationDeleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Reservation deleted.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Reservation deleted.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
@@ -551,7 +551,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
     @Override
     public void onCheckinCompleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Checkin completed.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Checkin completed.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
@@ -559,7 +559,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
     @Override
     public void onCheckoutCompleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Checkout completed.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Checkout completed.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
@@ -567,7 +567,7 @@ public class ReservationDetailActivity extends AppCompatActivity
 
     @Override
     public void onSaveCompleted() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Reservation saved.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Reservation saved.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));

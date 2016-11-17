@@ -282,7 +282,10 @@ public class Reservation {
     }
 
     public String getFTSReservationName() {
-        String ftsReservationName = mName + " (Adults : " + String.valueOf(mNumAdults) + ") (Children : " + String.valueOf(mNumChildren) + ")";
+        String ftsReservationName = mName + " (Adults : " + String.valueOf(mNumAdults) + ")";
+        if (mNumChildren > 0) {
+            ftsReservationName = ftsReservationName +  " (Children : " + String.valueOf(mNumChildren) + ")";
+        }
         return  ftsReservationName;
     }
 
@@ -293,8 +296,8 @@ public class Reservation {
             Calendar toDate = Calendar.getInstance();
             fromDate.setTimeInMillis(mFromDate);
             toDate.setTimeInMillis(mToDate);
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
-            datesString = dateFormatter.format(fromDate.getTime()) + " - " + dateFormatter.format(toDate.getTime());
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM, yyyy");
+            datesString = dateFormatter.format(fromDate.getTime()) + "  -  " + dateFormatter.format(toDate.getTime());
         }
         return datesString;
     }
