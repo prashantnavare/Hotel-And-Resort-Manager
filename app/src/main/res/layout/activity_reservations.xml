@@ -1,71 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e0e0e0"
-    tools:context=".ReservationsActivity"
+    android:background="@color/colorGrey"
+    android:orientation="vertical"
     >
 
-    <FrameLayout
+    <GridView
+        android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:numColumns="1"
+        android:gravity="center"
+        android:columnWidth="130dp"
+        android:stretchMode="columnWidth"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_main_ad_unit_id"
         >
+    </com.google.android.gms.ads.AdView>
 
-        <Button
-            android:id="@+id/newButton"
-            android:text="New"
-            android:onClick="onNewClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="25dp"
-            android:enabled="true"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/checkedInButton"
-            android:text="Checked In"
-            android:onClick="onCheckedInClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="85dp"
-            android:enabled="true"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/historicalButton"
-            android:text="Historical"
-            android:onClick="onHistoricalClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="145dp"
-            android:enabled="true"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            android:longClickable="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/button_shape"
-            />
-    </FrameLayout>
-</RelativeLayout>
+</LinearLayout>

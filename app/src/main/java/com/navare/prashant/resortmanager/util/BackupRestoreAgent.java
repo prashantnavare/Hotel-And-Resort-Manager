@@ -18,7 +18,7 @@ import java.io.IOException;
 public class BackupRestoreAgent extends BackupAgentHelper {
 
     // The name of the SharedPreferences file
-    private static final String PREFS_FILE = ResortManagerApp.sContext.getPackageName() + "_preferences";
+    private static final String PREFS_FILE = ResortManagerApp.mAppContext.getPackageName() + "_preferences";
     private static final String DB_FILE = "../databases/" + ResortManagerDatabase.DATABASE_NAME;
 
 

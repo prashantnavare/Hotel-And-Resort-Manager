@@ -196,7 +196,7 @@ public class SettingsActivity extends PreferenceActivity {
                 public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                     if(key.equals(ResortManagerApp.sPrefTaskRefreshTime)) {
                         ComputeNewTasksAlarmReceiver alarmReceiver = new ComputeNewTasksAlarmReceiver();
-                        alarmReceiver.setAlarm(ResortManagerApp.sContext, true);
+                        alarmReceiver.setAlarm(ResortManagerApp.mAppContext, true);
                     }
                 }
             };

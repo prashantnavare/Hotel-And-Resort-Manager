@@ -132,16 +132,20 @@ public class ReservationDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+        if (mbSaveMenuEnable) {
+            promptUserForSavingReservation();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (mbSaveMenuEnable) {
-                    promptUserForSavingReservation();
-                }
-                else {
-                    NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
-                }
+                onBackPressed();
                 return true;
             case R.id.menu_checkin:
                 doCheckin();
@@ -382,8 +386,9 @@ public class ReservationDetailActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog,int which) {
 
                 boolean bSuccess = saveReservation();
-                if (bSuccess)
-                    NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ReservationListActivity.class));
+                if (bSuccess) {
+                    onBackPressed();
+                }
             }
         });
 
@@ -570,7 +575,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Reservation saved.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+        finish();
     }
 
     @Override

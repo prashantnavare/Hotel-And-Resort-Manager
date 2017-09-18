@@ -7,14 +7,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.navare.prashant.resortmanager.InAppBilling.IabHelper;
 import com.navare.prashant.resortmanager.InAppBilling.IabHelper.IabAsyncInProgressException;
 import com.navare.prashant.resortmanager.InAppBilling.IabResult;
@@ -28,13 +35,10 @@ import com.navare.prashant.resortmanager.util.SystemUiHider;
  *
  * @see SystemUiHider
  */
-public class MainActivity extends Activity {
-    private Button mButtonReservations;
-    private Button mButtonTasks;
-    private Button mButtonRooms;
-    private Button mButtonInventory;
-    private Button mButtonRemoveAds;
+public class MainActivity extends AppCompatActivity {
+    private GridView mGridView;
     private AdView mAdView;
+
     private InterstitialAd mInterstitialAdForReservations;
     private InterstitialAd mInterstitialAdForTasks;
     private InterstitialAd mInterstitialAdForReports;
@@ -52,6 +56,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO: remove this before final build
+        ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
+
         mThisActivity = this;
         // To solve the documented problem of multiple instances of Main activity (see https://code.google.com/p/android/issues/detail?id=2373)
         if (!isTaskRoot()) {
@@ -66,38 +73,121 @@ public class MainActivity extends Activity {
 
         new SimpleEula(this).show();
 
-        // TODO: remove this before final build
-        ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
+        if (ResortManagerApp.getOrgName().isEmpty()) {
+            setTitle("Hotel/Resort Manager");
+        }
+        else {
+            setTitle(ResortManagerApp.getOrgName() + " Manager");
+        }
 
-        // Buttons that we need to change the text...
-        mButtonReservations = (Button) findViewById(R.id.reservations_button);
-        mButtonTasks = (Button) findViewById(R.id.tasks_button);
-        mButtonRooms = (Button) findViewById(R.id.rooms_button);
-        mButtonInventory = (Button) findViewById(R.id.inventory_button);
+        mGridView =(GridView)findViewById(R.id.grid);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        // Set the title to the name of the hospital
-        setTitleAndVariousCount();
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0:
+                        onReservationsClick();
+                        break;
+                    case 1:
+                        onTasksClick();
+                        break;
+                    case 2:
+                        onRoomsClick();
+                        break;
+                    case 3:
+                        onInventoryClick();
+                        break;
+                    case 4:
+                        onReportsClick();
+                        break;
+                    case 5:
+                        onBackupRestoreClick();
+                        break;
+                    case 6:
+                        onRemoveAdsClick();
+                        break;
+                }
+            }
+        });
 
-        // Ads related
-        mButtonRemoveAds = (Button) findViewById(R.id.removeads_button);
-        // Banner Ad
-        mAdView = (AdView) findViewById(R.id.adView);
+        initGridAdapater();
 
         doAdsInit();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu_actions, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                onSettingsClick();
+                return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void initGridAdapater() {
+        int numButtons = 0;
+        if (ResortManagerApp.isAppPurchased()) {
+            numButtons = 6;
+        }
+        else {
+            numButtons = 7;
+        }
+        String[]    tileTextArray = new String[numButtons];
+        int[]       tileImageArray = new int[numButtons];
+
+        tileTextArray[0] = getString(R.string.reservations);
+        tileTextArray[1]=getString(R.string.tasks) + " (" + String.valueOf(ResortManagerApp.getTaskCount()) + ")";;
+        tileTextArray[2]=getString(R.string.rooms) + " (" + String.valueOf(ResortManagerApp.getRoomCount()) + ")";;
+        tileTextArray[3]=getString(R.string.inventory) + " (" + String.valueOf(ResortManagerApp.getItemCount()) + ")";;
+        tileTextArray[4]=getString(R.string.reports);
+        tileTextArray[5]=getString(R.string.backup_restore);
+
+        tileImageArray[0] = R.drawable.ic_reservations;
+        tileImageArray[1] = R.drawable.ic_tasks;
+        tileImageArray[2] = R.drawable.ic_rooms;
+        tileImageArray[3] = R.drawable.ic_inventory;
+        tileImageArray[4] = R.drawable.ic_reports;
+        tileImageArray[5] = R.drawable.ic_backup;
+
+        if (numButtons == 7) {
+            tileTextArray[6] = getString(R.string.remove_ads);
+            tileImageArray[6] = R.drawable.ic_remove_ads;
+        }
+
+        NavigationGridAdapter adapter = new NavigationGridAdapter(this, tileTextArray, tileImageArray);
+        mGridView.setAdapter(adapter);
+    }
+
     private void removeAdStuff() {
-        mButtonRemoveAds.setVisibility(View.GONE);
         mAdView.setVisibility(View.GONE);
     }
 
     private void doAdsInit() {
+
+        mAdView = (AdView) findViewById(R.id.adView);
 
         if (ResortManagerApp.isAppPurchased()) {
             removeAdStuff();
             return;
         }
 
+        // TODO: Replace the ad unit ID with the real one
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
+
+        mAdView.setVisibility(View.VISIBLE);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
@@ -109,7 +199,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForReservations();
-                onReservationsClick(null);
+                onReservationsClick();
             }
         });
 
@@ -121,7 +211,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForTasks();
-                onTasksClick(null);
+                onTasksClick();
             }
         });
 
@@ -133,7 +223,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForReports();
-                onReportsClick(null);
+                onReportsClick();
             }
         });
 
@@ -145,7 +235,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForRooms();
-                onRoomsClick(null);
+                onRoomsClick();
             }
         });
 
@@ -157,7 +247,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForInventory();
-                onInventoryClick(null);
+                onInventoryClick();
             }
         });
 
@@ -169,7 +259,7 @@ public class MainActivity extends Activity {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForSetup();
-                onSetupClick(null);
+                onSetupClick();
             }
         });
     }
@@ -208,11 +298,18 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        setTitleAndVariousCount();
-        if (mAdView != null) {
-            mAdView.resume();
+        setTitle(ResortManagerApp.getOrgName() + " Inventory Manager");
+        initGridAdapater();
+
+        if (ResortManagerApp.isAppPurchased()) {
+            removeAdStuff();
         }
-        doAdsReload();
+        else {
+            if (mAdView != null) {
+                mAdView.resume();
+            }
+            doAdsReload();
+        }
     }
 
     // Called before the activity is destroyed
@@ -259,7 +356,7 @@ public class MainActivity extends Activity {
         mInterstitialAdForSetup.loadAd(adRequest);
     }
 
-    public void onReservationsClick(View view) {
+    public void onReservationsClick() {
         if (mInterstitialAdForReservations != null && mInterstitialAdForReservations.isLoaded()) {
             mInterstitialAdForReservations.show();
         }
@@ -268,7 +365,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onTasksClick(View view)
+    public void onTasksClick()
     {
         if (mInterstitialAdForTasks != null && mInterstitialAdForTasks.isLoaded()) {
             mInterstitialAdForTasks.show();
@@ -278,7 +375,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onRoomsClick(View view) {
+    public void onRoomsClick() {
         if (mInterstitialAdForRooms != null && mInterstitialAdForRooms.isLoaded()) {
             mInterstitialAdForRooms.show();
         }
@@ -287,7 +384,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onInventoryClick(View view) {
+    public void onInventoryClick() {
         if (mInterstitialAdForInventory != null && mInterstitialAdForInventory.isLoaded()) {
             mInterstitialAdForInventory.show();
         }
@@ -296,7 +393,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onReportsClick(View view) {
+    public void onReportsClick() {
         if (mInterstitialAdForReports != null && mInterstitialAdForReports.isLoaded()) {
             mInterstitialAdForReports.show();
         }
@@ -305,7 +402,11 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onSetupClick(View view) {
+    private void onBackupRestoreClick() {
+        // TODO: Implement this
+    }
+
+    public void onSetupClick() {
         if (mInterstitialAdForSetup != null && mInterstitialAdForSetup.isLoaded()) {
             mInterstitialAdForSetup.show();
         }
@@ -314,7 +415,12 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onRemoveAdsClick(View view) {
+    public void onSettingsClick() {
+        startActivity(new Intent(this, SettingsActivity.class));
+    }
+
+
+    public void onRemoveAdsClick() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Remove Ads");
@@ -425,34 +531,6 @@ public class MainActivity extends Activity {
         // TODO: Implement purchase Wait screen
     }
 
-    private void setTitleAndVariousCount() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-        if (titleString.isEmpty()) {
-            titleString = "Resort Manager";
-        }
-        else {
-            titleString = titleString + " Manager";
-        }
-        setTitle(titleString);
-
-        long taskCount = preferences.getLong(ResortManagerApp.sPrefTaskCount, 0);
-        String taskButtonString = "Tasks (" + String.valueOf(taskCount) + ")";
-        mButtonTasks.setText(taskButtonString);
-
-        long itemCount = preferences.getLong(ResortManagerApp.sPrefItemCount, 0);
-        String itemButtonString = "Inventory (" + String.valueOf(itemCount) + ")";
-        mButtonInventory.setText(itemButtonString);
-
-        long roomCount = preferences.getLong(ResortManagerApp.sPrefRoomCount, 0);
-        String roomButtonString = "Rooms (" + String.valueOf(roomCount) + ")";
-        mButtonRooms.setText(roomButtonString);
-    }
-
-    // TODO:
     // TODO: Revisit all alert dialogs for proper messaging (e.g. Adults should not empty should read Adults field should not be empty)
-    // TODO:
-    // TODO:
-    // TODO:
 }
 

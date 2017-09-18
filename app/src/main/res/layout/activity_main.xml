@@ -1,146 +1,36 @@
-<RelativeLayout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e0e0e0"
-    tools:context=".MainActivity"
+    android:background="@color/colorGrey"
+    android:orientation="vertical"
     >
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout
+    <GridView
+        android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        >
-
-        <Button
-            android:id="@+id/reservations_button"
-            android:text="Reservations"
-            android:onClick="onReservationsClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="25dp"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/tasks_button"
-            android:text="@string/tasks_button"
-            android:onClick="onTasksClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="85dp"
-            android:enabled="true"
-            android:longClickable="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/rooms_button"
-            android:text="Rooms"
-            android:onClick="onRoomsClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="145dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/inventory_button"
-            android:text="@string/inventory_button"
-            android:onClick="onInventoryClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:layout_marginTop="205dp"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/reports_button"
-            android:text="Reports"
-            android:onClick="onReportsClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="265dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/setup_button"
-            android:text="Setup"
-            android:onClick="onSetupClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="325dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-
-        <Button
-            android:id="@+id/removeads_button"
-            android:text="@string/removeads_button"
-            android:onClick="onRemoveAdsClick"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="385dp"
-            android:clickable="true"
-            android:enabled="true"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:longClickable="true"
-            android:background="@drawable/button_shape"
-            />
-    </FrameLayout>
+        android:numColumns="2"
+        android:gravity="center"
+        android:columnWidth="130dp"
+        android:stretchMode="columnWidth"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        />
 
     <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_main_ad_unit_id">
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_main_ad_unit_id"
+        >
     </com.google.android.gms.ads.AdView>
 
-</RelativeLayout>
+</LinearLayout>

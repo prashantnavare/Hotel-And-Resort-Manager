@@ -17,7 +17,7 @@ public class ResortManagerApp extends Application {
     // Object for intrinsic database lock
     public static final Object sDatabaseLock = new Object();
 
-    public static Context sContext;
+    public static Context mAppContext;
 
     private static String sPrefTaskAlarmInitialized = "TaskAlarmInitialized";
     public static String sPrefOrganizationName = "OrganizationName";
@@ -32,27 +32,31 @@ public class ResortManagerApp extends Application {
 
     public static long APP_PURCHASED = 0xdeadbeef;
 
+    private static SharedPreferences mPrefs;
+    private static SharedPreferences.Editor mEditor;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        sContext = getApplicationContext();
+        mAppContext = getApplicationContext();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!prefs.getBoolean(sPrefTaskAlarmInitialized, false)) {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mPrefs.edit();
+
+        if (!mPrefs.getBoolean(sPrefTaskAlarmInitialized, false)) {
             // Set the preferences flag to true
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(sPrefTaskAlarmInitialized, true);
-            editor.putString(ResortManagerApp.sPrefTaskRefreshTime, "01:00");
-            editor.commit();
+            mEditor.putBoolean(sPrefTaskAlarmInitialized, true);
+            mEditor.putString(ResortManagerApp.sPrefTaskRefreshTime, "01:00");
+            mEditor.commit();
 
             ComputeNewTasksAlarmReceiver alarmReceiver = new ComputeNewTasksAlarmReceiver();
             // Set up the daily alarm for computing new tasks
-            alarmReceiver.setAlarm(sContext, true);
-
+            alarmReceiver.setAlarm(mAppContext, true);
         }
     }
 
+    // Task
     static public void incrementTaskCount() {
         changeTaskCount(1);
     }
@@ -62,14 +66,17 @@ public class ResortManagerApp extends Application {
     }
 
     static private void changeTaskCount(long numTasks) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long taskCount = prefs.getLong(sPrefTaskCount, 0);
+        long taskCount = mPrefs.getLong(sPrefTaskCount, 0);
         taskCount = taskCount + numTasks;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefTaskCount, taskCount);
-        editor.commit();
+        mEditor.putLong(sPrefTaskCount, taskCount);
+        mEditor.commit();
     }
 
+    static public long getTaskCount() {
+        return mPrefs.getLong(sPrefTaskCount, 0);
+    }
+
+    // Item
     static public void incrementItemCount() {
         changeItemCount(1);
     }
@@ -79,14 +86,17 @@ public class ResortManagerApp extends Application {
     }
 
     static private void changeItemCount(long numItems) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long itemCount = prefs.getLong(sPrefItemCount, 0);
+        long itemCount = mPrefs.getLong(sPrefItemCount, 0);
         itemCount = itemCount + numItems;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefItemCount, itemCount);
-        editor.commit();
+        mEditor.putLong(sPrefItemCount, itemCount);
+        mEditor.commit();
     }
 
+    static public long getItemCount() {
+        return mPrefs.getLong(sPrefItemCount, 0);
+    }
+
+    // Room
     static public void incrementRoomCount() {
         changeRoomCount(1);
     }
@@ -96,14 +106,17 @@ public class ResortManagerApp extends Application {
     }
 
     static private void changeRoomCount(long numRooms) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long roomCount = prefs.getLong(sPrefRoomCount, 0);
+        long roomCount = mPrefs.getLong(sPrefRoomCount, 0);
         roomCount = roomCount + numRooms;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefRoomCount, roomCount);
-        editor.commit();
+        mEditor.putLong(sPrefRoomCount, roomCount);
+        mEditor.commit();
     }
 
+    static public long getRoomCount() {
+        return mPrefs.getLong(sPrefRoomCount, 0);
+    }
+
+    // New reservations
     static public void incrementNewReservationCount() {
         changeNewReservationCount(1);
     }
@@ -113,14 +126,17 @@ public class ResortManagerApp extends Application {
     }
 
     static private void changeNewReservationCount(long numReservations) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long reservationCount = prefs.getLong(sPrefNewReservationCount, 0);
+        long reservationCount = mPrefs.getLong(sPrefNewReservationCount, 0);
         reservationCount = reservationCount + numReservations;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefNewReservationCount, reservationCount);
-        editor.commit();
+        mEditor.putLong(sPrefNewReservationCount, reservationCount);
+        mEditor.commit();
     }
 
+    static public long getNewReservationsCount() {
+        return mPrefs.getLong(sPrefNewReservationCount, 0);
+    }
+
+    // Checked-in Reservations
     static public void incrementCheckedInReservationCount() {
         changeCheckedInReservationCount(1);
     }
@@ -130,14 +146,17 @@ public class ResortManagerApp extends Application {
     }
 
     static private void changeCheckedInReservationCount(long numReservations) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long reservationCount = prefs.getLong(sPrefCheckedInReservationCount, 0);
+        long reservationCount = mPrefs.getLong(sPrefCheckedInReservationCount, 0);
         reservationCount = reservationCount + numReservations;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefCheckedInReservationCount, reservationCount);
-        editor.commit();
+        mEditor.putLong(sPrefCheckedInReservationCount, reservationCount);
+        mEditor.commit();
     }
 
+    static public long getCheckedInReservationsCount() {
+        return mPrefs.getLong(sPrefCheckedInReservationCount, 0);
+    }
+
+    // Historical reservations
     static public void incrementHistoricalReservationCount() { changeHistoricalReservationCount(1);
     }
 
@@ -146,25 +165,33 @@ public class ResortManagerApp extends Application {
     }
 
     static private void changeHistoricalReservationCount(long numReservations) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long reservationCount = prefs.getLong(sPrefHistoricalReservationCount, 0);
+        long reservationCount = mPrefs.getLong(sPrefHistoricalReservationCount, 0);
         reservationCount = reservationCount + numReservations;
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefHistoricalReservationCount, reservationCount);
-        editor.commit();
+        mEditor.putLong(sPrefHistoricalReservationCount, reservationCount);
+        mEditor.commit();
+    }
+    static public long getHistoricalReservationsCount() {
+        return mPrefs.getLong(sPrefHistoricalReservationCount, 0);
     }
 
+    // purchase value
     static public void setPurchaseValue(long purchaseValue) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(sPrefPurchaseValue, purchaseValue);
-        editor.commit();
+        mEditor.putLong(sPrefPurchaseValue, purchaseValue);
+        mEditor.commit();
     }
 
     static public boolean isAppPurchased() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(sContext);
-        long purchaseValue = prefs.getLong(sPrefPurchaseValue, 0);
+        long purchaseValue = mPrefs.getLong(sPrefPurchaseValue, 0);
         return purchaseValue == APP_PURCHASED;
+    }
+
+    // Organization name
+    static public String getOrgName() {
+        return mPrefs.getString(sPrefOrganizationName, "");
+    }
+
+    static public void setOrgName(String orgName) {
+        mEditor.putString(sPrefOrganizationName, orgName);
     }
 
     static public void showAlertDialog(Context context, String title, String message) {

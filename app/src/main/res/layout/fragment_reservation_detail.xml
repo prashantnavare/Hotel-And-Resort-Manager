@@ -6,9 +6,10 @@
     android:layout_height="fill_parent">
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/reservationDetailsScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adView"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,17 +20,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_above="@+id/adView"
                 >
                 <!-- Reservation Name, etc. -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:layout_marginBottom="5dp"
-                    android:layout_marginTop="10dp"
-                    android:padding="5dp"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp"
                     android:layout_gravity="bottom"
                     android:elevation="6dp"
                     android:background="@drawable/raised_background"
@@ -557,17 +557,8 @@
                 </LinearLayout>
 
             </LinearLayout>
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_item_detail_ad_unit_id">
-            </com.google.android.gms.ads.AdView>
-
         </LinearLayout>
+
     </ScrollView>
 
     <LinearLayout
@@ -653,5 +644,15 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_item_detail_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
 
 </RelativeLayout>
