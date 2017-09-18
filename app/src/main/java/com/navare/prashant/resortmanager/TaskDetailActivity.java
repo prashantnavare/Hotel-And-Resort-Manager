@@ -403,7 +403,7 @@ public class TaskDetailActivity extends AppCompatActivity
 
     @Override
     public void onTaskDone() {
-        Toast toast = Toast.makeText(getApplicationContext(), "Task marked as done.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), "Task marked as done.", Toast.LENGTH_LONG);
         toast.show();
 
         NavUtils.navigateUpTo(this, new Intent(this, TaskListActivity.class));
