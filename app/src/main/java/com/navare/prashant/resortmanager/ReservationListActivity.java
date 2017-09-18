@@ -15,22 +15,6 @@ import android.view.MenuItem;
 import com.navare.prashant.resortmanager.Database.Reservation;
 
 
-/**
- * An activity representing a list of Reservations. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of reservations, which when touched,
- * lead to a {@link ReservationDetailActivity} representing
- * reservation details. On tablets, the activity presents the list of reservations and
- * reservation details side-by-side using two vertical panes.
- * <p/>
- * The activity makes heavy use of fragments. The list of reservations is a
- * {@link ReservationListFragment} and the reservation details
- * (if present) is a {@link ReservationDetailFragment}.
- * <p/>
- * This activity also implements the required
- * {@link ReservationListFragment.Callbacks} interface
- * to listen for reservation selections.
- */
 public class ReservationListActivity extends AppCompatActivity
         implements ReservationListFragment.Callbacks, SearchView.OnQueryTextListener {
 
