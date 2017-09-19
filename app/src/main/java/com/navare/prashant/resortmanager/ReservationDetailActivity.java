@@ -396,7 +396,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ReservationListActivity.class));
+                finish();
             }
         });
 
@@ -551,7 +551,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Reservation deleted.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+        finish();
     }
 
     @Override
@@ -559,7 +559,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Checkin completed.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+        finish();
     }
 
     @Override
@@ -567,7 +567,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Checkout completed.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ReservationListActivity.class));
+        finish();
     }
 
     @Override
