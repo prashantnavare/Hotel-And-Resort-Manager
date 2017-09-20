@@ -112,9 +112,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         void EnableCheckinButton(boolean bEnable);
         void EnableCheckoutButton(boolean bEnable);
         void EnableCompleteCheckoutButton(boolean bEnable);
-        void EnableCallButton(boolean bEnable);
-        void EnableMessageButton(boolean bEnable);
-        void EnableEmailButton(boolean bEnable);
         void EnableZoomInButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
@@ -139,15 +136,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         @Override
         public void EnableCompleteCheckoutButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableCallButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableMessageButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableEmailButton(boolean bEnable) {
         }
         @Override
         public void EnableZoomInButton(boolean bEnable) {
@@ -880,20 +868,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mCallbacks.EnableCheckoutButton(true);
             mCallbacks.EnableZoomInButton(true);
         }
-        if (mReservation.mPhoneNumber.isEmpty() == false) {
-            mCallbacks.EnableCallButton(true);
-            mCallbacks.EnableMessageButton(true);
-        }
-        else {
-            mCallbacks.EnableCallButton(false);
-            mCallbacks.EnableMessageButton(false);
-        }
-        if (mReservation.mEmailAddress.isEmpty() == false) {
-            mCallbacks.EnableEmailButton(true);
-        }
-        else {
-            mCallbacks.EnableEmailButton(false);
-        }
         mCallbacks.RedrawOptionsMenu();
         mCallbacks.setTitleString(mReservation.mName + " - " + mReservation.getStatusString()) ;
     }
@@ -921,11 +895,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         // New reservation so disable checkin and checkout buttons
         mCallbacks.EnableCheckinButton(false);
         mCallbacks.EnableCheckoutButton(false);
-
-        // New reservation so disable call, message and e-mail buttons
-        mCallbacks.EnableCallButton(false);
-        mCallbacks.EnableMessageButton(false);
-        mCallbacks.EnableEmailButton(false);
 
         mCallbacks.setTitleString("New Reservation");
 

@@ -42,9 +42,6 @@ public class ReservationDetailActivity extends AppCompatActivity
     private MenuItem checkinMenuItem = null;
     private MenuItem checkoutMenuItem = null;
     private MenuItem completeCheckoutMenuItem = null;
-    private MenuItem callMenuItem = null;
-    private MenuItem messageMenuItem = null;
-    private MenuItem emailMenuItem = null;
     private MenuItem zoomInMenuItem = null;
     private MenuItem saveMenuItem = null;
     private MenuItem revertMenuItem = null;
@@ -53,9 +50,6 @@ public class ReservationDetailActivity extends AppCompatActivity
     private boolean mbCheckinMenuEnable = false;
     private boolean mbCheckoutMenuEnable = false;
     private boolean mbCompleteCheckoutMenuEnable = false;
-    private boolean mbCallMenuEnable = false;
-    private boolean mbMessageMenuEnable = false;
-    private boolean mbEmailMenuEnable = false;
     private boolean mbZoomInMenuEnable = false;
     private boolean mbSaveMenuEnable = false;
     private boolean mbRevertMenuEnable = false;
@@ -106,13 +100,10 @@ public class ReservationDetailActivity extends AppCompatActivity
         checkinMenuItem = menu.getItem(0);
         checkoutMenuItem = menu.getItem(1);
         completeCheckoutMenuItem = menu.getItem(2);
-        callMenuItem = menu.getItem(3);
-        messageMenuItem = menu.getItem(4);
-        emailMenuItem = menu.getItem(5);
-        zoomInMenuItem = menu.getItem(6);
-        saveMenuItem = menu.getItem(7);
-        revertMenuItem = menu.getItem(8);
-        deleteMenuItem = menu.getItem(9);
+        zoomInMenuItem = menu.getItem(3);
+        saveMenuItem = menu.getItem(4);
+        revertMenuItem = menu.getItem(5);
+        deleteMenuItem = menu.getItem(6);
 
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here
@@ -120,9 +111,6 @@ public class ReservationDetailActivity extends AppCompatActivity
         EnableCheckinButton(mbCheckinMenuEnable);
         EnableCheckoutButton(mbCheckoutMenuEnable);
         EnableCompleteCheckoutButton(mbCompleteCheckoutMenuEnable);
-        EnableCallButton(mbCallMenuEnable);
-        EnableMessageButton(mbMessageMenuEnable);
-        EnableEmailButton(mbEmailMenuEnable);
         EnableZoomInButton(mbZoomInMenuEnable);
         EnableSaveButton(mbSaveMenuEnable);
         EnableRevertButton(mbRevertMenuEnable);
@@ -156,15 +144,6 @@ public class ReservationDetailActivity extends AppCompatActivity
             case R.id.menu_completecheckout:
                 doCompleteCheckout();
                 return true;
-            case R.id.menu_call:
-                doCall();
-                return true;
-            case R.id.menu_message:
-                doMessage();
-                return true;
-            case R.id.menu_email:
-                doEmail();
-                return true;
             case R.id.menu_zoomin:
                 doZoomIn();
                 return true;
@@ -181,187 +160,6 @@ public class ReservationDetailActivity extends AppCompatActivity
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    private void doEmail() {
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{ mMyFragment.getEmailAddress()});
-        emailIntent.setType("message/rfc822");
-
-        startActivity(Intent.createChooser(emailIntent, "Send e-mail"));
-    }
-
-    private void doMessage() {
-        if(checkAndRequestSMSPermission()) {
-            invokeSMSManager();
-        }
-    }
-
-    private void invokeSMSManager() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("smsto:" + Uri.encode(mMyFragment.getPhoneNumber())));
-        startActivity(intent);
-    }
-
-    private void doCall() {
-        if(checkAndRequestCallPhonePermission()) {
-            invokeCallingApp();
-        }
-    }
-
-    private void invokeCallingApp() {
-        ((ReservationDetailFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.reservation_detail_container)).callCustomer();
-    }
-
-    public static final int REQUEST_ID_SMS_PERMISSION = 12;
-    public static final int REQUEST_ID_CALL_PHONE_PERMISSION = 13;
-
-    private  boolean checkAndRequestSMSPermission() {
-        int sendSMSPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (sendSMSPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_SMS_PERMISSION);
-            return false;
-        }
-        return true;
-    }
-
-    private  boolean checkAndRequestCallPhonePermission() {
-        int callPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (callPhonePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_CALL_PHONE_PERMISSION);
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-
-            case REQUEST_ID_SMS_PERMISSION: {
-
-                Log.d("doMessage()", "SMS Permission callback called");
-                Map<String, Integer> perms = new HashMap<>();
-
-                // Initialize the map with SMS permission
-                perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);
-
-                // Fill with actual results from user
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < permissions.length; i++)
-                        perms.put(permissions[i], grantResults[i]);
-
-                    // Check for SMS permission
-                    if (perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-
-                        Log.d("doMessage()", "sms permission granted");
-                        EnableMessageButton(true);
-                        invokeSMSManager();
-                        break;
-                    }
-                    else {
-                        Log.d("doMessage()", "SMS permission are not granted. Ask again: ");
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)) {
-                            showDialogOK("SMS Permission is required for sending SMS.",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            switch (which) {
-                                                case DialogInterface.BUTTON_POSITIVE:
-                                                    checkAndRequestSMSPermission();
-                                                    break;
-                                                case DialogInterface.BUTTON_NEGATIVE:
-                                                    // disable the SMS functionality
-                                                    EnableMessageButton(false);
-                                                    break;
-                                            }
-                                        }
-                                    });
-                            break;
-                        }
-                        //permission is denied (and never ask again is  checked)
-                        //shouldShowRequestPermissionRationale will return false
-                        else {
-                            Toast.makeText(this, "Go to Settings and enable SMS permissions for the  Resort Manager before sending SMSs.", Toast.LENGTH_LONG).show();
-                            // disable the assign task functionality
-                            EnableMessageButton(false);
-                            break;
-                        }
-                    }
-                }
-            }
-            case REQUEST_ID_CALL_PHONE_PERMISSION: {
-
-                Log.d("doCall()", "Call Phone Permission callback called");
-                Map<String, Integer> perms = new HashMap<>();
-
-                // Initialize the map
-                perms.put(Manifest.permission.CALL_PHONE, PackageManager.PERMISSION_GRANTED);
-
-                // Fill with actual results from user
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < permissions.length; i++)
-                        perms.put(permissions[i], grantResults[i]);
-
-                    // Check for CALL permission
-                    if (perms.get(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-
-                        Log.d("doCall()", "call phone permission granted");
-                        EnableCallButton(true);
-                        invokeCallingApp();
-                        break;
-                    }
-                    else {
-                        Log.d("doCall()", "Some permissions are not granted. Ask again: ");
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CALL_PHONE)) {
-                            showDialogOK("Phone Permission is required for calling.",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            switch (which) {
-                                                case DialogInterface.BUTTON_POSITIVE:
-                                                    checkAndRequestCallPhonePermission();
-                                                    break;
-                                                case DialogInterface.BUTTON_NEGATIVE:
-                                                    // disable the call assignee functionality
-                                                    EnableCallButton(false);
-                                                    break;
-                                            }
-                                        }
-                                    });
-                            break;
-                        }
-                        //permission is denied (and never ask again is  checked)
-                        //shouldShowRequestPermissionRationale will return false
-                        else {
-                            Toast.makeText(this, "Go to Settings and enable Phone permission for the  Resort Manager before calling from the app.", Toast.LENGTH_LONG).show();
-                            // disable the call assignee functionality
-                            EnableCallButton(false);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", okListener)
-                .create()
-                .show();
-    }
-
 
     private boolean saveReservation() {
         return ((ReservationDetailFragment) getSupportFragmentManager()
@@ -475,33 +273,6 @@ public class ReservationDetailActivity extends AppCompatActivity
         if (completeCheckoutMenuItem != null) {
             completeCheckoutMenuItem.setEnabled(bEnable);
             completeCheckoutMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
-    public void EnableCallButton(boolean bEnable) {
-        mbCallMenuEnable = bEnable;
-        if (callMenuItem != null) {
-            callMenuItem.setEnabled(bEnable);
-            callMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
-    public void EnableMessageButton(boolean bEnable) {
-        mbMessageMenuEnable = bEnable;
-        if (messageMenuItem != null) {
-            messageMenuItem.setEnabled(bEnable);
-            messageMenuItem.setVisible(bEnable);
-        }
-    }
-
-    @Override
-    public void EnableEmailButton(boolean bEnable) {
-        mbEmailMenuEnable = bEnable;
-        if (emailMenuItem != null) {
-            emailMenuItem.setEnabled(bEnable);
-            emailMenuItem.setVisible(bEnable);
         }
     }
 
