@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -14,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 
 import com.google.android.gms.ads.AdListener;
@@ -44,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAdForReports;
     private InterstitialAd mInterstitialAdForRooms;
     private InterstitialAd mInterstitialAdForInventory;
-    private InterstitialAd mInterstitialAdForSetup;
+    private InterstitialAd mInterstitialAdForBackupRestore;
     private IabHelper mHelper;
     private Activity mThisActivity;
 
@@ -215,18 +212,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Reports related interstitial ad
-        mInterstitialAdForReports = new InterstitialAd(this);
-        mInterstitialAdForReports.setAdUnitId(getString(R.string.interstitial_tasks_ad_unit_id));
-
-        mInterstitialAdForReports.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitialForReports();
-                onReportsClick();
-            }
-        });
-
         // Rooms related interstitial ad
         mInterstitialAdForRooms = new InterstitialAd(this);
         mInterstitialAdForRooms.setAdUnitId(getString(R.string.interstitial_reports_ad_unit_id));
@@ -251,15 +236,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Setup related interstitial ad
-        mInterstitialAdForSetup = new InterstitialAd(this);
-        mInterstitialAdForSetup.setAdUnitId(getString(R.string.interstitial_backuprestore_ad_unit_id));
+        // Reports related interstitial ad
+        mInterstitialAdForReports = new InterstitialAd(this);
+        mInterstitialAdForReports.setAdUnitId(getString(R.string.interstitial_tasks_ad_unit_id));
 
-        mInterstitialAdForSetup.setAdListener(new AdListener() {
+        mInterstitialAdForReports.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitialForReports();
+                onReportsClick();
+            }
+        });
+
+        // Backup/Restore related interstitial ad
+        mInterstitialAdForBackupRestore = new InterstitialAd(this);
+        mInterstitialAdForBackupRestore.setAdUnitId(getString(R.string.interstitial_backuprestore_ad_unit_id));
+
+        mInterstitialAdForBackupRestore.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
                 requestNewInterstitialForSetup();
-                onSetupClick();
+                onBackupRestoreClick();
             }
         });
     }
@@ -280,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         if (mInterstitialAdForInventory != null && !mInterstitialAdForInventory.isLoaded()) {
             requestNewInterstitialForInventory();
         }
-        if (mInterstitialAdForSetup != null && !mInterstitialAdForSetup.isLoaded()) {
+        if (mInterstitialAdForBackupRestore != null && !mInterstitialAdForBackupRestore.isLoaded()) {
             requestNewInterstitialForSetup();
         }
     }
@@ -298,7 +295,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setTitle(ResortManagerApp.getOrgName() + " Inventory Manager");
+        if (ResortManagerApp.getOrgName().isEmpty()) {
+            setTitle("Hotel/Resort Manager");
+        }
+        else {
+            setTitle(ResortManagerApp.getOrgName() + " Manager");
+        }
         initGridAdapater();
 
         if (ResortManagerApp.isAppPurchased()) {
@@ -353,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestNewInterstitialForSetup() {
         AdRequest adRequest = new AdRequest.Builder().build();
-        mInterstitialAdForSetup.loadAd(adRequest);
+        mInterstitialAdForBackupRestore.loadAd(adRequest);
     }
 
     public void onReservationsClick() {
@@ -402,16 +404,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void onBackupRestoreClick() {
-        // TODO: Implement this
-    }
-
-    public void onSetupClick() {
-        if (mInterstitialAdForSetup != null && mInterstitialAdForSetup.isLoaded()) {
-            mInterstitialAdForSetup.show();
+    public void onBackupRestoreClick() {
+        if (mInterstitialAdForBackupRestore != null && mInterstitialAdForBackupRestore.isLoaded()) {
+            mInterstitialAdForBackupRestore.show();
         }
         else {
-            startActivity(new Intent(this, SetupActivity.class));
+            startActivity(new Intent(this, BackupRestoreActivity.class));
         }
     }
 
@@ -424,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Remove Ads");
-        alertDialog.setMessage("Would you like to purchase  Resort Manager and remove the ads?");
+        alertDialog.setMessage("Would you like to purchase  Hotel/Resort Manager and remove the ads?");
         alertDialog.setIcon(R.drawable.ic_resort_manager);
         alertDialog.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {

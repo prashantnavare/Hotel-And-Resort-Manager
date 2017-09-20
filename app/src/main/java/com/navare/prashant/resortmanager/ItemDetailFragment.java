@@ -892,7 +892,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         // a new service call is being inserted.
         Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.SERVICE_CALL_URI, sc.getContentValues());
         if (uri != null) {
-            Toast toast = Toast.makeText(mContext, "Problem report created.", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(mContext, "Service call created.", Toast.LENGTH_LONG);
             toast.show();
 
             // Also create a corresponding task
@@ -908,7 +908,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             Uri taskUri = getActivity().getContentResolver().insert(ResortManagerContentProvider.TASK_URI, task.getContentValues());
         }
         else {
-            Toast toast = Toast.makeText(mContext, "Failed to create problem report.", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(mContext, "Failed to create service call.", Toast.LENGTH_LONG);
             toast.show();
         }
     }

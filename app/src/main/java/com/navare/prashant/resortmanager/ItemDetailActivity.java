@@ -225,7 +225,7 @@ public class ItemDetailActivity extends AppCompatActivity
                         // permission is denied (and never ask again is  checked)
                         // shouldShowRequestPermissionRationale will return false
                         else {
-                            Toast.makeText(this, "Go to Settings and enable Storage permission for the  Resort Manager before taking photos of items.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Go to Settings and enable Storage permission for the  Hotel/Resort Manager before taking photos of items.", Toast.LENGTH_LONG).show();
                             // disable the call assignee functionality
                             EnableCameraButton(false);
                         }

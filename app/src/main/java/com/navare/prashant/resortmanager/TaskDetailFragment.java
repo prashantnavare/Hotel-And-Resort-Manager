@@ -469,88 +469,9 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         int result = getActivity().getContentResolver().update(taskURI, mTask.getContentValues(), null, null);
         if (result > 0) {
 
-            // If the task was unassigned to a person, send that person an SMS.
-            // If the task was assigned to a new person, send that person an SMS.
-            sendTaskSMSs();
             updateUIFromTask();
         }
     }
-
-    private void sendTaskSMSs() {
-        if (!mNewAssignee.isEmpty()) {
-            // If the current and new assignees are the same, don't do anytrhing.
-            if (mNewAssignee.equalsIgnoreCase(mCurrentAssignee))
-                return;
-
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-            String titleString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-            titleString = titleString + "  Resort Manager: ";
-            // First send SMS to the new assignee
-            String smsAssignMessage = titleString + "You have been assigned a " + mTask.getTaskTypeString() + " task for " + mTask.mItemName;
-            if (!mTask.mItemLocation.isEmpty()) {
-                smsAssignMessage = smsAssignMessage + " located at " + mTask.mItemLocation;
-            }
-            String assigneePhoneNumber = getPhoneNumber(mNewAssignee);
-            if (!assigneePhoneNumber.isEmpty()) {
-                sendAssigneeSMS(assigneePhoneNumber, smsAssignMessage);
-            }
-        }
-    }
-
-    private void sendAssigneeSMS(String phoneNumber, String message)
-    {
-        String SENT = "SMS_SENT";
-
-        PendingIntent sentPI = PendingIntent.getBroadcast(mContext, 0, new Intent(SENT), 0);
-        final SmsManager sms = SmsManager.getDefault();
-
-        // when the SMS has been sent, send the deAssignee an SMS about unassignment
-        mContext.registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode()) {
-                    case Activity.RESULT_OK:
-                        if (!mCurrentAssignee.isEmpty()) {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                            String orgString = preferences.getString(ResortManagerApp.sPrefOrganizationName, "");
-                            if (orgString.isEmpty()) {
-                                orgString = "Resort Manager";
-                            }
-                            else {
-                                orgString = orgString + " Manager";
-                            }
-                            String titleString = "From " + orgString + ": ";
-                            String smsUnAssignMessage = titleString + "You have been unassigned from a " + mTask.getTaskTypeString() + " task for " + mTask.mItemName;
-                            if (!mTask.mItemLocation.isEmpty()) {
-                                smsUnAssignMessage = smsUnAssignMessage + " located at " + mTask.mItemLocation;
-                            }
-                            String unAssigneePhoneNumber = getPhoneNumber(mCurrentAssignee);
-                            if (!unAssigneePhoneNumber.isEmpty()) {
-                                sms.sendTextMessage(unAssigneePhoneNumber, null, smsUnAssignMessage, null, null);
-                            }
-                        }
-                        break;
-                }
-            }
-        }, new IntentFilter(SENT));
-
-        sms.sendTextMessage(phoneNumber, null, message, sentPI, null);
-    }
-
-    private String getPhoneNumber(String name) {
-        String phoneNumber = "";
-        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" like'%" + name +"%'";
-        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER};
-        Cursor c = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                projection, selection, null, null);
-        if (c.moveToFirst()) {
-            phoneNumber = c.getString(0);
-        }
-        c.close();
-        return phoneNumber;
-    }
-
-    public final int PICK_CONTACT = 2015;
 
     public void assignTask() {
         AssignTaskDialogFragment dialog = new AssignTaskDialogFragment();
@@ -564,24 +485,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         mTextAssignedToPhone.setText(assigneePhone);
         enableRevertAndSaveButtons();
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
-            Uri contactUri = data.getData();
-            Cursor cursor = mContext.getContentResolver().query(contactUri, null, null, null, null);
-            cursor.moveToFirst();
-            int columnDisplayName = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-            String assigneeName = cursor.getString(columnDisplayName);
-            cursor.close();
-
-            mCurrentAssignee = mTask.mAssignedTo;
-            mNewAssignee = assigneeName;
-            mTextAssignedTo.setText(assigneeName);
-            enableRevertAndSaveButtons();
-        }
-    }
-
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     private void updateTaskFromUI() {
@@ -749,5 +652,4 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         datePicker.setCallBack(onDateChangeCallback);
         datePicker.show(((FragmentActivity)mContext).getSupportFragmentManager(), "Task Due Date Picker");
     }
-
 }

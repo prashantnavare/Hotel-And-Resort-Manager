@@ -13,6 +13,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.telephony.SmsManager;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,9 +46,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
 
     public interface Callbacks {
         void setTitleString(String titleString);
-        void EnableEmailButton(boolean bEnable);
-        void EnableMessageButton(boolean bEnable);
-        void EnableCallButton(boolean bEnable);
         void RedrawOptionsMenu();
     }
 
@@ -58,15 +56,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void setTitleString(String titleString) {
-        }
-        @Override
-        public void EnableEmailButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableMessageButton(boolean bEnable) {
-        }
-        @Override
-        public void EnableCallButton(boolean bEnable) {
         }
         @Override
         public void RedrawOptionsMenu() {
@@ -166,7 +155,9 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
 
         mTextName = ((TextView) rootView.findViewById(R.id.textName));
         mTextPhoneNUmber = ((TextView) rootView.findViewById(R.id.textPhoneNumber));
+        mTextPhoneNUmber.setMovementMethod(LinkMovementMethod.getInstance());
         mTextEmailAddress = ((TextView) rootView.findViewById(R.id.textEmailAddress));
+        mTextEmailAddress.setMovementMethod(LinkMovementMethod.getInstance());
         mTextNumAdults = ((TextView) rootView.findViewById(R.id.textNumAdults));
         mTextNumChildren = ((TextView) rootView.findViewById(R.id.textNumChildren));
         mTextNumDays = (TextView) rootView.findViewById(R.id.textNumDays);
@@ -253,9 +244,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
 
         mCallbacks.setTitleString("Details for " + mReservation.mCompletedFTSName) ;
 
-        mCallbacks.EnableEmailButton(true);
-        mCallbacks.EnableMessageButton(true);
-        mCallbacks.EnableCallButton(true);
         mCallbacks.RedrawOptionsMenu();
     }
 
