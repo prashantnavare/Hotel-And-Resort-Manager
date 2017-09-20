@@ -101,6 +101,7 @@
                             android:padding="5dp"
                             android:inputType="textMultiLine"
                             android:cursorVisible="true"
+                            android:autoLink="all"
                             android:background="@drawable/textview_shape_readonly"
                             android:layout_marginRight="5dp"
                             />
@@ -134,6 +135,7 @@
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:inputType="textMultiLine"
+                            android:autoLink="all"
                             android:cursorVisible="true"
                             android:background="@drawable/textview_shape_readonly"
                             android:layout_marginRight="5dp"
