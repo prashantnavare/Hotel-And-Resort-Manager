@@ -25,10 +25,4 @@
         android:title="@string/menu_mark_as_complete"
         android:orderInCategory="4"
         />
-    <item android:id="@+id/menu_call"
-        android:icon="@drawable/ic_menu_call"
-        resortmanager:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/menu_call_assigned_person"
-        android:orderInCategory="5"
-        />
 </menu>

@@ -36,7 +36,7 @@
     <string name="title_task_list">Tasks</string>
     <string name="title_task_detail">Task Detail</string>
     <string name="menu_update_tasks">Update Tasks Table</string>
-    <string name="assigned_to">Assigned</string>
+    <string name="assigned_to">Assigned To</string>
     <string name="due_date">Due Date</string>
     <string name="none">None</string>
     <string name="menu_mark_as_complete">Mark as complete</string>

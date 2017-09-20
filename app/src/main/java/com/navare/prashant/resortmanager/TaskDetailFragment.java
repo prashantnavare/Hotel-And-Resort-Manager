@@ -39,6 +39,7 @@ import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.util.ContractTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.InventoryTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
+import com.navare.prashant.resortmanager.util.AssignTaskDialogFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,6 +76,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     private TextView mTextItemLocation;
     private Button mBtnChangeDueDate;
     private TextView mTextAssignedTo;
+    private TextView mTextAssignedToPhone;
     private TextView mTextTaskType;
     private TextView mTextInstructionsLabel;
     private TextView mTextInstructions;
@@ -99,7 +101,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
          */
         void EnableAssignButton(boolean bEnable);
         void EnableTaskDoneButton(boolean bEnable);
-        void EnableCallButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
         void RedrawOptionsMenu();
@@ -115,10 +116,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
         @Override
         public void EnableTaskDoneButton(boolean bEnable) {
-        }
-
-        @Override
-        public void EnableCallButton(boolean bEnable) {
         }
 
         @Override
@@ -233,6 +230,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         });
 
         mTextAssignedTo = ((TextView) rootView.findViewById(R.id.textAssignedTo));
+        mTextAssignedToPhone = ((TextView) rootView.findViewById(R.id.textAssignedToPhone));
 
         mTextTaskType = ((TextView) rootView.findViewById(R.id.textTaskType));
 
@@ -555,14 +553,16 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     public final int PICK_CONTACT = 2015;
 
     public void assignTask() {
-        Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(i, PICK_CONTACT);
+        AssignTaskDialogFragment dialog = new AssignTaskDialogFragment();
+        dialog.setAssigneeName(mTask.mAssignedTo);
+        dialog.setAssigneePhone(mTask.mAssignedToContactNumber);
+        dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "AssignTaskDialogFragment");
     }
 
-    public void callAssignee() {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + mTask.mAssignedToContactNumber));
-        startActivity(callIntent);
+    public void setTaskAssigneeInfo(String assigneeName, String assigneePhone) {
+        mTextAssignedTo.setText(assigneeName);
+        mTextAssignedToPhone.setText(assigneePhone);
+        enableRevertAndSaveButtons();
     }
 
     @Override
@@ -589,8 +589,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             mTask = new Task();
 
         mTask.mAssignedTo = mTextAssignedTo.getText().toString();
-        if (!mTask.mAssignedTo.isEmpty())
-            mTask.mAssignedToContactNumber = getPhoneNumber(mTask.mAssignedTo);
+        mTask.mAssignedToContactNumber = mTextAssignedToPhone.getText().toString();
         if (mNormalRadioButton.isChecked()) {
             mTask.mPriority = Task.NormalPriority;
         }
@@ -642,6 +641,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         }
 
         mTextAssignedTo.setText(mTask.mAssignedTo);
+        mTextAssignedToPhone.setText(mTask.mAssignedToContactNumber);
 
         mTextTaskType.setText(mTask.getTaskTypeString());
 
@@ -698,11 +698,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         // Toggle the action bar buttons appropriately
         mCallbacks.EnableAssignButton(true);
 
-        if (!mTask.mAssignedTo.isEmpty()) {
-            if (!mTask.mAssignedToContactNumber.isEmpty()) {
-                mCallbacks.EnableCallButton(true);
-            }
-        }
         mCallbacks.EnableTaskDoneButton(true);
         mCallbacks.EnableSaveButton(false);
         mCallbacks.EnableRevertButton(false);

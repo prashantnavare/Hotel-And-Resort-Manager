@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -64,6 +65,7 @@ public class TaskListFragment extends ListFragment {
     }
 
     private AdView mAdView;
+    private Context mContext;
 
     /**
      * A dummy implementation of the {@link Callbacks} interface that does
@@ -176,6 +178,7 @@ public class TaskListFragment extends ListFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        mContext = context;
         Activity activity = getActivity();
         // Activities containing this fragment must implement its callbacks.
         if (!(activity instanceof Callbacks)) {
@@ -255,10 +258,16 @@ public class TaskListFragment extends ListFragment {
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
                 ((SimpleCursorAdapter) getListAdapter()).swapCursor(c);
-                if (c != null)
+                if (c != null) {
                     mCallbacks.setTaskCount(c.getCount());
-                else
+                    if (c.getCount() > 0) {
+                        Toast toast = Toast.makeText(mContext, "Tap on any task to see the task details.", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+                else {
                     mCallbacks.setTaskCount(0);
+                }
             }
 
             @Override
