@@ -56,7 +56,7 @@
                         android:id="@+id/textName"
                         android:hint="Room Name or Number"
                         android:layout_weight="1"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
@@ -90,7 +90,7 @@
                     <EditText
                         android:id="@+id/textCapacity"
                         android:layout_weight="1"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberDecimal"
@@ -124,7 +124,7 @@
                     <EditText
                         android:id="@+id/textDescription"
                         android:layout_weight="1"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textMultiLine|textCapWords"
@@ -157,7 +157,7 @@
                 <CheckBox
                     android:id="@+id/chkCleaning"
                     android:layout_weight="1"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:text="Cleaning Reminders"
@@ -196,7 +196,7 @@
                             />
                         <EditText
                             android:id="@+id/textCleaningFrequency"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -224,7 +224,7 @@
                         <Button
                             android:id="@+id/btnChangeCleaningDate"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:padding="5dp"
                             android:textStyle="bold"
@@ -253,7 +253,7 @@
                         <EditText
                             android:id="@+id/textCleaningInstructions"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"

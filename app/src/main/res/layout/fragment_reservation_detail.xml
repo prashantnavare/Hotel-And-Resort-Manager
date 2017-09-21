@@ -58,7 +58,7 @@
                         <EditText
                             android:id="@+id/textName"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -92,11 +92,12 @@
                         <EditText
                             android:id="@+id/textPhoneNumber"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:inputType="numberDecimal"
+                            android:linksClickable="true"
                             android:autoLink="all"
                             android:cursorVisible="true"
                             android:background="@drawable/textview_shape"
@@ -127,11 +128,12 @@
                         <EditText
                             android:id="@+id/textEmailAddress"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
-                            android:inputType="textMultiLine|textEmailAddress"
+                            android:inputType="textEmailAddress"
+                            android:linksClickable="true"
                             android:autoLink="all"
                             android:cursorVisible="true"
                             android:background="@drawable/textview_shape"
@@ -161,7 +163,7 @@
                         <EditText
                             android:id="@+id/textNumAdults"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -194,7 +196,7 @@
                         <EditText
                             android:id="@+id/textNumChildren"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -225,7 +227,7 @@
                         <Button
                             android:id="@+id/btnFromDate"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:padding="5dp"
                             android:textStyle="bold"
@@ -258,7 +260,7 @@
                         <EditText
                             android:id="@+id/textNumDays"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -293,7 +295,7 @@
                         <EditText
                             android:id="@+id/textArrivalDetails"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -345,7 +347,7 @@
                         <TextView
                             android:id="@+id/textAllocatedRooms"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -379,7 +381,7 @@
                         <EditText
                             android:id="@+id/textRoomCharge"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
@@ -412,7 +414,7 @@
                         <EditText
                             android:id="@+id/textAdultCharge"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -446,7 +448,7 @@
                         <EditText
                             android:id="@+id/textChildCharge"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -479,7 +481,7 @@
                         <EditText
                             android:id="@+id/textAdditionalCharge"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -512,7 +514,7 @@
                         <EditText
                             android:id="@+id/textTaxPercent"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -545,7 +547,7 @@
                         <TextView
                             android:id="@+id/textTotalCharge"
                             android:layout_weight="1"
-                            android:textSize="12sp"
+                            android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"

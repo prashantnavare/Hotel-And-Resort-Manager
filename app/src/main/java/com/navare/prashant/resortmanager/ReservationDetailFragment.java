@@ -13,7 +13,12 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -263,9 +268,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
         mTextPhoneNumber = ((TextView) rootView.findViewById(R.id.textPhoneNumber));
         mTextPhoneNumber.addTextChangedListener(this);
+        mTextPhoneNumber.setMovementMethod(LinkMovementMethod.getInstance());
 
         mTextEmailAddress = ((TextView) rootView.findViewById(R.id.textEmailAddress));
         mTextEmailAddress.addTextChangedListener(this);
+        mTextEmailAddress.setMovementMethod(LinkMovementMethod.getInstance());
 
         mTextNumAdults = ((TextView) rootView.findViewById(R.id.textNumAdults));
         mTextNumAdults.addTextChangedListener(this);
@@ -832,8 +839,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private void updateUIFromReservation() {
 
         mTextName.setText(mReservation.mName);
-        mTextPhoneNumber.setText(mReservation.mPhoneNumber);
-        mTextEmailAddress.setText(mReservation.mEmailAddress);
+
+        // Add a space to both phoneNumber and eMail so that the link is both clickable and editable
+        mTextPhoneNumber.setText(mReservation.mPhoneNumber + " ");
+        mTextEmailAddress.setText(mReservation.mEmailAddress + " ");
+
         mTextNumAdults.setText(String.valueOf(mReservation.mNumAdults));
         mTextNumChildren.setText(String.valueOf(mReservation.mNumChildren));
         mTextNumDays.setText(String.valueOf(mReservation.mNumDays));
