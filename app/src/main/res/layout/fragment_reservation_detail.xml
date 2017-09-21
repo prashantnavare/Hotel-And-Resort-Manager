@@ -131,7 +131,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
-                            android:inputType="textMultiLine"
+                            android:inputType="textMultiLine|textEmailAddress"
                             android:autoLink="all"
                             android:cursorVisible="true"
                             android:background="@drawable/textview_shape"

@@ -173,13 +173,13 @@ public class TaskDetailActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog,int which) {
 
                 saveTask();
-                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, TaskListActivity.class));
+                finish();
             }
         });
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, TaskListActivity.class));
+                finish();
             }
         });
         alertDialog.show();
@@ -241,7 +241,7 @@ public class TaskDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Task marked as done.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, TaskListActivity.class));
+        finish();
     }
 
     @Override

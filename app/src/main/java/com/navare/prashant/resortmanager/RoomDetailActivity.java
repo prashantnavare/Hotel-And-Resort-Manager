@@ -279,7 +279,7 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setMessage("Are you sure you want to delete this room?");
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_menu_delete);
+        alertDialog.setIcon(R.drawable.ic_delete_grey);
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {

@@ -208,7 +208,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Delete");
         alertDialog.setMessage("Are you sure you want to delete this reservation?");
-        alertDialog.setIcon(R.drawable.ic_menu_delete);
+        alertDialog.setIcon(R.drawable.ic_delete_grey);
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
