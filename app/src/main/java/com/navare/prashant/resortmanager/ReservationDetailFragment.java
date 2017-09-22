@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -545,6 +546,10 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         if (bSuccess) {
             mCallbacks.onSaveCompleted();
+        }
+        else {
+            Toast toast = Toast.makeText(mContext, "Failed to save reservation. Please retry...", Toast.LENGTH_LONG);
+            toast.show();
         }
         return true;
     }

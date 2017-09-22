@@ -127,16 +127,21 @@ public class ItemDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+        if (mbSaveMenuEnable) {
+            promptUserForSavingItem();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (mbSaveMenuEnable) {
-                    promptUserForSavingItem();
-                }
-                else {
-                    NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
-                }
+                onBackPressed();
                 return true;
             case R.id.menu_revert:
                 revertUI();
@@ -277,19 +282,17 @@ public class ItemDetailActivity extends AppCompatActivity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Save Changes");
         alertDialog.setMessage("Would you like to save the changes to this item?");
-        alertDialog.setIcon(R.drawable.ic_menu_save);
+        alertDialog.setIcon(R.drawable.ic_save_black);
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
-                boolean bSuccess = saveItem();
-                if (bSuccess)
-                    NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ItemListActivity.class));
+                saveItem();
             }
         });
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, ItemListActivity.class));
+                finish();
             }
         });
 
@@ -302,7 +305,7 @@ public class ItemDetailActivity extends AppCompatActivity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Delete");
         alertDialog.setMessage("Are you sure you want to delete this item?");
-        alertDialog.setIcon(R.drawable.ic_delete_grey);
+        alertDialog.setIcon(R.drawable.ic_delete_black);
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
@@ -396,7 +399,7 @@ public class ItemDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Item deleted.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
+        finish();
     }
 
     @Override
@@ -436,7 +439,7 @@ public class ItemDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Item saved.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, ItemListActivity.class));
+        finish();
     }
 
     @Override

@@ -168,12 +168,11 @@ public class TaskDetailActivity extends AppCompatActivity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Save Changes");
         alertDialog.setMessage("Would you like to save the changes to this task?");
-        alertDialog.setIcon(R.drawable.ic_menu_save);
+        alertDialog.setIcon(R.drawable.ic_save_black);
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
                 saveTask();
-                finish();
             }
         });
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -281,6 +280,14 @@ public class TaskDetailActivity extends AppCompatActivity
         String assigneeNumber = dialog.getAssigneePhone();
         ((TaskDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.task_detail_container)).setTaskAssigneeInfo(assigneeName, assigneeNumber);
+    }
+
+    @Override
+    public void onSaveCompleted() {
+        Toast toast = Toast.makeText(getApplicationContext(), "Task saved.", Toast.LENGTH_LONG);
+        toast.show();
+
+        finish();
     }
 
     @Override

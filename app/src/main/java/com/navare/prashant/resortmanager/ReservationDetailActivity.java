@@ -177,7 +177,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         alertDialog.setMessage("Would you like to save the changes to this reservation?");
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_menu_save);
+        alertDialog.setIcon(R.drawable.ic_save_black);
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -208,7 +208,7 @@ public class ReservationDetailActivity extends AppCompatActivity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Delete");
         alertDialog.setMessage("Are you sure you want to delete this reservation?");
-        alertDialog.setIcon(R.drawable.ic_delete_grey);
+        alertDialog.setIcon(R.drawable.ic_delete_black);
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 

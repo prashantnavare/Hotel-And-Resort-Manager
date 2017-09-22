@@ -435,6 +435,10 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         if (bSuccess) {
             mCallbacks.onSaveCompleted();
         }
+        else {
+            Toast toast = Toast.makeText(mContext, "Failed to save changes to the room. Please retry...", Toast.LENGTH_LONG);
+            toast.show();
+        }
         return true;
     }
 

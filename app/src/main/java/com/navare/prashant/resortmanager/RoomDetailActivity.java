@@ -115,16 +115,21 @@ public class RoomDetailActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+        if (mbSaveMenuEnable) {
+            promptUserForSavingRoom();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (mbSaveMenuEnable) {
-                    promptUserForSavingRoom();
-                }
-                else {
-                    NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));
-                }
+                onBackPressed();
                 return true;
             case R.id.menu_revert:
                 revertUI();
@@ -249,19 +254,17 @@ public class RoomDetailActivity extends AppCompatActivity
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Save Changes");
         alertDialog.setMessage("Would you like to save the changes to this room?");
-        alertDialog.setIcon(R.drawable.ic_menu_save);
+        alertDialog.setIcon(R.drawable.ic_save_black);
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 
-                boolean bSuccess = saveRoom();
-                if (bSuccess)
-                    NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, RoomListActivity.class));
+                saveRoom();
             }
         });
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
-                NavUtils.navigateUpTo(mThisActivity, new Intent(mThisActivity, RoomListActivity.class));
+                finish();
             }
         });
         alertDialog.show();
@@ -279,7 +282,7 @@ public class RoomDetailActivity extends AppCompatActivity
         alertDialog.setMessage("Are you sure you want to delete this room?");
 
         // Setting Icon to Dialog
-        alertDialog.setIcon(R.drawable.ic_delete_grey);
+        alertDialog.setIcon(R.drawable.ic_delete_black);
 
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -362,7 +365,7 @@ public class RoomDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Room deleted.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));
+        finish();
     }
 
     @Override
@@ -381,7 +384,7 @@ public class RoomDetailActivity extends AppCompatActivity
         Toast toast = Toast.makeText(getApplicationContext(), "Room saved.", Toast.LENGTH_LONG);
         toast.show();
 
-        NavUtils.navigateUpTo(this, new Intent(this, RoomListActivity.class));
+        finish();
     }
 
     @Override

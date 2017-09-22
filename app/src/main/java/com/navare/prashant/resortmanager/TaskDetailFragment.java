@@ -1,10 +1,12 @@
 package com.navare.prashant.resortmanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -107,6 +109,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         void RedrawOptionsMenu();
         void onTaskDone();
         void setTitleString(String titleString);
+        void onSaveCompleted();
     }
 
     private static Callbacks sDummyCallbacks = new Callbacks() {
@@ -137,6 +140,10 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
         @Override
         public void setTitleString(String titleString) {
+        }
+
+        @Override
+        public void onSaveCompleted() {
         }
 
     };
@@ -389,6 +396,25 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         updateUIFromTask();
     }
 
+    private void confirmTaskAsDone() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle("Confirm Task As Done");
+        alertDialog.setMessage("Would you like to mark this task as done?");
+        alertDialog.setIcon(R.drawable.ic_success);
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+
+                markTaskAsDone();
+            }
+        });
+        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+    }
+
     public void markTaskAsDone() {
         mTask.mCompletedTimeStamp = Calendar.getInstance().getTimeInMillis();
         mTask.mStatus = Task.CompletedStatus;
@@ -464,15 +490,20 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     }
 
     public void saveTask() {
+        boolean bSuccess = false;
         updateTaskFromUI();
         Uri taskURI = Uri.withAppendedPath(ResortManagerContentProvider.TASK_URI,
                 mTaskID);
         int result = getActivity().getContentResolver().update(taskURI, mTask.getContentValues(), null, null);
         if (result > 0) {
-
-            Toast toast = Toast.makeText(mContext, "Your changes have been saved.", Toast.LENGTH_LONG);
+            bSuccess = true;
+        }
+        if (bSuccess) {
+            mCallbacks.onSaveCompleted();
+        }
+        else {
+            Toast toast = Toast.makeText(mContext, "Failed to save task. Please retry...", Toast.LENGTH_LONG);
             toast.show();
-            updateUIFromTask();
         }
     }
 
@@ -624,7 +655,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
             dialog.show(((FragmentActivity)mContext).getSupportFragmentManager(), "InventoryTaskDoneDialogFragment");
         }
         else {
-            markTaskAsDone();
+            confirmTaskAsDone();
         }
     }
 
