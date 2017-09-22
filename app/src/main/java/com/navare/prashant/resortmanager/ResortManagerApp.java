@@ -198,7 +198,7 @@ public class ResortManagerApp extends Application {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        alertDialog.setIcon(R.drawable.ic_resort_manager);
+        alertDialog.setIcon(R.mipmap.ic_resort_manager);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();

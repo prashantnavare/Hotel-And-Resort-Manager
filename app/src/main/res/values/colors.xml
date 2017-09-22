@@ -5,20 +5,8 @@
     <color name="colorPrimaryDark">#EDB649</color>
     <color name="colorPrimaryLight">#FFECB3</color>
     <color name="colorAccent">#5A87C7</color>
-    <color name="colorIcon">#FFFFFF</color>
-    <color name="colorPrimaryText">#212121</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorSecondaryText">#757575</color>
-    <color name="colorDivider">#BDBDBD</color>
-    <color name="colorExpired">#BDBDBD</color>
     <color name="colorGrey">#848484</color>
-    <color name="colorExpiredOld">#E0E0E0</color>
     <color name="windowBackground">#FDF9F2</color>
-    <color name="navigationViewColor1">#CFDADE</color>
-    <color name="navigationViewColor2">#AED684</color>
-    <color name="navigationViewColor3">#5A87C7</color>
-    <color name="navigationViewColor4">#F77970</color>
-    <color name="red_delete_color">#E13A31</color>
-    <color name="colorLink">#0000FF</color>
 
 </resources>

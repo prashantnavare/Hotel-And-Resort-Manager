@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Remove Ads");
         alertDialog.setMessage("Would you like to purchase  Hotel/Resort Manager and remove the ads?");
-        alertDialog.setIcon(R.drawable.ic_resort_manager);
+        alertDialog.setIcon(R.mipmap.ic_resort_manager);
         alertDialog.setPositiveButton("Purchase", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
 

@@ -27,7 +27,7 @@
         android:name=".ResortManagerApp"
         android:allowBackup="true"
         android:backupAgent=".util.BackupRestoreAgent"
-        android:icon="@drawable/ic_resort_manager"
+        android:icon="@mipmap/ic_resort_manager"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <meta-data
