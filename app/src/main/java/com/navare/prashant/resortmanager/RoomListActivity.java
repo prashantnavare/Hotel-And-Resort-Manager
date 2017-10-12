@@ -1,7 +1,9 @@
 package com.navare.prashant.resortmanager;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -30,7 +32,7 @@ import android.view.MenuItem;
  * to listen for room selections.
  */
 public class RoomListActivity extends AppCompatActivity
-        implements RoomListFragment.Callbacks, SearchView.OnQueryTextListener {
+        implements RoomListFragment.Callbacks, SearchView.OnQueryTextListener, ResortManagerApp.PurchaseListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -109,11 +111,33 @@ public class RoomListActivity extends AppCompatActivity
             case R.id.menu_search:
                 return true;
             case R.id.menu_add:
-                onRoomSelected(null);
+                handleAddRoom();
                 return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void handleAddRoom() {
+        if (ResortManagerApp.isAppPurchased()) {
+            // Create new room
+            onRoomSelected(null);
+        }
+        else {
+            if (ResortManagerApp.getRoomCount() < ResortManagerApp.getMaxFreeRooms()) {
+                // Create new room
+                onRoomSelected(null);
+            }
+            else {
+                ResortManagerApp.promptForPurchase(this, "Please purchase  Hotel/Resort Manager to create additional rooms.");
+            }
+        }
+    }
+
+    @Override
+    public void onPurchaseCompleted() {
+        // Create new room
+        onRoomSelected(null);
     }
 
     /**
@@ -166,4 +190,5 @@ public class RoomListActivity extends AppCompatActivity
                 .findFragmentById(R.id.room_list)).getNewRoomList(mQuery);
         return true;
     }
+
 }

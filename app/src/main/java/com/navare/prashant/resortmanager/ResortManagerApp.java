@@ -30,7 +30,7 @@ public class ResortManagerApp extends Application {
     public static String sPrefTaskCount = "TaskCount";
     public static String sPrefItemCount = "ItemCount";
     public static String sPrefRoomCount = "RoomCount";
-    public static String sPrefTotalNewReservationCount = "TotalNewReservationCount";
+    public static String sPrefTotalReservationCount = "TotalReservationCount";
     public static String sPrefNewReservationCount = "NewReservationCount";
     public static String sPrefCheckedInReservationCount = "CheckedInReservationCount";
     public static String sPrefHistoricalReservationCount = "HistoricalReservationCount";
@@ -134,19 +134,19 @@ public class ResortManagerApp extends Application {
     }
 
     // Total New reservations
-    static public void incrementTotalNewReservationCount() {
-        changeTotalNewReservationCount(1);
+    static public void incrementTotalReservationCount() {
+        changeTotalReservationCount(1);
     }
 
-    static private void changeTotalNewReservationCount(long numReservations) {
-        long reservationCount = mPrefs.getLong(sPrefTotalNewReservationCount, 0);
+    static private void changeTotalReservationCount(long numReservations) {
+        long reservationCount = mPrefs.getLong(sPrefTotalReservationCount, 0);
         reservationCount = reservationCount + numReservations;
-        mEditor.putLong(sPrefTotalNewReservationCount, reservationCount);
+        mEditor.putLong(sPrefTotalReservationCount, reservationCount);
         mEditor.commit();
     }
 
-    static public long getTotalNewReservationsCount() {
-        return mPrefs.getLong(sPrefTotalNewReservationCount, 0);
+    static public long getTotalReservationsCount() {
+        return mPrefs.getLong(sPrefTotalReservationCount, 0);
     }
 
     // current New reservations
@@ -251,7 +251,7 @@ public class ResortManagerApp extends Application {
 
         if (callingActivity instanceof PurchaseListener) {
             mPurchaseActivity = callingActivity;
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mAppContext);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(mPurchaseActivity);
             alertDialog.setTitle("Purchase Hotel/Resort Manager");
             alertDialog.setMessage(purchaseMessage);
             alertDialog.setIcon(R.mipmap.ic_resort_manager);
@@ -320,7 +320,7 @@ public class ResortManagerApp extends Application {
     }
 
     static private void showPurchaseAlertInternal(String message, boolean bError) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mAppContext);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mPurchaseActivity);
         if (bError) {
             alertDialog.setTitle("Purchase Error");
             alertDialog.setIcon(R.drawable.ic_error);

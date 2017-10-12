@@ -16,7 +16,7 @@ import com.navare.prashant.resortmanager.Database.Reservation;
 
 
 public class ReservationListActivity extends AppCompatActivity
-        implements ReservationListFragment.Callbacks, SearchView.OnQueryTextListener {
+        implements ReservationListFragment.Callbacks, SearchView.OnQueryTextListener, ResortManagerApp.PurchaseListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -106,12 +106,35 @@ public class ReservationListActivity extends AppCompatActivity
             case R.id.menu_search:
                 return true;
             case R.id.menu_add:
-                onReservationSelected(null);
+                handleNewReservation();
                 return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void handleNewReservation() {
+        if (ResortManagerApp.isAppPurchased()) {
+            // Create new reservation
+            onReservationSelected(null);
+        }
+        else {
+            if (ResortManagerApp.getTotalReservationsCount() < ResortManagerApp.getMaxFreeReservations()) {
+                // Create new reservation
+                onReservationSelected(null);
+            }
+            else {
+                ResortManagerApp.promptForPurchase(this, "Please purchase  Hotel/Resort Manager to create additional new reservations.");
+            }
+        }
+    }
+
+    @Override
+    public void onPurchaseCompleted() {
+        // Create new reservation
+        onReservationSelected(null);
+    }
+
 
     /**
      * Callback method from {@link ReservationListFragment.Callbacks}

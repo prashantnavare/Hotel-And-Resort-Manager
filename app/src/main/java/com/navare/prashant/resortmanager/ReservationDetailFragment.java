@@ -535,6 +535,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
                 mReservation.mID = Long.valueOf(mReservationID);
                 bSuccess = true;
                 ResortManagerApp.incrementNewReservationCount();
+                ResortManagerApp.incrementTotalReservationCount();
             }
         }
         else {

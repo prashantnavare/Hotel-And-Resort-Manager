@@ -42,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: remove this before final build
-        ResortManagerApp.setPurchaseValue(ResortManagerApp.APP_PURCHASED);
-
         mThisActivity = this;
         // To solve the documented problem of multiple instances of Main activity (see https://code.google.com/p/android/issues/detail?id=2373)
         if (!isTaskRoot()) {
