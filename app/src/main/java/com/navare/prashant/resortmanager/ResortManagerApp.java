@@ -66,11 +66,11 @@ public class ResortManagerApp extends Application {
     }
 
     // Max free rooms before requiring a purchase
-    private static int mMaxFreeRooms = 1;
+    private static int mMaxFreeRooms = 10;
     static public int getMaxFreeRooms() { return mMaxFreeRooms;}
 
     // Max free reservations before requiring a purchase
-    private static int mMaxFreeReservations = 1;
+    private static int mMaxFreeReservations = 100;
     static public int getMaxFreeReservations() { return mMaxFreeReservations;}
 
     // Task

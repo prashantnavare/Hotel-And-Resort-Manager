@@ -13,12 +13,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +28,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
@@ -99,8 +93,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     private TextView mTextAdditionalCharge;
     private TextView mTextTaxPercent;
     private TextView mTextTotalCharge;
-
-    private AdView mAdView;
 
     private SelectedRoomListCursorAdapter mRoomCursorAdapter;
 
@@ -232,9 +224,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -242,17 +231,11 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
@@ -349,17 +332,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mTextTaxPercent.addTextChangedListener(this);
 
         mTextTotalCharge = ((TextView) rootView.findViewById(R.id.textTotalCharge));
-
-        // Banner Ad
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
 
         return rootView;
     }
@@ -550,6 +522,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         else {
             Toast toast = Toast.makeText(mContext, "Failed to save reservation. Please retry...", Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
         }
         return true;

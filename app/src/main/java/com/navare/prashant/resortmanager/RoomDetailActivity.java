@@ -4,11 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -212,7 +210,9 @@ public class RoomDetailActivity extends AppCompatActivity
                         // permission is denied (and never ask again is  checked)
                         // shouldShowRequestPermissionRationale will return false
                         else {
-                            Toast.makeText(this, "Go to Settings and enable Storage permission for the  Hotel/Resort Manager before taking photos of rooms.", Toast.LENGTH_LONG).show();
+                            Toast toast = Toast.makeText(this, "Go to Settings and enable Storage permission for the  Hotel/Resort Manager before taking photos of rooms.", Toast.LENGTH_LONG);
+                            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
+                            toast.show();
                             // disable the call assignee functionality
                             EnableCameraButton(false);
                         }
@@ -363,6 +363,7 @@ public class RoomDetailActivity extends AppCompatActivity
     @Override
     public void onRoomDeleted() {
         Toast toast = Toast.makeText(getApplicationContext(), "Room deleted.", Toast.LENGTH_LONG);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
 
         finish();
@@ -382,6 +383,7 @@ public class RoomDetailActivity extends AppCompatActivity
     @Override
     public void onSaveCompleted() {
         Toast toast = Toast.makeText(getApplicationContext(), "Room saved.", Toast.LENGTH_LONG);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
 
         finish();

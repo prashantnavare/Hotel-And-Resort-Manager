@@ -1,10 +1,8 @@
 package com.navare.prashant.resortmanager;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -33,14 +31,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Item;
+import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
-import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
 import com.navare.prashant.resortmanager.util.InventoryDialogFragment;
+import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -114,7 +110,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     private Uri mImageFileUri;
     private Bitmap mImageBitmap = null;
 
-    private AdView mAdView;
 
 
     /**
@@ -219,9 +214,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -229,17 +221,11 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
@@ -404,17 +390,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
         // image related
         mImageView = ((ImageView) rootView.findViewById(R.id.imageItem));
-
-        // Banner Ad
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
 
         return rootView;
     }
@@ -583,6 +558,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         }
         else {
             Toast toast = Toast.makeText(mContext, "Failed to save item. Please retry...", Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
         }
         return true;
@@ -897,6 +873,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         Uri uri = getActivity().getContentResolver().insert(ResortManagerContentProvider.SERVICE_CALL_URI, sc.getContentValues());
         if (uri != null) {
             Toast toast = Toast.makeText(mContext, "Service call created.", Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
 
             // Also create a corresponding task
@@ -913,6 +890,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         }
         else {
             Toast toast = Toast.makeText(mContext, "Failed to create service call.", Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
         }
     }

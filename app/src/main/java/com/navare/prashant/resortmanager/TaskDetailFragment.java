@@ -3,24 +3,16 @@ package com.navare.prashant.resortmanager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,17 +24,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Item;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
 import com.navare.prashant.resortmanager.Database.ServiceCall;
 import com.navare.prashant.resortmanager.Database.Task;
+import com.navare.prashant.resortmanager.util.AssignTaskDialogFragment;
 import com.navare.prashant.resortmanager.util.ContractTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.InventoryTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
-import com.navare.prashant.resortmanager.util.AssignTaskDialogFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,8 +82,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     private RadioButton mUrgentButton;
     private RadioButton mNormalRadioButton;
     int mPreviousPriority = 0;
-
-    private AdView mAdView;
 
     String mCurrentAssignee = "";
     String mNewAssignee = "";
@@ -193,9 +181,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -203,17 +188,11 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
@@ -274,17 +253,6 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         mTextContractExpiryDate = ((TextView) rootView.findViewById(R.id.textContractExpiryDate));
         mRequiredQuantityLayout = (LinearLayout) rootView.findViewById(R.id.requiredQuantityLayout);
         mTextRequiredQuantity = ((TextView) rootView.findViewById(R.id.textRequiredQuantity));
-
-        // Banner Ad
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
 
         return rootView;
     }
@@ -503,6 +471,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         }
         else {
             Toast toast = Toast.makeText(mContext, "Failed to save task. Please retry...", Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
         }
     }

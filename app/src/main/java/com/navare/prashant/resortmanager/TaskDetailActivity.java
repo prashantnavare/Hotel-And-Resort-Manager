@@ -1,17 +1,10 @@
 package com.navare.prashant.resortmanager;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,11 +13,6 @@ import android.widget.Toast;
 import com.navare.prashant.resortmanager.util.AssignTaskDialogFragment;
 import com.navare.prashant.resortmanager.util.ContractTaskDoneDialogFragment;
 import com.navare.prashant.resortmanager.util.InventoryTaskDoneDialogFragment;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -238,6 +226,7 @@ public class TaskDetailActivity extends AppCompatActivity
     @Override
     public void onTaskDone() {
         Toast toast = Toast.makeText(getApplicationContext(), "Task marked as done.", Toast.LENGTH_LONG);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
 
         finish();
@@ -285,6 +274,7 @@ public class TaskDetailActivity extends AppCompatActivity
     @Override
     public void onSaveCompleted() {
         Toast toast = Toast.makeText(getApplicationContext(), "Task saved.", Toast.LENGTH_LONG);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
 
         finish();

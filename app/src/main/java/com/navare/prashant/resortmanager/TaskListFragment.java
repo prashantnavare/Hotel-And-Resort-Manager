@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Task;
 import com.navare.prashant.resortmanager.util.TaskListCursorAdapter;
@@ -64,7 +62,6 @@ public class TaskListFragment extends ListFragment {
         void setTaskCount(long taskCount);
     }
 
-    private AdView mAdView;
     private Context mContext;
 
     /**
@@ -121,9 +118,6 @@ public class TaskListFragment extends ListFragment {
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -131,34 +125,17 @@ public class TaskListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_task_list, container, false);
-
-        // Banner Ad
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
 
         return rootView;
     }
@@ -262,6 +239,7 @@ public class TaskListFragment extends ListFragment {
                     mCallbacks.setTaskCount(c.getCount());
                     if (c.getCount() > 0) {
                         Toast toast = Toast.makeText(mContext, "Tap on any task to see the task details.", Toast.LENGTH_LONG);
+                        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
                         toast.show();
                     }
                 }

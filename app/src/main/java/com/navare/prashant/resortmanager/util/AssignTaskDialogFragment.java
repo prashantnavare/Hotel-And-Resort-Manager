@@ -101,6 +101,7 @@ public class AssignTaskDialogFragment extends DialogFragment {
                 public void onClick(View view) {
                     if (mTextAssigneeName.getText().toString().isEmpty()) {
                         Toast toast = Toast.makeText(mContext, "Please enter assignee name.", Toast.LENGTH_SHORT);
+                        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
                         toast.show();
                         return;
                     }

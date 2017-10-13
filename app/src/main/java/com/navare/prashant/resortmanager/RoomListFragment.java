@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 import com.navare.prashant.resortmanager.Database.Room;
 
@@ -81,8 +79,6 @@ public class RoomListFragment extends ListFragment {
         }
     };
 
-    private AdView mAdView;
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -103,9 +99,6 @@ public class RoomListFragment extends ListFragment {
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -113,34 +106,17 @@ public class RoomListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_room_list, container, false);
-
-        // Banner Ad
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
 
         return rootView;
     }

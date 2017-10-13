@@ -1,25 +1,19 @@
 package com.navare.prashant.resortmanager;
 
-import android.app.Activity;
 import android.app.backup.BackupManager;
 import android.app.backup.RestoreObserver;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 public class BackupRestoreActivity extends AppCompatActivity {
 
     private GridView mGridView;
-    private AdView mAdView;
-    private Activity mThisActivity;
 
     private Context mContext;
 
@@ -27,7 +21,6 @@ public class BackupRestoreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        mThisActivity = this;
         setContentView(R.layout.activity_backup_restore);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -49,17 +42,6 @@ public class BackupRestoreActivity extends AppCompatActivity {
         });
 
         initGridAdapater();
-
-        // Banner Ad
-        mAdView = (AdView) findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
     }
 
     private void initGridAdapater() {
@@ -80,6 +62,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
         BackupManager backupManager = new BackupManager(this);
         backupManager.dataChanged();
         Toast toast = Toast.makeText(mContext, "Backup operation has been scheduled.", Toast.LENGTH_SHORT);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
     }
 
@@ -97,12 +80,14 @@ public class BackupRestoreActivity extends AppCompatActivity {
                                 orgName = ResortManagerApp.getOrgName() + " Manager";
                             }
                             Toast toast = Toast.makeText(mContext, orgName + " data has been restored.", Toast.LENGTH_SHORT);
+                            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
                             toast.show();
                         }
                     }
                 }
         );
         Toast toast = Toast.makeText(mContext, "Restore operation has been scheduled. You will be notified when the restore operation is completed.", Toast.LENGTH_SHORT);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
     }
 

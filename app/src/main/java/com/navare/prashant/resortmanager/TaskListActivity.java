@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -131,6 +130,7 @@ public class TaskListActivity extends AppCompatActivity
         ComputeNewTasksAlarmReceiver alarmReceiver = new ComputeNewTasksAlarmReceiver();
         alarmReceiver.setAlarm(this, false);
         Toast toast = Toast.makeText(getApplicationContext(), "New tasks are being computed. This may take a while. Please check back after a few minutes.", Toast.LENGTH_LONG);
+        toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
     }
 

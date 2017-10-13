@@ -1,12 +1,8 @@
 package com.navare.prashant.resortmanager;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,15 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-import com.navare.prashant.resortmanager.InAppBilling.IabHelper;
-import com.navare.prashant.resortmanager.InAppBilling.IabHelper.IabAsyncInProgressException;
-import com.navare.prashant.resortmanager.InAppBilling.IabResult;
-import com.navare.prashant.resortmanager.InAppBilling.Purchase;
 import com.navare.prashant.resortmanager.util.SimpleEula;
 import com.navare.prashant.resortmanager.util.SystemUiHider;
 
@@ -34,15 +21,11 @@ import com.navare.prashant.resortmanager.util.SystemUiHider;
  */
 public class MainActivity extends AppCompatActivity {
     private GridView mGridView;
-    private AdView mAdView;
-
-    private Activity mThisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mThisActivity = this;
         // To solve the documented problem of multiple instances of Main activity (see https://code.google.com/p/android/issues/detail?id=2373)
         if (!isTaskRoot()) {
             Intent intent = getIntent();
@@ -92,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initGridAdapater();
-
-        doAdsInit();
     }
 
     @Override
@@ -140,33 +121,9 @@ public class MainActivity extends AppCompatActivity {
         mGridView.setAdapter(adapter);
     }
 
-    private void removeAdStuff() {
-        mAdView.setVisibility(View.GONE);
-    }
-
-    private void doAdsInit() {
-
-        mAdView = (AdView) findViewById(R.id.adView);
-
-        if (ResortManagerApp.isAppPurchased()) {
-            removeAdStuff();
-            return;
-        }
-
-        // TODO: Replace the ad unit ID with the real one
-        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
-
-        mAdView.setVisibility(View.VISIBLE);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-    }
-
     // Called when leaving the activity
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -181,25 +138,12 @@ public class MainActivity extends AppCompatActivity {
             setTitle(ResortManagerApp.getOrgName() + " Manager");
         }
         initGridAdapater();
-
-        if (ResortManagerApp.isAppPurchased()) {
-            removeAdStuff();
-        }
-        else {
-            if (mAdView != null) {
-                mAdView.resume();
-            }
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mAdView != null) {
-            mAdView.destroy();
-            mAdView = null;
-        }
     }
 
 

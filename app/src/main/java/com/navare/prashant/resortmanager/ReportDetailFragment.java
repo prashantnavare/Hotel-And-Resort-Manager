@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.telephony.SmsManager;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +19,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.navare.prashant.resortmanager.Database.Reservation;
 import com.navare.prashant.resortmanager.Database.ResortManagerContentProvider;
 
@@ -82,8 +79,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
     private TextView mTextTaxPercent;
     private TextView mTextTotalCharge;
 
-    private AdView mAdView;
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -124,9 +119,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onPause() {
-        if (mAdView != null) {
-            mAdView.pause();
-        }
         super.onPause();
     }
 
@@ -134,17 +126,11 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdView != null) {
-            mAdView.resume();
-        }
     }
 
     // Called before the activity is destroyed
     @Override
     public void onDestroy() {
-        if (mAdView != null) {
-            mAdView.destroy();
-        }
         super.onDestroy();
     }
 
@@ -170,17 +156,6 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         mTextAdditionalCharge = ((TextView) rootView.findViewById(R.id.textAdditionalCharge));
         mTextTaxPercent = ((TextView) rootView.findViewById(R.id.textTaxPercent));
         mTextTotalCharge = ((TextView) rootView.findViewById(R.id.textTotalCharge));
-
-        // Banner Ad
-        mAdView = (AdView) rootView.findViewById(R.id.adView);
-        if (ResortManagerApp.isAppPurchased()) {
-            mAdView.setVisibility(View.GONE);
-            mAdView = null;
-        }
-        else {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
 
         return rootView;
     }

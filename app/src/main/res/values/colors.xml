@@ -2,11 +2,12 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="colorPrimary">#FDBE41</color>
-    <color name="colorPrimaryDark">#EDB649</color>
+    <color name="colorPrimaryDark">#d5a341</color>
     <color name="colorPrimaryLight">#FFECB3</color>
     <color name="colorAccent">#5A87C7</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGrey">#848484</color>
     <color name="windowBackground">#FDF9F2</color>
+    <color name="toastBackground">#FDBE41</color>
 
 </resources>
