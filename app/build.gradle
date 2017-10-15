@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'PNAndroidKey'
+            keyPassword 'mohana123!!'
+            storeFile file('C:/Android/keystore/uploadkey.jks')
+            storePassword 'mohana123!!'
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion "25.0.0"
     defaultConfig {
@@ -14,6 +22,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
