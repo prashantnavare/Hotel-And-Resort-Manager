@@ -86,7 +86,7 @@ public class BackupRestoreActivity extends AppCompatActivity {
                     }
                 }
         );
-        Toast toast = Toast.makeText(mContext, "Restore operation has been scheduled. You will be notified when the restore operation is completed.", Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(mContext, "Restore operation has been scheduled.", Toast.LENGTH_SHORT);
         toast.getView().setBackgroundResource(R.drawable.toast_drawable);
         toast.show();
     }

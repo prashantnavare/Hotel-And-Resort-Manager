@@ -756,7 +756,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.EnableSaveButton(false);
         mCallbacks.RedrawOptionsMenu();
 
-        mCallbacks.setTitleString(mItem.mName);
+        mCallbacks.setTitleString("Inventory Item - " + mItem.mName);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -780,7 +780,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.EnableInventoryAddButton(false);
         mCallbacks.EnableInventorySubtractButton(false);
 
-        mCallbacks.setTitleString("New Item");
+        mCallbacks.setTitleString("New Inventory Item");
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 

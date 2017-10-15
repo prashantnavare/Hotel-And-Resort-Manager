@@ -217,7 +217,7 @@ public class ReportDetailFragment extends Fragment implements LoaderManager.Load
         mTextTaxPercent.setText(mReservation.mCompletedFTSTaxPercent);
         mTextTotalCharge.setText(mReservation.mCompletedFTSTotalCharge);
 
-        mCallbacks.setTitleString("Details for " + mReservation.mCompletedFTSName) ;
+        mCallbacks.setTitleString("Reservation Details - " + mReservation.mCompletedFTSName) ;
 
         mCallbacks.RedrawOptionsMenu();
     }

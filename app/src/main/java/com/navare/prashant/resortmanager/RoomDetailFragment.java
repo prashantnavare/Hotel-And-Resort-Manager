@@ -494,7 +494,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.EnableSaveButton(false);
         mCallbacks.EnableServiceCallButton(true);
         mCallbacks.RedrawOptionsMenu();
-        mCallbacks.setTitleString(mRoom.mName);
+        mCallbacks.setTitleString("Room " + mRoom.mName);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

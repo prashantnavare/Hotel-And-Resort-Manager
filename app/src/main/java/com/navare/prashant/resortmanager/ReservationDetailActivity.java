@@ -43,7 +43,6 @@ public class ReservationDetailActivity extends AppCompatActivity
     private boolean mbDeleteMenuEnable = false;
 
     private ReservationDetailFragment mMyFragment;
-    private Activity mThisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,6 @@ public class ReservationDetailActivity extends AppCompatActivity
                     .add(R.id.reservation_detail_container, mMyFragment)
                     .commit();
         }
-        mThisActivity = this;
     }
 
     @Override

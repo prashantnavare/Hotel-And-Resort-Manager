@@ -282,10 +282,11 @@ public class Reservation {
     }
 
     public String getFTSReservationName() {
-        String ftsReservationName = mName + " (Adults : " + String.valueOf(mNumAdults) + ")";
+        String ftsReservationName = mName + "\n(Adults : " + String.valueOf(mNumAdults) + ")";
         if (mNumChildren > 0) {
             ftsReservationName = ftsReservationName +  " (Children : " + String.valueOf(mNumChildren) + ")";
         }
+        ftsReservationName += " (Days : " + String.valueOf(mNumDays) + ")";
         return  ftsReservationName;
     }
 

@@ -609,7 +609,7 @@ public class TaskDetailFragment extends Fragment implements LoaderManager.Loader
         mCallbacks.EnableRevertButton(false);
         mCallbacks.RedrawOptionsMenu();
 
-        String titleString = mTask.getTaskTypeString() + " (" + mTask.mItemName + ")";
+        String titleString = mTask.getTaskTypeString() + " Task - " + mTask.mItemName;
         mCallbacks.setTitleString(titleString);
     }
 

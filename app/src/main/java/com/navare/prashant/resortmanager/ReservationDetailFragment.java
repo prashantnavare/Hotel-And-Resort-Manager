@@ -350,8 +350,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         }
         OnDateSetListener onDateChangeCallback = new OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
@@ -776,6 +775,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (mTextNumChildren.getText().toString().isEmpty() == false) {
             mReservation.mNumChildren = Long.valueOf(mTextNumChildren.getText().toString());
         }
+
         String uiFromDate = mBtnFromDate.getText().toString();
         if (uiFromDate.compareToIgnoreCase("Set") == 0) {
             ResortManagerApp.showAlertDialog(mContext, errorDialogTitle, "From Date needs to be set.");
@@ -856,7 +856,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             mCallbacks.EnableZoomInButton(true);
         }
         mCallbacks.RedrawOptionsMenu();
-        mCallbacks.setTitleString(mReservation.mName + " - " + mReservation.getStatusString()) ;
+        mCallbacks.setTitleString(mReservation.getStatusString() + " Reservation - " + mReservation.mName) ;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
