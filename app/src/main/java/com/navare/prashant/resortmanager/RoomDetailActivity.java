@@ -35,19 +35,15 @@ import java.util.Map;
 public class RoomDetailActivity extends AppCompatActivity
         implements RoomDetailFragment.Callbacks, ServiceCallDialogFragment.ServiceCallDialogListener {
 
-    private MenuItem cameraMenuItem = null;
     private MenuItem deleteMenuItem = null;
     private MenuItem revertMenuItem = null;
     private MenuItem saveMenuItem = null;
     private MenuItem serviceCallMenuItem = null;
 
-    private boolean mbCameraMenuEnable = false;
     private boolean mbDeleteMenuEnable = false;
     private boolean mbRevertMenuEnable = false;
     private boolean mbSaveMenuEnable = false;
     private boolean mbServiceCallMenuEnable = false;
-
-    private Activity mThisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +74,6 @@ public class RoomDetailActivity extends AppCompatActivity
                     .add(R.id.room_detail_container, fragment)
                     .commit();
         }
-        mThisActivity = this;
     }
 
     @Override
@@ -91,24 +86,16 @@ public class RoomDetailActivity extends AppCompatActivity
         saveMenuItem = menu.getItem(0);
         revertMenuItem = menu.getItem(1);
         serviceCallMenuItem = menu.getItem(2);
-        cameraMenuItem = menu.getItem(3);
-        deleteMenuItem = menu.getItem(4);
+        deleteMenuItem = menu.getItem(3);
 
         // Toggle the options menu buttons as per desired state
         // It is possible that the query has already finished loading before we get here
         // as it happens on a separate thread. Hence the boolean state keepers
-        EnableCameraButton(mbCameraMenuEnable);
         EnableDeleteButton(mbDeleteMenuEnable);
         EnableSaveButton(mbSaveMenuEnable);
         EnableRevertButton(mbRevertMenuEnable);
         EnableServiceCallButton(mbServiceCallMenuEnable);
 
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            EnableCameraButton(false);
-        }
-        else {
-            EnableCameraButton(true);
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -141,101 +128,8 @@ public class RoomDetailActivity extends AppCompatActivity
             case R.id.menu_service_call:
                 showServiceCallDialog();
                 return true;
-            case R.id.menu_camera:
-                handleCamera();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private static final int REQUEST_ID_STORAGE_PERMISSION = 13;
-
-    private  boolean checkAndRequestStoragePermission() {
-        int storagePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        List<String> listPermissionsNeeded = new ArrayList<>();
-        if (storagePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_STORAGE_PERMISSION);
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-
-            case REQUEST_ID_STORAGE_PERMISSION: {
-
-                Log.d("handleCamera()", "Storage Permission callback called");
-                Map<String, Integer> perms = new HashMap<>();
-
-                // Initialize the map
-                perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
-
-                // Fill with actual results from user
-                if (grantResults.length > 0) {
-                    for (int i = 0; i < permissions.length; i++)
-                        perms.put(permissions[i], grantResults[i]);
-
-                    // Check for both permissions
-                    if (perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-                        Log.d("handleCamera()", "Storage permission granted");
-                        ((RoomDetailFragment) getSupportFragmentManager()
-                                .findFragmentById(R.id.room_detail_container)).handleCamera();
-                    }
-                    else {
-                        Log.d("handleCamera()", "Storage permission not granted. Ask again: ");
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                            showDialogOK(
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            switch (which) {
-                                                case DialogInterface.BUTTON_POSITIVE:
-                                                    checkAndRequestStoragePermission();
-                                                    break;
-                                                case DialogInterface.BUTTON_NEGATIVE:
-                                                    // disable the photo functionality
-                                                    EnableCameraButton(false);
-                                                    break;
-                                            }
-                                        }
-                                    });
-                        }
-                        // permission is denied (and never ask again is  checked)
-                        // shouldShowRequestPermissionRationale will return false
-                        else {
-                            Toast toast = Toast.makeText(this, "Go to Settings and enable Storage permission for the  Hotel/Resort Manager before taking photos of rooms.", Toast.LENGTH_LONG);
-                            toast.getView().setBackgroundResource(R.drawable.toast_drawable);
-                            toast.show();
-                            // disable the call assignee functionality
-                            EnableCameraButton(false);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void showDialogOK(DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(this)
-                .setMessage("Storage Permission is required for taking a photo of the room.")
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", okListener)
-                .create()
-                .show();
-    }
-
-    private void handleCamera() {
-
-        if(checkAndRequestStoragePermission()) {
-            ((RoomDetailFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.room_detail_container)).handleCamera();
         }
     }
 
@@ -307,15 +201,6 @@ public class RoomDetailActivity extends AppCompatActivity
     private void revertUI() {
         ((RoomDetailFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.room_detail_container)).revertUI();
-    }
-
-    @Override
-    public void EnableCameraButton(boolean bEnable) {
-        mbCameraMenuEnable = bEnable;
-        if (cameraMenuItem != null) {
-            cameraMenuItem.setEnabled(bEnable);
-            cameraMenuItem.setVisible(bEnable);
-        }
     }
 
     @Override

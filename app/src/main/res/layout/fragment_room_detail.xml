@@ -193,13 +193,12 @@
                             />
                         <EditText
                             android:id="@+id/textCleaningFrequency"
+                            android:layout_weight="1"
                             android:textSize="14sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:inputType="numberDecimal"
-                            android:layout_weight="1"
-                            android:layout_marginRight="120dp"
                             android:background="@drawable/textview_shape"
                             />
                     </LinearLayout>
@@ -227,9 +226,9 @@
                             android:textStyle="bold"
                             android:text="@string/set_date"
                             android:textColor="#ffffff"
-                            android:layout_marginRight="120dp"
                             android:layout_height="30dp"
                             android:background="@drawable/button_shape"
+                            android:textAllCaps="false"
                             />
                     </LinearLayout>
                     <LinearLayout
@@ -260,49 +259,6 @@
                             android:background="@drawable/textview_shape"
                             />
                     </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <!-- Image  Layout -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:layout_gravity="bottom"
-                android:elevation="6dp"
-                android:background="@drawable/raised_background"
-                android:orientation="vertical"
-                android:textAlignment="center"
-                >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="bottom"
-                    >
-
-                    <TextView
-                        android:text="Image"
-                        android:layout_weight="3"
-                        android:textSize="12sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        />
-
-                    <ImageView
-                        android:id="@+id/imageRoom"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:visibility="visible"
-                        />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

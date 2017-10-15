@@ -63,7 +63,8 @@
                             android:textStyle="bold"
                             android:text="@string/set_date"
                             android:textColor="#ffffff"
-                            android:layout_marginRight="100dp"
+                            android:layout_marginRight="10dp"
+                            android:textAllCaps="false"
                             android:layout_height="30dp"
                             android:background="@drawable/button_shape"
                             />
@@ -94,7 +95,8 @@
                             android:textStyle="bold"
                             android:text="@string/set_date"
                             android:textColor="#ffffff"
-                            android:layout_marginRight="100dp"
+                            android:layout_marginRight="10dp"
+                            android:textAllCaps="false"
                             android:layout_height="30dp"
                             android:background="@drawable/button_shape"
                             />
@@ -131,7 +133,8 @@
                             android:textStyle="bold"
                             android:text="Get Reports"
                             android:textColor="#ffffff"
-                            android:layout_marginRight="100dp"
+                            android:layout_marginRight="10dp"
+                            android:textAllCaps="false"
                             android:layout_height="30dp"
                             android:background="@drawable/button_shape"
                             />

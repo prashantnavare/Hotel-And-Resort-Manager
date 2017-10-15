@@ -13,10 +13,6 @@
         android:icon="@drawable/ic_menu_service_call"
         resortmanager:showAsAction="ifRoom|collapseActionView"
         android:title="@string/menu_service_call"/>
-    <item android:id="@+id/menu_camera"
-        android:icon="@drawable/ic_menu_camera"
-        resortmanager:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/menu_camera"/>
     <item android:id="@+id/menu_delete"
         android:icon="@drawable/ic_menu_delete"
         resortmanager:showAsAction="ifRoom|collapseActionView"

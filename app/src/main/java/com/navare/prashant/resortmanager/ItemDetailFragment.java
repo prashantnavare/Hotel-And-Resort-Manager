@@ -3,13 +3,9 @@ package com.navare.prashant.resortmanager;
 import android.app.Activity;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -24,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -39,8 +34,6 @@ import com.navare.prashant.resortmanager.util.InventoryDialogFragment;
 import com.navare.prashant.resortmanager.util.ResortManagerDatePickerFragment;
 import com.navare.prashant.resortmanager.util.ServiceCallDialogFragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -102,15 +95,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
     private TextView mTextCurrentQuantity;
     private TextView mTextMeasuringUnit;
     private TextView mTextReorderInstructions;
-
-    private ImageView mImageView;
-
-    private String mImageFileName;
-    private File mImageFile;
-    private Uri mImageFileUri;
-    private Bitmap mImageBitmap = null;
-
-
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -388,9 +372,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
         mTextReorderInstructions = (TextView) rootView.findViewById(R.id.textReorderInstructions);
         mTextReorderInstructions.addTextChangedListener(this);
 
-        // image related
-        mImageView = ((ImageView) rootView.findViewById(R.id.imageItem));
-
         return rootView;
     }
 
@@ -430,7 +411,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 switch (pickerType) {
@@ -596,7 +577,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                     mItem.mMaintenanceFrequency = Long.valueOf(mTextMaintenanceFrequency.getText().toString());
                 }
 
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 Calendar maintenanceDate = Calendar.getInstance();
                 String uiMaintenanceDate = mBtnChangeMaintenanceDate.getText().toString();
                 if (uiMaintenanceDate.compareToIgnoreCase("Set") != 0) {
@@ -617,7 +598,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             // Contract related
             if (mContractCheckBox.isChecked()) {
                 mItem.mContractReminders = 1;
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 Calendar contractDate = Calendar.getInstance();
                 String uiContractDate = mBtnContractValidTillDate.getText().toString();
                 if (uiContractDate.compareToIgnoreCase("Set") != 0) {
@@ -671,11 +652,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 mItem.mInventoryReminders = 0;
             }
         }
-        if (mImageBitmap != null) {
-            ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-            mImageBitmap.compress(Bitmap.CompressFormat.PNG, 0, imageStream);
-            mItem.mImage = imageStream.toByteArray();
-        }
         return true;
     }
 
@@ -708,7 +684,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 if (mItem.mMaintenanceDate > 0) {
                     Calendar maintenanceDate = Calendar.getInstance();
                     maintenanceDate.setTimeInMillis(mItem.mMaintenanceDate);
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                     mBtnChangeMaintenanceDate.setText(dateFormatter.format(maintenanceDate.getTime()));
                 }
                 else {
@@ -728,7 +704,7 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
                 if (mItem.mContractValidTillDate > 0) {
                     Calendar contractDate = Calendar.getInstance();
                     contractDate.setTimeInMillis(mItem.mContractValidTillDate);
-                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                    SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                     mBtnContractValidTillDate.setText(dateFormatter.format(contractDate.getTime()));
                 }
                 else {
@@ -774,17 +750,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             }
         }
 
-        if (mItem.mImage == null) {
-            mImageView.setImageBitmap(null);
-        }
-        else {
-            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-            bmpFactoryOptions.inJustDecodeBounds = false;
-            mImageBitmap = BitmapFactory.decodeByteArray(mItem.mImage, 0, mItem.mImage.length, bmpFactoryOptions);
-            // Display it
-            mImageView.setImageBitmap(mImageBitmap);
-        }
-
         // Toggle remaining action bar buttons appropriately
         mCallbacks.EnableDeleteButton(true);
         mCallbacks.EnableRevertButton(false);
@@ -807,8 +772,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
 
         mContractCheckBox.setChecked(false);
         mContractDetailsLayout.setVisibility(View.GONE);
-
-        mImageView.setImageBitmap(null);
 
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
@@ -892,35 +855,6 @@ public class ItemDetailFragment extends Fragment implements LoaderManager.Loader
             Toast toast = Toast.makeText(mContext, "Failed to create service call.", Toast.LENGTH_LONG);
             toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
-        }
-    }
-
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    public void handleCamera() {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {
-            // Create the File where the photo should go
-            mImageFileName = mContext.getExternalFilesDir(null).getAbsolutePath() + "/" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".png";
-            mImageFile = new File(mImageFileName);
-            mImageFileUri = Uri.fromFile(mImageFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mImageFile));
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-            bmpFactoryOptions.inSampleSize = 4;
-            mImageBitmap = BitmapFactory.decodeFile(mImageFileName, bmpFactoryOptions);
-            // Display it
-            mImageView.setImageBitmap(mImageBitmap);
-            mImageFile.delete();
-            enableRevertAndSaveButtons();
         }
     }
 }

@@ -866,7 +866,7 @@ public class ResortManagerDatabase extends SQLiteOpenHelper {
                 Date dueDate = new Date();
                 dueDate.setTime(task.mDueDate);
 
-                SimpleDateFormat dueDateFormat = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dueDateFormat = new SimpleDateFormat("dd MMM yyyy");
                 String dueDateString = dueDateFormat.format(dueDate);
                 ftsValues.put(Task.COL_FTS_DUE_DATE, dueDateString);
             }

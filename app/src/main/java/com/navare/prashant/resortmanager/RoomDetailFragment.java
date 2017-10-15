@@ -65,7 +65,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
      */
     private String mRoomID;
     private Room mRoom = null;
-    private long mPreviousType = 0;
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     /**
@@ -83,14 +82,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
     private Button mBtnChangeCleaningDate;
     private TextView mTextCleaningInstructions;
 
-    private ImageView mImageView;
-
-    private String mImageFileName;
-    private File mImageFile;
-    private Uri mImageFileUri;
-    private Bitmap mImageBitmap = null;
-
-
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -100,7 +91,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         /**
          * Callbacks for when an room has been selected.
          */
-        void EnableCameraButton(boolean bEnable);
         void EnableDeleteButton(boolean bEnable);
         void EnableRevertButton(boolean bEnable);
         void EnableSaveButton(boolean bEnable);
@@ -115,9 +105,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
      * nothing. Used only when this fragment is not attached to an activity.
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void EnableCameraButton(boolean bEnable) {
-        }
         @Override
         public void EnableDeleteButton(boolean bEnable) {
         }
@@ -250,9 +237,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mTextCleaningInstructions = (TextView) rootView.findViewById(R.id.textCleaningInstructions);
         mTextCleaningInstructions.addTextChangedListener(this);
 
-        // image related
-        mImageView = ((ImageView) rootView.findViewById(R.id.imageRoom));
-
         return rootView;
     }
 
@@ -287,7 +271,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 switch (pickerType) {
@@ -454,7 +438,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
                 mRoom.mCleaningFrequency = Long.valueOf(mTextCleaningFrequency.getText().toString());
             }
 
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
             Calendar cleaningDate = Calendar.getInstance();
             String uiCleaningDate = mBtnChangeCleaningDate.getText().toString();
             if (uiCleaningDate.compareToIgnoreCase("Set") != 0) {
@@ -470,11 +454,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         }
         else {
             mRoom.mCleaningReminders = 0;
-        }
-        if (mImageBitmap != null) {
-            ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-            mImageBitmap.compress(Bitmap.CompressFormat.PNG, 0, imageStream);
-            mRoom.mImage = imageStream.toByteArray();
         }
         return true;
     }
@@ -496,7 +475,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             if (mRoom.mCleaningDate > 0) {
                 Calendar cleaningDate = Calendar.getInstance();
                 cleaningDate.setTimeInMillis(mRoom.mCleaningDate);
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 mBtnChangeCleaningDate.setText(dateFormatter.format(cleaningDate.getTime()));
             }
             else {
@@ -509,19 +488,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             mCleaningDetailsLayout.setVisibility(View.GONE);
         }
 
-        if (mRoom.mImage == null) {
-            mImageView.setImageBitmap(null);
-        }
-        else {
-            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-            bmpFactoryOptions.inJustDecodeBounds = false;
-            mImageBitmap = BitmapFactory.decodeByteArray(mRoom.mImage, 0, mRoom.mImage.length, bmpFactoryOptions);
-            // Display it
-            mImageView.setImageBitmap(mImageBitmap);
-        }
-
         // Toggle the action bar buttons appropriately
-        mCallbacks.EnableCameraButton(true);
         mCallbacks.EnableDeleteButton(true);
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
@@ -539,10 +506,7 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
         mCleaningCheckBox.setChecked(false);
         mCleaningDetailsLayout.setVisibility(View.GONE);
 
-        mImageView.setImageBitmap(null);
-
         // Toggle the action bar buttons appropriately
-        mCallbacks.EnableCameraButton(true);
         mCallbacks.EnableDeleteButton(false);
         mCallbacks.EnableRevertButton(false);
         mCallbacks.EnableSaveButton(false);
@@ -593,35 +557,6 @@ public class RoomDetailFragment extends Fragment implements LoaderManager.Loader
             Toast toast = Toast.makeText(mContext, "Failed to create service call.", Toast.LENGTH_LONG);
             toast.getView().setBackgroundResource(R.drawable.toast_drawable);
             toast.show();
-        }
-    }
-
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    public void handleCamera() {
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {
-            // Create the File where the photo should go
-            mImageFileName = mContext.getExternalFilesDir(null).getAbsolutePath() + "/" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".png";
-            mImageFile = new File(mImageFileName);
-            mImageFileUri = Uri.fromFile(mImageFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mImageFile));
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
-            bmpFactoryOptions.inSampleSize = 4;
-            mImageBitmap = BitmapFactory.decodeFile(mImageFileName, bmpFactoryOptions);
-            // Display it
-            mImageView.setImageBitmap(mImageBitmap);
-            mImageFile.delete();
-            enableRevertAndSaveButtons();
         }
     }
 }

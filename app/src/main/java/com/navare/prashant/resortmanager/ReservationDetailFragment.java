@@ -353,7 +353,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 mBtnFromDate.setText(dateFormatter.format(newDate.getTime()));
@@ -785,7 +785,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
             return false;
         }
         else {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy");
             Calendar fromDate = Calendar.getInstance();
             try {
                 fromDate.setTime(dateFormatter.parse(uiFromDate));
@@ -829,7 +829,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (mReservation.mFromDate > 0) {
             Calendar fromDate = Calendar.getInstance();
             fromDate.setTimeInMillis(mReservation.mFromDate);
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy");
             mBtnFromDate.setText(dateFormatter.format(fromDate.getTime()));
         }
         else {

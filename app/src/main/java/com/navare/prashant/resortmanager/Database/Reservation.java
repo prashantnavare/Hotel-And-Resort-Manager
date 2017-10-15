@@ -296,7 +296,7 @@ public class Reservation {
             Calendar toDate = Calendar.getInstance();
             fromDate.setTimeInMillis(mFromDate);
             toDate.setTimeInMillis(mToDate);
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy");
             datesString = dateFormatter.format(fromDate.getTime()) + "  -  " + dateFormatter.format(toDate.getTime());
         }
         return datesString;

@@ -37,8 +37,6 @@ public class Room {
     public static final String COL_STATUS = "status";
     public static final String COL_RESERVATION_ID = "reservationID";
 
-    public static final String COL_IMAGE = "imagePath";
-
     public static final int Free = 1;
     public static final int Occupied = 2;
 
@@ -56,9 +54,7 @@ public class Room {
             COL_CLEANING_INSTRUCTIONS,
 
             COL_STATUS,
-            COL_RESERVATION_ID,
-
-            COL_IMAGE
+            COL_RESERVATION_ID
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -85,8 +81,6 @@ public class Room {
         map.put(COL_STATUS, COL_STATUS);
         map.put(COL_RESERVATION_ID, COL_RESERVATION_ID);
 
-        map.put(COL_IMAGE, COL_IMAGE);
-
         return map;
     }
 
@@ -109,9 +103,7 @@ public class Room {
                     + COL_CLEANING_INSTRUCTIONS + " TEXT DEFAULT '',"
 
                     + COL_STATUS + " INTEGER,"
-                    + COL_RESERVATION_ID + " INTEGER,"
-
-                    + COL_IMAGE + " BLOB"
+                    + COL_RESERVATION_ID + " INTEGER"
 
                     + ")";
 
@@ -130,8 +122,6 @@ public class Room {
 
     public long mStatus = 0;
     public long mReservationID = -1;
-
-    public byte[] mImage;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -167,8 +157,6 @@ public class Room {
 
         this.mStatus = cursor.getLong(8);
         this.mReservationID = cursor.getLong(9);
-
-        this.mImage = cursor.getBlob(10);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -191,8 +179,6 @@ public class Room {
         values.put(COL_STATUS, mStatus);
         values.put(COL_RESERVATION_ID, mReservationID);
 
-        values.put(COL_IMAGE, mImage);
-
         return values;
     }
 
@@ -213,8 +199,6 @@ public class Room {
 
         mStatus = values.getAsLong(COL_STATUS);
         mReservationID = values.getAsLong(COL_RESERVATION_ID);
-
-        mImage = values.getAsByteArray(COL_IMAGE);
     }
 
     // Room FTS Table
@@ -280,5 +264,4 @@ public class Room {
                 SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
         return map;
     }
-
 }

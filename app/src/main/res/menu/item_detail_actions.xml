@@ -21,10 +21,6 @@
         android:icon="@drawable/ic_menu_inventory_subtract"
         resortmanager:showAsAction="ifRoom|collapseActionView"
         android:title="@string/menu_inventory_subtract"/>
-    <item android:id="@+id/menu_camera"
-        android:icon="@drawable/ic_menu_camera"
-        resortmanager:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/menu_camera"/>
     <item android:id="@+id/menu_delete"
         android:icon="@drawable/ic_menu_delete"
         resortmanager:showAsAction="ifRoom|collapseActionView"

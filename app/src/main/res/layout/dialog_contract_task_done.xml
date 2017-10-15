@@ -29,12 +29,14 @@
         <Button
             android:id="@+id/btnContractValidTillDate"
             android:text="@string/set_date"
+            android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
             android:background="@drawable/button_shape"
             android:textColor="#ffffff"
+            android:textAllCaps="false"
             />
     </LinearLayout>
     <LinearLayout

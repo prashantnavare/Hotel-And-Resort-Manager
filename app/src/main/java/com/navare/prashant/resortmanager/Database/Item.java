@@ -44,8 +44,6 @@ public class Item {
     public static final String COL_MEASURING_UNIT = "measuringUnit";
     public static final String COL_REORDER_INSTRUCTIONS = "reorderInstructions";
 
-    public static final String COL_IMAGE = "imagePath";
-
     // Defines related to item type
     public static final long InstrumentType = 1;
     public static final long ConsumableType = 2;
@@ -75,9 +73,7 @@ public class Item {
             COL_MIN_REQUIRED_QUANTITY,
             COL_CURRENT_QUANTITY,
             COL_MEASURING_UNIT,
-            COL_REORDER_INSTRUCTIONS,
-
-            COL_IMAGE
+            COL_REORDER_INSTRUCTIONS
     };
 
     public static final HashMap<String, String> mColumnMap = buildColumnMap();
@@ -112,8 +108,6 @@ public class Item {
         map.put(COL_MEASURING_UNIT, COL_MEASURING_UNIT);
         map.put(COL_REORDER_INSTRUCTIONS, COL_REORDER_INSTRUCTIONS);
 
-        map.put(COL_IMAGE, COL_IMAGE);
-
         return map;
     }
 
@@ -144,9 +138,7 @@ public class Item {
                     + COL_MIN_REQUIRED_QUANTITY + " INTEGER,"
                     + COL_CURRENT_QUANTITY + " INTEGER,"
                     + COL_MEASURING_UNIT + " TEXT NOT NULL DEFAULT '',"
-                    + COL_REORDER_INSTRUCTIONS + " TEXT DEFAULT '',"
-
-                    + COL_IMAGE + " BLOB"
+                    + COL_REORDER_INSTRUCTIONS + " TEXT DEFAULT ''"
 
                     + ")";
 
@@ -172,8 +164,6 @@ public class Item {
     public long mCurrentQuantity = 0;
     public String mMeasuringUnit = "";
     public String mReorderInstructions = "";
-
-    public byte[] mImage;
 
     /**
      * No need to do anything, fields are already set to default values above
@@ -207,8 +197,6 @@ public class Item {
         this.mCurrentQuantity = cursor.getLong(14);
         this.mMeasuringUnit = cursor.getString(15);
         this.mReorderInstructions = cursor.getString(16);
-
-        this.mImage = cursor.getBlob(17);
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -239,8 +227,6 @@ public class Item {
         values.put(COL_MEASURING_UNIT, mMeasuringUnit);
         values.put(COL_REORDER_INSTRUCTIONS, mReorderInstructions);
 
-        values.put(COL_IMAGE, mImage);
-
         return values;
     }
 
@@ -269,8 +255,6 @@ public class Item {
         mCurrentQuantity = values.getAsLong(COL_CURRENT_QUANTITY);
         mMeasuringUnit = values.getAsString(COL_MEASURING_UNIT);
         mReorderInstructions = values.getAsString(COL_REORDER_INSTRUCTIONS);
-
-        mImage = values.getAsByteArray(COL_IMAGE);
     }
 
     // Item FTS Table
@@ -336,5 +320,4 @@ public class Item {
                 SearchManager.SUGGEST_COLUMN_SHORTCUT_ID);
         return map;
     }
-
 }

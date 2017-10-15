@@ -222,7 +222,7 @@ public class Task {
         if (mDueDate > 0) {
             Calendar dueDate = Calendar.getInstance();
             dueDate.setTimeInMillis(mDueDate);
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
             dueDateString = dateFormatter.format(dueDate.getTime());
         }
         return dueDateString;

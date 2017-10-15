@@ -230,9 +230,9 @@
                             android:textStyle="bold"
                             android:text="@string/set_date"
                             android:textColor="#ffffff"
-                            android:layout_marginRight="100dp"
                             android:layout_height="30dp"
                             android:background="@drawable/button_shape"
+                            android:textAllCaps="false"
                             />
                     </LinearLayout>
 

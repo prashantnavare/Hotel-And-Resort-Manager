@@ -76,7 +76,7 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 myButton.setText(dateFormatter.format(newDate.getTime()));
@@ -99,7 +99,7 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
             return;
         }
         else {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
             try {
                 fromDate.setTime(dateFormatter.parse(uiFromDate));
             } catch (ParseException e) {
@@ -114,7 +114,7 @@ public class ReportsActivity extends AppCompatActivity implements LoaderManager.
             return;
         }
         else {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
             try {
                 toDate.setTime(dateFormatter.parse(uiToDate));
             } catch (ParseException e) {

@@ -106,7 +106,7 @@ public class ContractTaskDoneDialogFragment extends DialogFragment {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 mBtnContractValidTillDate.setText(dateFormatter.format(newDate.getTime()));
@@ -136,7 +136,7 @@ public class ContractTaskDoneDialogFragment extends DialogFragment {
             };
 
     public long getContractValidTillDate() {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
         Calendar contractDate = Calendar.getInstance();
         String uiContractDate = mBtnContractValidTillDate.getText().toString();
         if (uiContractDate.compareToIgnoreCase("Set") != 0) {

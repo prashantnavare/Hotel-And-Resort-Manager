@@ -40,7 +40,7 @@ public class ReservationListCursorAdapter extends SimpleCursorAdapter {
             String dateString = cursor.getString(cursor.getColumnIndex(Reservation.COL_FTS_RESERVATION_DATES));
             String[] dates = dateString.split("-");
             String fromDateString = dates[0];
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM, yyyy");
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
             Calendar todayDate = Calendar.getInstance();
             Calendar fromDate = Calendar.getInstance();
             try {
