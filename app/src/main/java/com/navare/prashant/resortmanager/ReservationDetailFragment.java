@@ -579,6 +579,7 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         if (result > 0) {
             // Get all the selected rooms and update their status
             updateSelectedRooms();
+            getLoaderManager().restartLoader(LOADER_ID_ROOM_DETAILS, null, this);
             mReservationDetailsScrollView.setVisibility(View.VISIBLE);
             mSelectedRoomsLayout.setVisibility(View.GONE);
         }
