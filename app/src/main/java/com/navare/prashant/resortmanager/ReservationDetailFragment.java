@@ -342,7 +342,6 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
     }
 
     private void showDatePicker() {
-        Calendar minDate = Calendar.getInstance();
         Calendar dateToShow = Calendar.getInstance();
         if (mReservation != null) {
             if (mReservation.mFromDate > 0) {
@@ -364,9 +363,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         int year = dateToShow.get(Calendar.YEAR);
         int month = dateToShow.get(Calendar.MONTH);
         int day = dateToShow.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePicker = new DatePickerDialog(mContext, onDateChangeCallback, year, month, day);
-        datePicker.getDatePicker().setMinDate(minDate.getTime().getTime());
-        datePicker.show();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, onDateChangeCallback, year, month, day);
+        datePickerDialog.show();
     }
 
     @Override
@@ -869,8 +867,8 @@ public class ReservationDetailFragment extends Fragment implements LoaderManager
         mCheckoutLayout.setVisibility(View.GONE);
 
         mTextName.setText("");
-        mTextPhoneNumber.setText("");
-        mTextEmailAddress.setText("");
+        mTextPhoneNumber.setText(" ");
+        mTextEmailAddress.setText(" ");
         mTextNumAdults.setText("");
         mTextNumChildren.setText("");
         mTextNumDays.setText("");

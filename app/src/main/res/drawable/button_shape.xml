@@ -3,13 +3,16 @@
     <corners
         android:radius="14dp"
         />
-    <solid
-        android:color="#4F4F4F"
-        />
     <padding
         android:left="0dp"
         android:top="0dp"
         android:right="0dp"
         android:bottom="0dp"
         />
+
+    <gradient
+        android:startColor="#5A87C7"
+        android:centerColor="#4578c0"
+        android:endColor="#275494"
+        android:angle="270" />
 </shape>

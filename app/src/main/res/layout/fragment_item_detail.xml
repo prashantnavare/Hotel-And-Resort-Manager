@@ -483,6 +483,7 @@
                     android:padding="5dp"
                     android:textStyle="bold"
                     android:checked="false"
+                    android:layout_marginTop="20dp"
                     />
 
                 <LinearLayout
