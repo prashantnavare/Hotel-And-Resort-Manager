@@ -132,6 +132,16 @@ public class RoomListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass on the activity result to ResortManagerApp to see if it handles it
+        if (!ResortManagerApp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onPurchaseCompleted() {
         // Create new room
         onRoomSelected(null);

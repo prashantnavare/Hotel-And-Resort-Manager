@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -270,6 +271,13 @@ public class ResortManagerApp extends Application {
 
             alertDialog.show();
         }
+    }
+
+    static public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mHelper == null)
+            return false;
+
+        return mHelper.handleActivityResult(requestCode, resultCode, data);
     }
 
     private static final String SKU_RESORT_MANAGER = "com.navare.prashant.resortmanager";
